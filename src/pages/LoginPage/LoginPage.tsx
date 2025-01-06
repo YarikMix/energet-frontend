@@ -1,9 +1,17 @@
-const LoginPage = () => {
-    return (
-        <div>
-            <h3>LoginPage</h3>
-        </div>
-    )
-}
+import { Container } from "@mui/material";
+import LoginForm from "src/widgets/LoginForm/LoginForm.tsx";
+import { LoginCreadentials } from "src/widgets/LoginForm/types.ts";
 
-export default LoginPage
+const LoginPage = () => {
+    const onSubmit = (data: LoginCreadentials) => {
+        console.log(data);
+    };
+
+    return (
+        <Container maxWidth="xs" sx={{ pt: 8 }}>
+            <LoginForm onSubmit={onSubmit} />
+        </Container>
+    );
+};
+
+export default LoginPage;

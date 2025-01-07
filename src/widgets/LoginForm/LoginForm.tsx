@@ -3,14 +3,14 @@ import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
 import { PasswordInput } from "shared/PasswordInput/PasswordInput.tsx";
 import { useForm } from "react-hook-form";
-import { LoginCreadentials } from "src/widgets/LoginForm/types.ts";
+import { T_UserLoginCreadentials } from "src/widgets/LoginForm/types.ts";
 
 type Props = {
-    onSubmit: (data: LoginCreadentials) => void;
+    onSubmit: (data: T_UserLoginCreadentials) => void;
 };
 
 const LoginForm = ({ onSubmit }: Props) => {
-    const form = useForm<LoginCreadentials>({
+    const form = useForm<T_UserLoginCreadentials>({
         defaultValues: {
             email: "",
             password: "",

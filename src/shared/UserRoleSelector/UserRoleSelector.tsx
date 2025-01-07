@@ -7,7 +7,7 @@ import {
     RadioGroup,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
-import { E_UserRole } from "src/widgets/RegisterForm/types.ts";
+import { E_UserRole } from "entities/User/model/types/User.ts";
 
 const UserRoleSelector = ({ control }) => {
     return (

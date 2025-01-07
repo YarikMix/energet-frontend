@@ -1,3 +1,5 @@
+import { E_UserRole } from "entities/User/model/types/User.ts";
+
 export type RegisterCredentials = {
     email: string;
     phone: string;
@@ -6,9 +8,3 @@ export type RegisterCredentials = {
     repeatPassword: string;
     role: E_UserRole;
 };
-
-export enum E_UserRole {
-    Buyer = 0,
-    Producer = 1,
-    Moderator = 2,
-}

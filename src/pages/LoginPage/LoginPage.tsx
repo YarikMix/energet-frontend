@@ -1,10 +1,15 @@
 import { Container } from "@mui/material";
 import LoginForm from "src/widgets/LoginForm/LoginForm.tsx";
-import { LoginCreadentials } from "src/widgets/LoginForm/types.ts";
+import { T_UserLoginCreadentials } from "src/widgets/LoginForm/types.ts";
+import { handleLogin } from "entities/User/lib/slices/UserSlice.ts";
+import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 
 const LoginPage = () => {
-    const onSubmit = (data: LoginCreadentials) => {
+    const dispatch = useAppDispatch();
+
+    const onSubmit = (data: T_UserLoginCreadentials) => {
         console.log(data);
+        dispatch(handleLogin(data));
     };
 
     return (

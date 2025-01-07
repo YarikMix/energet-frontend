@@ -3,11 +3,9 @@ import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
 import { PasswordInput } from "shared/PasswordInput/PasswordInput.tsx";
 import { useForm } from "react-hook-form";
-import {
-    E_UserRole,
-    RegisterCredentials,
-} from "src/widgets/RegisterForm/types.ts";
+import { RegisterCredentials } from "src/widgets/RegisterForm/types.ts";
 import UserRoleSelector from "shared/UserRoleSelector/UserRoleSelector.tsx";
+import { E_UserRole } from "entities/User/model/types/User.ts";
 
 type Props = {
     onSubmit: (data: RegisterCredentials) => void;

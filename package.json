@@ -30,7 +30,7 @@
     "sass": "^1.83.1",
     "styled-reset": "^4.5.2",
     "stylelint-scss": "^6.10.0",
-    "usehooks-ts": "^3.1.0",
+    "use-debounce": "^10.0.4",
     "vite-tsconfig-paths": "^5.1.4"
   },
   "devDependencies": {

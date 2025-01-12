@@ -4,12 +4,11 @@ import {
     useItemsProducersList,
     useItemsTypesList,
 } from "entities/Item/api/itemsApi.ts";
-import { Box, Container, Grid2 } from "@mui/material";
+import { Box, Container, Grid2, Pagination, Typography } from "@mui/material";
 import MultipleSelect from "shared/MultipleSelect/MultipleSelect.tsx";
 import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { useDebounceValue } from "usehooks-ts";
+import { useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
 
 const ItemsPage = () => {
     const [name, setName] = useState("");
@@ -19,16 +18,26 @@ const ItemsPage = () => {
         number[]
     >([]);
 
-    const [searchParams] = useDebounceValue(
-        [name, selectedItemTypes, selectedItemProducers],
-        250
-    );
+    const [debouncedName] = useDebounce(name, 250);
 
-    const { data, refetch } = useItemsList({ searchParams });
+    const [page, setPage] = useState(1);
+
+    const { data: itemsList, refetch } = useItemsList({
+        searchParams: [debouncedName, selectedItemTypes, selectedItemProducers],
+        page,
+    });
 
     const { data: itemsTypes } = useItemsTypesList();
 
     const { data: itemsProducers } = useItemsProducersList();
+
+    const handleChange = (e, pageIdx) => {
+        setPage(pageIdx);
+    };
+
+    useEffect(() => {
+        setPage(1);
+    }, [debouncedName, selectedItemTypes, selectedItemProducers]);
 
     return (
         <Container>
@@ -55,14 +64,14 @@ const ItemsPage = () => {
                     />
                 </Box>
             </Box>
-            <motion.div className="group-list-wrapper">
-                <AnimatePresence>
+            {itemsList?.items?.length > 0 ? (
+                <Box>
                     <Grid2
                         container
                         spacing={{ xs: 2, md: 3 }}
                         columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                     >
-                        {data?.map((item) => (
+                        {itemsList?.items?.map((item) => (
                             <Grid2
                                 item
                                 key={item.id}
@@ -72,8 +81,27 @@ const ItemsPage = () => {
                             </Grid2>
                         ))}
                     </Grid2>
-                </AnimatePresence>
-            </motion.div>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            mt: 5,
+                        }}
+                    >
+                        <Pagination
+                            count={itemsList?.total_pages}
+                            page={page}
+                            onChange={handleChange}
+                        />
+                    </Box>
+                </Box>
+            ) : (
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 15 }}>
+                    <Typography variant="h4" color="text.secondary">
+                        Оборудование не найдено
+                    </Typography>
+                </Box>
+            )}
         </Container>
     );
 };

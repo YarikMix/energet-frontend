@@ -5,6 +5,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { ItemOption } from "entities/Item/model/types/Item.ts";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -27,18 +28,31 @@ function getStyles(name: string, personName: string[], theme: Theme) {
 
 interface IProps {
     label: string;
-    options: string[];
+    options?: ItemOption[];
+    onChange: (value: number[]) => void;
 }
 
-export default function MultipleSelect({ label, options }: IProps) {
+export default function MultipleSelect({ label, options, onChange }: IProps) {
     const theme = useTheme();
-    const [personName, setPersonName] = React.useState<string[]>([]);
+    const [selectedOptions, setSelectedOptions] = React.useState<string[]>([]);
 
-    const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+    if (!options) {
+        return <div>sadfasdf</div>;
+    }
+
+    const handleChange = (event: SelectChangeEvent<string[]>) => {
         const {
             target: { value },
         } = event;
-        setPersonName(typeof value === "string" ? value.split(",") : value);
+        if (Array.isArray(value)) {
+            setSelectedOptions(value);
+            onChange(
+                value.map((option) => options.find((i) => i.name == option).id)
+            );
+        } else {
+            setSelectedOptions([]);
+            onChange([]);
+        }
     };
 
     return (
@@ -48,18 +62,18 @@ export default function MultipleSelect({ label, options }: IProps) {
                 labelId="demo-multiple-name-label"
                 id="demo-multiple-name"
                 multiple
-                value={personName}
+                value={selectedOptions}
                 onChange={handleChange}
                 input={<OutlinedInput label={label} />}
                 MenuProps={MenuProps}
             >
-                {options.map((name) => (
+                {options.map((item) => (
                     <MenuItem
-                        key={name}
-                        value={name}
-                        style={getStyles(name, personName, theme)}
+                        key={item.id}
+                        value={item.name}
+                        style={getStyles(item.name, selectedOptions, theme)}
                     >
-                        {name}
+                        {item.name}
                     </MenuItem>
                 ))}
             </Select>

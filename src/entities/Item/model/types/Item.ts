@@ -1,7 +1,8 @@
 export type T_Item = {
     id: number;
     name: string;
-    type: E_ItemType;
+    item_type: ItemOption;
+    item_producer: ItemOption;
     status: E_ItemStatus;
     price: number;
     image: string;
@@ -14,8 +15,7 @@ export enum E_ItemStatus {
     Deleted = 2,
 }
 
-export enum E_ItemType {
-    Accumulator = 0,
-    SolarBattery = 1,
-    WindTurbine = 2,
-}
+export type ItemOption = {
+    id: number;
+    name: string;
+};

@@ -1,5 +1,9 @@
 import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
-import { useItemsList } from "entities/Item/api/itemsApi.ts";
+import {
+    useItemsList,
+    useItemsProducersList,
+    useItemsTypesList,
+} from "entities/Item/api/itemsApi.ts";
 import { Box, Container, Grid2 } from "@mui/material";
 import MultipleSelect from "shared/MultipleSelect/MultipleSelect.tsx";
 import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
@@ -10,24 +14,21 @@ import { useDebounceValue } from "usehooks-ts";
 const ItemsPage = () => {
     const [name, setName] = useState("");
 
-    const [searchParams] = useDebounceValue([name], 250);
+    const [selectedItemTypes, setSelectedItemTypes] = useState<number[]>([]);
+    const [selectedItemProducers, setSelectedItemProducers] = useState<
+        number[]
+    >([]);
+
+    const [searchParams] = useDebounceValue(
+        [name, selectedItemTypes, selectedItemProducers],
+        250
+    );
 
     const { data, refetch } = useItemsList({ searchParams });
 
-    const names = [
-        "Oliver Hansen",
-        "Van Henry",
-        "April Tucker",
-        "Ralph Hubbard",
-        "Omar Alexander",
-        "Carlos Abbott",
-        "Miriam Wagner",
-        "Bradley Wilkerson",
-        "Virginia Andrews",
-        "Kelly Snyder",
-    ];
+    const { data: itemsTypes } = useItemsTypesList();
 
-    const manufacturer = ["Oliver Hansen", "Van Henry", "April Tucker"];
+    const { data: itemsProducers } = useItemsProducersList();
 
     return (
         <Container>
@@ -42,10 +43,15 @@ const ItemsPage = () => {
             >
                 <SearchInput onChange={setName} onIconClick={refetch} />
                 <Box>
-                    <MultipleSelect label="Тип товара" options={names} />
+                    <MultipleSelect
+                        label="Тип товара"
+                        options={itemsTypes}
+                        onChange={setSelectedItemTypes}
+                    />
                     <MultipleSelect
                         label="Производитель"
-                        options={manufacturer}
+                        options={itemsProducers}
+                        onChange={setSelectedItemProducers}
                     />
                 </Box>
             </Box>

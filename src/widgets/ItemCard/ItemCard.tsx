@@ -1,4 +1,5 @@
 import {
+    Box,
     Card,
     CardActionArea,
     CardContent,
@@ -22,14 +23,47 @@ const ItemCard = (data: T_Item) => {
                     <Typography gutterBottom variant="h5" component="div">
                         {data.name}
                     </Typography>
-                    <Typography
-                        variant="body2"
-                        sx={{ color: "text.secondary" }}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            mb: 2,
+                        }}
                     >
-                        Lizards are a widespread group of squamate reptiles,
-                        with over 6,000 species, ranging across all continents
-                        except Antarctica
-                    </Typography>
+                        <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+                            Цена
+                        </Typography>
+                        <Typography
+                            sx={{
+                                color: "#319CFF",
+                                fontSize: 18,
+                            }}
+                        >
+                            {data.price}₽
+                        </Typography>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+                            Тип
+                        </Typography>
+                        <Typography>{data.item_type.name}</Typography>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+                            Производитель
+                        </Typography>
+                        <Typography>{data.item_producer.name}</Typography>
+                    </Box>
                 </CardContent>
             </CardActionArea>
         </Card>

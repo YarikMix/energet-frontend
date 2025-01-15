@@ -11,7 +11,6 @@ export const PasswordInput = ({
 }) => {
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
-    const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
     return (
         <TextField
@@ -24,10 +23,7 @@ export const PasswordInput = ({
                 input: {
                     endAdornment: (
                         <InputAdornment position="end">
-                            <IconButton
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                            >
+                            <IconButton onClick={handleClickShowPassword}>
                                 {showPassword ? (
                                     <Visibility />
                                 ) : (

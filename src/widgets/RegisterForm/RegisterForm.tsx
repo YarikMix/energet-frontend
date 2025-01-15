@@ -3,16 +3,16 @@ import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
 import { PasswordInput } from "shared/PasswordInput/PasswordInput.tsx";
 import { useForm } from "react-hook-form";
-import { RegisterCredentials } from "src/widgets/RegisterForm/types.ts";
+import { T_UserRegisterCredentials } from "src/widgets/RegisterForm/types.ts";
 import UserRoleSelector from "shared/UserRoleSelector/UserRoleSelector.tsx";
 import { E_UserRole } from "entities/User/model/types/User.ts";
 
 type Props = {
-    onSubmit: (data: RegisterCredentials) => void;
+    onSubmit: (data: T_UserRegisterCredentials) => void;
 };
 
 const RegisterForm = ({ onSubmit }: Props) => {
-    const form = useForm<RegisterCredentials>({
+    const form = useForm<T_UserRegisterCredentials>({
         defaultValues: {
             phone: "",
             name: "",

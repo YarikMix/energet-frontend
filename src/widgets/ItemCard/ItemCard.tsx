@@ -5,11 +5,15 @@ import {
     CardActionArea,
     CardContent,
     CardMedia,
+    Checkbox,
     Typography,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { T_Item } from "entities/Item/model/types/Item.ts";
 import { useNavigate } from "react-router-dom";
+import { Favorite, FavoriteBorder } from "@mui/icons-material";
+import * as React from "react";
+import { MouseEventHandler } from "react";
 
 interface IProps {
     showAddToDraftOrderBtn: boolean;
@@ -27,7 +31,7 @@ const ItemCard = ({ showAddToDraftOrderBtn = false, data }: IProps) => {
         // TODO
     };
 
-    const handleAddItemToFavourites = (e: MouseEvent) => {
+    const handleAddItemToFavourites = (e) => {
         e.preventDefault();
         e.stopPropagation();
         console.log("handleAddItemToFavourites");
@@ -55,16 +59,17 @@ const ItemCard = ({ showAddToDraftOrderBtn = false, data }: IProps) => {
             sx={{ maxWidth: 345, position: "relative" }}
             onClick={handleOpenItemDetailsPage}
         >
-            <FavoriteIcon
+            <Checkbox
+                icon={<FavoriteBorder />}
+                checkedIcon={<Favorite />}
+                onClick={handleAddItemToFavourites}
                 sx={{
                     position: "absolute",
-                    top: "15px",
-                    right: "15px",
+                    top: "10px",
+                    right: "10px",
                     zIndex: 2,
-                    color: "#319CFF",
-                    cursor: "pointer",
+                    color: "#fff",
                 }}
-                onClick={handleAddItemToFavourites}
             />
             <CardActionArea>
                 <CardMedia

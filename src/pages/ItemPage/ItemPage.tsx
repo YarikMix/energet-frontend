@@ -7,7 +7,7 @@ import {
     Tabs,
     Typography,
 } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useItem } from "entities/Item/api/itemsApi.ts";
 import { useSelector } from "react-redux";
 import {

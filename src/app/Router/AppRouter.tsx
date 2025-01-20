@@ -4,6 +4,7 @@ import LoginPage from "pages/LoginPage/LoginPage.tsx";
 import RegisterPage from "pages/RegisterPage/RegisterPage.tsx";
 import { ProfilePage } from "pages/ProfilePage/ProfilePage.tsx";
 import { ItemPage } from "pages/ItemPage/ItemPage.tsx";
+import { BinPage } from "pages/BinPage/BinPage.tsx";
 
 export const useRouteMatch = (patterns: readonly string[]) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -29,6 +30,7 @@ export const AppRouter = () => {
             <Route path="/login/" element={<LoginPage />} />
             <Route path="/register/" element={<RegisterPage />} />
             <Route path="/profile/" element={<ProfilePage />} />
+            <Route path="/bin/" element={<BinPage />} />
         </Routes>
     );
 };

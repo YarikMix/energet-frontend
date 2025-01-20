@@ -9,8 +9,17 @@ import MultipleSelect from "shared/MultipleSelect/MultipleSelect.tsx";
 import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
+import { useSelector } from "react-redux";
+import {
+    getIsAuthenticated,
+    getUser,
+} from "entities/User/model/selectors/getUser.ts";
+import { E_UserRole } from "entities/User/model/types/User.ts";
 
 const ItemsPage = () => {
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const user = useSelector(getUser);
+
     const [name, setName] = useState("");
 
     const [selectedItemTypes, setSelectedItemTypes] = useState<number[]>([]);
@@ -39,11 +48,12 @@ const ItemsPage = () => {
         setPage(1);
     }, [debouncedName, selectedItemTypes, selectedItemProducers]);
 
+    console.log(itemsList);
+
     return (
         <Container>
             <Box
                 mb={5}
-                pt={3}
                 sx={{
                     display: "flex",
                     alignItems: "center",
@@ -77,7 +87,13 @@ const ItemsPage = () => {
                                 key={item.id}
                                 size={{ xs: 2, sm: 3, md: 3 }}
                             >
-                                <ItemCard {...item} />
+                                <ItemCard
+                                    data={item}
+                                    showAddToDraftOrderBtn={
+                                        isAuthenticated &&
+                                        user?.role == E_UserRole.Buyer
+                                    }
+                                />
                             </Grid2>
                         ))}
                     </Grid2>

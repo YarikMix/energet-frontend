@@ -34,7 +34,16 @@ const Header = () => {
     }
 
     return (
-        <Container className={styles.root}>
+        <Container
+            sx={{
+                padding: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                mb: 3,
+            }}
+            fullWidth
+        >
             <Tabs value={currentLeftTab}>
                 <Tab label="Каталог" value="/" to="/" component={Link} />
                 <Tab
@@ -47,7 +56,7 @@ const Header = () => {
             </Tabs>
 
             <Link to="/">
-                <img src={Logo as string} className={styles.logo} alt="" />
+                <img src={Logo as string} alt="" />
             </Link>
 
             <Box>

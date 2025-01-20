@@ -3,8 +3,10 @@ import ItemsPage from "pages/ItemsPage/ItemsPage.tsx";
 import LoginPage from "pages/LoginPage/LoginPage.tsx";
 import RegisterPage from "pages/RegisterPage/RegisterPage.tsx";
 import { ProfilePage } from "pages/ProfilePage/ProfilePage.tsx";
+import { ItemPage } from "pages/ItemPage/ItemPage.tsx";
 
 export const useRouteMatch = (patterns: readonly string[]) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { pathname } = useLocation();
 
     for (let i = 0; i < patterns.length; i += 1) {
@@ -23,6 +25,7 @@ export const AppRouter = () => {
         <Routes>
             <Route path="/" element={<ItemsPage />} />
             <Route path="/items" element={<ItemsPage />} />
+            <Route path="/items/:id" element={<ItemPage />} />
             <Route path="/login/" element={<LoginPage />} />
             <Route path="/register/" element={<RegisterPage />} />
             <Route path="/profile/" element={<ProfilePage />} />

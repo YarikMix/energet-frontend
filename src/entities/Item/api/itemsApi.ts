@@ -1,4 +1,4 @@
-import { ItemOption, T_Item } from "entities/Item/model/types/Item.ts";
+import { T_ItemOption, T_Item } from "entities/Item/model/types/Item.ts";
 import { useQuery } from "react-query";
 import { api } from "src/app/api.ts";
 import { ITEMS_PAGE_SIZE } from "src/app/consts.ts";
@@ -52,13 +52,20 @@ export const useItemsList = ({ searchParams, page }: IProps) =>
 export const useItemsTypesList = () =>
     useQuery(
         ["ItemsTypes"],
-        (): Promise<ItemOption[]> =>
+        (): Promise<T_ItemOption[]> =>
             api.get(`/items/types`).then((response) => response.data)
     );
 
 export const useItemsProducersList = () =>
     useQuery(
         ["ItemsProducers"],
-        (): Promise<ItemOption[]> =>
+        (): Promise<T_ItemOption[]> =>
             api.get(`/items/producers`).then((response) => response.data)
+    );
+
+export const useItem = (id: string) =>
+    useQuery(
+        ["Item"],
+        (): Promise<T_Item> =>
+            api.get(`/items/` + id).then((response) => response.data)
     );

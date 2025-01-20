@@ -5,7 +5,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { ItemOption } from "entities/Item/model/types/Item.ts";
+import { T_ItemOption } from "entities/Item/model/types/Item.ts";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -28,7 +28,7 @@ function getStyles(name: string, personName: string[], theme: Theme) {
 
 interface IProps {
     label: string;
-    options?: ItemOption[];
+    options?: T_ItemOption[];
     onChange: (value: number[]) => void;
 }
 

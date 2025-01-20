@@ -14,7 +14,6 @@ import { E_UserRole } from "entities/User/model/types/User.ts";
 export const ProfilePage = () => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const user = useSelector(getUser);
-    console.log(user);
 
     const navigate = useNavigate();
 

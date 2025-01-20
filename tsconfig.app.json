@@ -29,8 +29,9 @@
       "pages/*": ["pages/*"],
       "entities/*": ["entities/*"],
       "shared/*": ["shared/*"],
-      "assets/*": ["shared/assets/*"],
-    }
+      "assets/*": ["shared/assets/*"]
+    },
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"]
 }

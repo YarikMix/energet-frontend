@@ -14,7 +14,7 @@ export const handleLogin = createAsyncThunk<
     T_User,
     T_UserLoginCreadentials,
     AsyncThunkConfig
->("check", async function (data: T_UserLoginCreadentials) {
+>("login", async function (data: T_UserLoginCreadentials) {
     const response = await api.post("/auth/login/", data);
     return response.data;
 });
@@ -33,6 +33,14 @@ export const handleLogout = createAsyncThunk<void, void, AsyncThunkConfig>(
     async function () {
         console.log("handleLogout");
         await api.post("/auth/logout/");
+    }
+);
+
+export const handleCheckUser = createAsyncThunk<T_User, void, AsyncThunkConfig>(
+    "check",
+    async function () {
+        const response = await api.post("/auth/check/");
+        return response.data;
     }
 );
 
@@ -63,6 +71,17 @@ const userSlice = createSlice({
             state.is_authenticated = false;
             state.userInfo = null;
         });
+        builder.addCase(handleCheckUser.rejected, (state: T_UserState) => {
+            state.is_authenticated = false;
+            state.userInfo = null;
+        });
+        builder.addCase(
+            handleCheckUser.fulfilled,
+            (state: T_UserState, action: PayloadAction<T_User>) => {
+                state.is_authenticated = true;
+                state.userInfo = action.payload;
+            }
+        );
     },
 });
 

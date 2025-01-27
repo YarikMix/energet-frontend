@@ -39,6 +39,10 @@ export const ProfilePage = () => {
         return "Модератор";
     };
 
+    if (!user) {
+        return <></>;
+    }
+
     return (
         <Container sx={{ pt: 5 }}>
             <Box

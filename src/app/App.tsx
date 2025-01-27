@@ -2,24 +2,44 @@ import Header from "src/widgets/Header/Header.tsx";
 import { Reset } from "styled-reset";
 import styles from "./App.module.scss";
 import { AppRouter } from "src/app/Router/AppRouter.tsx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { handleCheckUser } from "entities/User/lib/slices/UserSlice.ts";
+import { Box, CircularProgress } from "@mui/material";
 
 function App() {
+    const [isLoading, setIsLoading] = useState(false);
+
     const dispatch = useAppDispatch();
 
+    const checkUser = async () => {
+        setIsLoading(true);
+        await dispatch(handleCheckUser());
+        setIsLoading(false);
+    };
+
     useEffect(() => {
-        dispatch(handleCheckUser());
+        checkUser();
     }, []);
 
     return (
         <>
             <Reset />
-            <div className={styles.root}>
-                <Header />
-                <AppRouter />
-            </div>
+            {isLoading ? (
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    minHeight="100vh"
+                >
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <div className={styles.root}>
+                    <Header />
+                    <AppRouter />
+                </div>
+            )}
         </>
     );
 }

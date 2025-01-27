@@ -48,8 +48,6 @@ const ItemsPage = () => {
         setPage(1);
     }, [debouncedName, selectedItemTypes, selectedItemProducers]);
 
-    console.log(itemsList);
-
     return (
         <Container>
             <Box

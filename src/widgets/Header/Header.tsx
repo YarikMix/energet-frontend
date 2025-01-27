@@ -48,8 +48,8 @@ const Header = () => {
                 <Tab label="Каталог" value="/" to="/" component={Link} />
                 <Tab
                     label="Конфигуратор"
-                    value="/configurator/"
-                    to="/configurator/"
+                    value="/configurator"
+                    to="/configurator"
                     component={Link}
                     hidden={!isAuthenticated}
                 />

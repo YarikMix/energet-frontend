@@ -1,4 +1,10 @@
-import { matchPath, Route, Routes, useLocation } from "react-router-dom";
+import {
+    matchPath,
+    Navigate,
+    Route,
+    Routes,
+    useLocation,
+} from "react-router-dom";
 import ItemsPage from "pages/ItemsPage/ItemsPage.tsx";
 import LoginPage from "pages/LoginPage/LoginPage.tsx";
 import RegisterPage from "pages/RegisterPage/RegisterPage.tsx";
@@ -25,12 +31,14 @@ export const AppRouter = () => {
     return (
         <Routes>
             <Route path="/" element={<ItemsPage />} />
-            <Route path="/items" element={<ItemsPage />} />
             <Route path="/items/:id" element={<ItemPage />} />
             <Route path="/login/" element={<LoginPage />} />
             <Route path="/register/" element={<RegisterPage />} />
             <Route path="/profile/" element={<ProfilePage />} />
+            <Route path="/configurator/" element={<ItemsPage />} />
+            <Route path="/favourites/" element={<ItemsPage />} />
             <Route path="/bin/" element={<BinPage />} />
+            <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
     );
 };

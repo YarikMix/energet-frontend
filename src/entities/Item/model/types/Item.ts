@@ -8,6 +8,7 @@ export type T_Item = {
     weight: number;
     image: string;
     owner: number;
+    count?: number;
 };
 
 export enum E_ItemStatus {

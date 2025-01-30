@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userReducer } from "entities/User";
+import { orderReducer } from "entities/Order";
 import {
     persistStore,
     persistReducer,
@@ -20,6 +21,7 @@ const persistConfig = {
 export const store = configureStore({
     reducer: {
         userReducer: persistReducer(persistConfig, userReducer),
+        orderReducer: orderReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

@@ -5,17 +5,27 @@ import {
     Checkbox,
     Container,
     FormControlLabel,
-    Grid,
     Grid2,
     Typography,
 } from "@mui/material";
-import { useDrftOrder } from "entities/Order/api/orderApi.ts";
 import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
+import { calculateTotalPrice } from "entities/Order/lib/calcTotalPrice.ts";
+import { formatItemsCount } from "entities/Order/lib/formatItemsCount.ts";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { handleFetchDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
+import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 
 export const BinPage = () => {
-    const { data: order, isLoading } = useDrftOrder();
+    const dispatch = useAppDispatch();
+    const order = useSelector((state) => state.orderReducer.order);
 
-    if (isLoading || !order) {
+    useEffect(() => {
+        console.log("handleFetchDraftOrder");
+        dispatch(handleFetchDraftOrder());
+    }, []);
+
+    if (!order) {
         return <div>Loading</div>;
     }
 
@@ -36,7 +46,7 @@ export const BinPage = () => {
                         color: "rgba(0, 0, 0, 0.6)",
                     }}
                 >
-                    138 товаров
+                    {formatItemsCount(order)}
                 </span>
             </Box>
             <Box>
@@ -60,7 +70,7 @@ export const BinPage = () => {
                                     key={item.id}
                                     size={{ xs: 2, sm: 3, md: 3 }}
                                 >
-                                    <ItemCard data={item} isBinPage={true} />
+                                    <ItemCard item={item} isBinPage={true} />
                                 </Grid2>
                             ))}
                         </Grid2>
@@ -80,10 +90,10 @@ export const BinPage = () => {
                             <Typography variant="h4">Сумма заказа</Typography>
                             <Box display="flex" justifyContent="space-between">
                                 <Typography color="text.secondary">
-                                    12 товаров
+                                    {formatItemsCount(order)}
                                 </Typography>
                                 <Typography color="text.secondary">
-                                    234 ₽
+                                    {calculateTotalPrice(order)} ₽
                                 </Typography>
                             </Box>
                             <Button variant="contained">

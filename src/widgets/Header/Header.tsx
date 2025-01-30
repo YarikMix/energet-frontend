@@ -5,12 +5,16 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
-import { Box, Container, Tab, Tabs } from "@mui/material";
+import { Badge, Box, Container, Tab, Tabs } from "@mui/material";
 import { FavoriteBorderOutlined } from "@mui/icons-material";
 import { useRouteMatch } from "src/app/Router/AppRouter.tsx";
+import { useEffect } from "react";
+import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { handleFetchDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
 
 const Header = () => {
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const dispatch = useAppDispatch();
 
     const leftTabs = ["/", "/configurator"];
     const leftRouteMatch = useRouteMatch(leftTabs);
@@ -32,6 +36,14 @@ const Header = () => {
     if (currentRightTab === "/register" || currentRightTab === "/login") {
         currentRightTab = "/auth";
     }
+
+    const items_count = useSelector((state) => state.orderReducer.items_count);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            dispatch(handleFetchDraftOrder());
+        }
+    }, [isAuthenticated]);
 
     return (
         <Container
@@ -91,11 +103,20 @@ const Header = () => {
                         iconPosition="start"
                     />
                     <Tab
-                        label="Корзина"
                         value="/bin"
                         to="/bin"
                         component={Link}
                         hidden={!isAuthenticated}
+                        sx={{ px: 3 }}
+                        icon={
+                            <Badge
+                                badgeContent={items_count}
+                                color="primary"
+                                className={styles.test}
+                                sx={{ transform: "translateX(45px)" }}
+                            ></Badge>
+                        }
+                        label={"Корзина"}
                     />
                 </Tabs>
             </Box>

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { handleCheckUser } from "entities/User/lib/slices/UserSlice.ts";
 import { Box, CircularProgress } from "@mui/material";
+import { handleFetchDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
 
 function App() {
     const [isLoading, setIsLoading] = useState(false);
@@ -18,8 +19,13 @@ function App() {
         setIsLoading(false);
     };
 
+    const fetchDraftOrder = async () => {
+        dispatch(handleFetchDraftOrder());
+    };
+
     useEffect(() => {
         checkUser();
+        fetchDraftOrder();
     }, []);
 
     return (

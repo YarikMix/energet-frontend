@@ -17,22 +17,49 @@ import * as React from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useEffect, useState } from "react";
+import { handleUpdateItemCount } from "entities/Order/lib/slices/DraftOrderSlice.ts";
+import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { useSelector } from "react-redux";
 
 interface IProps {
-    data: T_Item;
+    item: T_Item;
     showAddToDraftOrderBtn?: boolean;
     isBinPage?: boolean;
 }
 
+function useDebounce(cb, delay) {
+    const [debounceValue, setDebounceValue] = useState(cb);
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebounceValue(cb);
+        }, delay);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [cb, delay]);
+    return debounceValue;
+}
+
 const ItemCard = ({
-    data,
+    item,
     showAddToDraftOrderBtn = false,
     isBinPage = false,
 }: IProps) => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    const [error, setError] = useState(false);
+
+    const [count, setCount] = useState(item?.count);
+    const debouncedCount = useDebounce(count, 500);
+
+    const order = useSelector((state) => state.orderReducer.order);
 
     const handleOpenItemDetailsPage = () => {
-        navigate("/items/" + data.id);
+        navigate("/items/" + item.id);
     };
 
     const addToDraftOrder = () => {
@@ -45,6 +72,49 @@ const ItemCard = ({
         console.log("handleAddItemToFavourites");
         // TODO
     };
+
+    const handleUpdateCount = (e) => {
+        const { value } = e.target;
+
+        if (value <= 0 || value > 100) {
+            setError(true);
+        } else {
+            setError(false);
+        }
+
+        setCount(value);
+    };
+
+    const handleIncreaseCount = () => {
+        if (count < 99) {
+            setCount((count) => count + 1);
+        }
+    };
+
+    const handleDecreaseCount = () => {
+        if (count > 1) {
+            setCount((count) => count - 1);
+        }
+    };
+
+    useEffect(() => {
+        if (
+            isBinPage &&
+            !error &&
+            order.items.find((i) => i.id == item.id).count != debouncedCount
+        ) {
+            dispatch(
+                handleUpdateItemCount({
+                    itemId: item.id,
+                    count: debouncedCount as number,
+                })
+            );
+        }
+    }, [debouncedCount]);
+
+    useEffect(() => {
+        setCount(item.count);
+    }, [item]);
 
     if (isBinPage) {
         const variantBackgroundColor = {
@@ -75,7 +145,7 @@ const ItemCard = ({
                 <CardMedia
                     component="img"
                     sx={{ width: "260px" }}
-                    image={data.image as string}
+                    image={item.image as string}
                     alt=""
                 />
                 <CardContent
@@ -87,11 +157,20 @@ const ItemCard = ({
                     }}
                 >
                     <Box>
-                        <Typography gutterBottom variant="h5" component="div">
-                            {data.name}
-                        </Typography>
+                        <Box display="flex" justifyContent="space-between">
+                            <Typography
+                                gutterBottom
+                                variant="h5"
+                                component="div"
+                            >
+                                {item.name}
+                            </Typography>
+                            <IconButton>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Box>
                         <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-                            {data.price} ₽
+                            {item.price} ₽
                         </Typography>
                     </Box>
                     <Box display="flex" justifyContent="space-between">
@@ -103,15 +182,25 @@ const ItemCard = ({
                         </Button>
 
                         <Box display="flex" alignItems="center" gap="10px">
-                            <MyIconButton variant="filled">
+                            <MyIconButton
+                                variant="filled"
+                                onClick={handleDecreaseCount}
+                            >
                                 <RemoveIcon />
                             </MyIconButton>
                             <TextField
                                 label="Количество"
                                 variant="outlined"
                                 sx={{ width: "125px" }}
+                                value={count}
+                                onChange={handleUpdateCount}
+                                type="number"
+                                error={error}
                             />
-                            <MyIconButton variant="filled">
+                            <MyIconButton
+                                variant="filled"
+                                onClick={handleIncreaseCount}
+                            >
                                 <AddIcon />
                             </MyIconButton>
                         </Box>
@@ -158,12 +247,12 @@ const ItemCard = ({
                 <CardMedia
                     component="img"
                     height="140"
-                    image={data.image as string}
+                    image={item.image as string}
                     alt=""
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                        {data.name}
+                        {item.name}
                     </Typography>
                     <Box
                         sx={{
@@ -181,15 +270,15 @@ const ItemCard = ({
                                 fontSize: 18,
                             }}
                         >
-                            {data.price}₽
+                            {item.price}₽
                         </Typography>
                     </Box>
-                    <ItemProperty name="Тип" value={data.item_type.name} />
+                    <ItemProperty name="Тип" value={item.item_type.name} />
                     <ItemProperty
                         name="Производитель"
-                        value={data.item_producer.name}
+                        value={item.item_producer.name}
                     />
-                    <ItemProperty name="Вес" value={data.weight + " кг"} />
+                    <ItemProperty name="Вес" value={item.weight + " кг"} />
                     {showAddToDraftOrderBtn && (
                         <Box>
                             <Button

@@ -12,21 +12,65 @@ import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
 import { calculateTotalPrice } from "entities/Order/lib/calcTotalPrice.ts";
 import { formatItemsCount } from "entities/Order/lib/formatItemsCount.ts";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
-import { handleFetchDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
+import { useEffect, useState } from "react";
+import {
+    handleFetchDraftOrder,
+    selectAllItems,
+    unselectAllItems,
+} from "entities/Order/lib/slices/DraftOrderSlice.ts";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 
 export const BinPage = () => {
     const dispatch = useAppDispatch();
-    const order = useSelector((state) => state.orderReducer.order);
+
+    const { order, items } = useSelector((state) => state.orderReducer);
+
+    const [selectedAll, setSelectedAll] = useState(false);
 
     useEffect(() => {
-        console.log("handleFetchDraftOrder");
         dispatch(handleFetchDraftOrder());
     }, []);
 
+    useEffect(() => {
+        setSelectedAll(isSelectedAll());
+    }, [items]);
+
+    const isSelectedAll = () => {
+        return items.length == order?.items?.length;
+    };
+
+    const handleUnselectAll = () => {
+        dispatch(unselectAllItems());
+    };
+
+    const handleSelectAll = () => {
+        dispatch(selectAllItems());
+    };
+
+    const handleDeleteDraftOrder = () => {
+        // TODO
+        console.log("handleDeleteDraftOrder");
+    };
+
     if (!order) {
         return <div>Loading</div>;
+    }
+
+    if (!order.items.length) {
+        return (
+            <Container
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    minHeight: "50vh",
+                }}
+            >
+                <Typography variant="h4" color={"text.secondary"}>
+                    Корзина пуста
+                </Typography>
+            </Container>
+        );
     }
 
     return (
@@ -50,11 +94,30 @@ export const BinPage = () => {
                 </span>
             </Box>
             <Box>
-                <Box mb={3}>
+                <Box mb={3} display="flex" alignItems="center" gap={2}>
                     <FormControlLabel
-                        label="Выбрать все"
-                        control={<Checkbox />}
+                        label={selectedAll ? "Снять выбор" : "Выбрать все"}
+                        unselectable
+                        control={
+                            <Checkbox
+                                checked={selectedAll}
+                                onChange={() =>
+                                    selectedAll
+                                        ? handleUnselectAll()
+                                        : handleSelectAll()
+                                }
+                            />
+                        }
                     />
+                    {selectedAll && (
+                        <Typography
+                            color="error.main"
+                            sx={{ cursor: "pointer" }}
+                            onClick={handleDeleteDraftOrder}
+                        >
+                            Удалить все
+                        </Typography>
+                    )}
                 </Box>
                 <Box display="flex" gap="25px" alignItems="flex-start">
                     <Box sx={{ display: "flex", width: "calc(100% - 400px)" }}>

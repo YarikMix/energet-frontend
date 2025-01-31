@@ -17,16 +17,37 @@ import {
 import { E_UserRole } from "entities/User/model/types/User.ts";
 import * as React from "react";
 import { useState } from "react";
+import {
+    addItemToOrder,
+    deleteItemFromOrder,
+} from "entities/Order/lib/slices/DraftOrderSlice.ts";
+import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { isAddedToDraftOrder } from "entities/Item/lib/isAddedToDraftOrder.ts";
 
 export const ItemPage = () => {
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<{ id: number }>();
 
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const dispatch = useAppDispatch();
     const user = useSelector(getUser);
 
-    const { data: item, isLoading } = useItem(id as string);
+    const order = useSelector((state) => state.orderReducer.order);
+
+    const { data: item, isLoading } = useItem(id as number);
 
     const [currentTab, setCurrentTab] = useState(0);
+
+    const handleAddToDraftOrder = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dispatch(addItemToOrder(id as number));
+    };
+
+    const handleDeleteFromOrder = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dispatch(deleteItemFromOrder(id as number));
+    };
 
     if (isLoading || !item) {
         return <div>isLoading</div>;
@@ -104,7 +125,7 @@ export const ItemPage = () => {
                             variant="h5"
                             sx={{ color: "#319CFF", my: 3 }}
                         >
-                            {item.price}₽
+                            {item.price} ₽
                         </Typography>
                         <ItemProperty name="Тип" value={item.item_type.name} />
                         <ItemProperty
@@ -118,9 +139,17 @@ export const ItemPage = () => {
                             <Button
                                 variant="contained"
                                 sx={{ display: "flex", flex: 1 }}
+                                onClick={(e) =>
+                                    isAddedToDraftOrder(order, id as number)
+                                        ? handleDeleteFromOrder(e)
+                                        : handleAddToDraftOrder(e)
+                                }
                             >
-                                В корзину
+                                {isAddedToDraftOrder(order, id as number)
+                                    ? "Из корзины"
+                                    : "В корзину"}
                             </Button>
+
                             <Button
                                 variant="outlined"
                                 sx={{ display: "flex", flex: 1 }}

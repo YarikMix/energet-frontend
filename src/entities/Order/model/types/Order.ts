@@ -15,3 +15,8 @@ export enum E_OrderStatus {
     Rejected,
     Deleted,
 }
+
+export type T_UpdateItemCount = {
+    itemId: number;
+    count: number;
+};

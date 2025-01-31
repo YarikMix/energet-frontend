@@ -37,7 +37,7 @@ const Header = () => {
         currentRightTab = "/auth";
     }
 
-    const items_count = useSelector((state) => state.orderReducer.items_count);
+    const order = useSelector((state) => state.orderReducer.order);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -110,9 +110,8 @@ const Header = () => {
                         sx={{ px: 3 }}
                         icon={
                             <Badge
-                                badgeContent={items_count}
+                                badgeContent={order?.items.length}
                                 color="primary"
-                                className={styles.test}
                                 sx={{ transform: "translateX(45px)" }}
                             ></Badge>
                         }

@@ -7,7 +7,6 @@ import {
     CardMedia,
     Checkbox,
     IconButton,
-    TextField,
     Typography,
 } from "@mui/material";
 import { T_Item } from "entities/Item/model/types/Item.ts";
@@ -15,32 +14,25 @@ import { useNavigate } from "react-router-dom";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import * as React from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
-import { handleUpdateItemCount } from "entities/Order/lib/slices/DraftOrderSlice.ts";
+import {
+    addItemToOrder,
+    deleteItemFromOrder,
+    handleUpdateItemCount,
+    toggleSelectItem,
+    unselectItem,
+} from "entities/Order/lib/slices/DraftOrderSlice.ts";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { useSelector } from "react-redux";
+import { isAddedToDraftOrder } from "entities/Item/lib/isAddedToDraftOrder.ts";
+import { InputCounter } from "shared/InputCounter/InputCounter.tsx";
+import { useDebounce } from "use-debounce";
 
 interface IProps {
     item: T_Item;
     showAddToDraftOrderBtn?: boolean;
     isBinPage?: boolean;
-}
-
-function useDebounce(cb, delay) {
-    const [debounceValue, setDebounceValue] = useState(cb);
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebounceValue(cb);
-        }, delay);
-
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [cb, delay]);
-    return debounceValue;
 }
 
 const ItemCard = ({
@@ -51,19 +43,24 @@ const ItemCard = ({
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
+    const [count, setCount] = useState(item?.count);
+    const [debouncedCount] = useDebounce<number>(count as number, 500);
     const [error, setError] = useState(false);
 
-    const [count, setCount] = useState(item?.count);
-    const debouncedCount = useDebounce(count, 500);
+    const { order, items } = useSelector((state) => state.orderReducer);
 
-    const order = useSelector((state) => state.orderReducer.order);
+    const [isChecked, setIsChecked] = useState<boolean>(
+        items?.includes(item.id)
+    );
 
     const handleOpenItemDetailsPage = () => {
         navigate("/items/" + item.id);
     };
 
-    const addToDraftOrder = () => {
-        // TODO
+    const handleAddToDraftOrder = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dispatch(addItemToOrder(item.id));
     };
 
     const handleAddItemToFavourites = (e) => {
@@ -73,28 +70,15 @@ const ItemCard = ({
         // TODO
     };
 
-    const handleUpdateCount = (e) => {
-        const { value } = e.target;
-
-        if (value <= 0 || value > 100) {
-            setError(true);
-        } else {
-            setError(false);
-        }
-
-        setCount(value);
+    const handleDeleteFromOrder = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dispatch(deleteItemFromOrder(item.id));
+        dispatch(unselectItem(item.id));
     };
 
-    const handleIncreaseCount = () => {
-        if (count < 99) {
-            setCount((count) => count + 1);
-        }
-    };
-
-    const handleDecreaseCount = () => {
-        if (count > 1) {
-            setCount((count) => count - 1);
-        }
+    const handleToggleSelect = () => {
+        dispatch(toggleSelectItem(item.id));
     };
 
     useEffect(() => {
@@ -102,6 +86,7 @@ const ItemCard = ({
             isBinPage &&
             !error &&
             order.items.find((i) => i.id == item.id).count != debouncedCount
+            // order.items.find((i) => i.id == item.id).count != 0
         ) {
             dispatch(
                 handleUpdateItemCount({
@@ -116,44 +101,28 @@ const ItemCard = ({
         setCount(item.count);
     }, [item]);
 
+    useEffect(() => {
+        setIsChecked(items.includes(item.id));
+    }, [items]);
+
     if (isBinPage) {
-        const variantBackgroundColor = {
-            filled: "primary.main",
-        };
-
-        const variantColor = {
-            filled: "white",
-        };
-
-        function MyIconButton({ variant, ...other }) {
-            return (
-                <IconButton
-                    sx={{
-                        backgroundColor: variantBackgroundColor[variant],
-                        color: variantColor[variant],
-                        "&:hover": {
-                            backgroundColor: variantBackgroundColor[variant],
-                        },
-                    }}
-                    {...other}
-                />
-            );
-        }
-
         return (
             <Card sx={{ display: "flex" }}>
-                <CardMedia
-                    component="img"
-                    sx={{ width: "260px" }}
-                    image={item.image as string}
-                    alt=""
-                />
+                <Box width={260}>
+                    <CardMedia
+                        component="img"
+                        sx={{ width: "100%", height: "100%" }}
+                        image={item.image as string}
+                        alt=""
+                    />
+                </Box>
                 <CardContent
                     sx={{
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "space-between",
-                        width: "100%",
+                        flex: "1",
+                        minWidth: "400px",
                     }}
                 >
                     <Box>
@@ -165,45 +134,40 @@ const ItemCard = ({
                             >
                                 {item.name}
                             </Typography>
-                            <IconButton>
-                                <DeleteIcon />
-                            </IconButton>
+                            <Checkbox
+                                checked={isChecked}
+                                onChange={handleToggleSelect}
+                                inputProps={{ "aria-label": "controlled" }}
+                            />
                         </Box>
                         <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
                             {item.price} ₽
                         </Typography>
                     </Box>
                     <Box display="flex" justifyContent="space-between">
-                        <Button
-                            startIcon={<FavoriteBorderIcon />}
-                            onClick={handleAddItemToFavourites}
-                        >
-                            В избранное
-                        </Button>
-
-                        <Box display="flex" alignItems="center" gap="10px">
-                            <MyIconButton
-                                variant="filled"
-                                onClick={handleDecreaseCount}
+                        <Box>
+                            <IconButton
+                                onClick={handleAddItemToFavourites}
+                                sx={{ width: 56, height: 56 }}
                             >
-                                <RemoveIcon />
-                            </MyIconButton>
-                            <TextField
-                                label="Количество"
-                                variant="outlined"
-                                sx={{ width: "125px" }}
-                                value={count}
-                                onChange={handleUpdateCount}
-                                type="number"
-                                error={error}
-                            />
-                            <MyIconButton
-                                variant="filled"
-                                onClick={handleIncreaseCount}
+                                <FavoriteBorderIcon />
+                            </IconButton>
+                            <IconButton
+                                onClick={handleDeleteFromOrder}
+                                sx={{ width: 56, height: 56 }}
                             >
-                                <AddIcon />
-                            </MyIconButton>
+                                <DeleteIcon />
+                            </IconButton>
                         </Box>
+
+                        <InputCounter
+                            value={count as number}
+                            setValue={setCount}
+                            error={error}
+                            setError={setError}
+                            min={1}
+                            max={100}
+                        />
                     </Box>
                 </CardContent>
             </Card>
@@ -243,7 +207,7 @@ const ItemCard = ({
                     color: "#fff",
                 }}
             />
-            <CardActionArea>
+            <CardActionArea disableRipple={true}>
                 <CardMedia
                     component="img"
                     height="140"
@@ -281,13 +245,23 @@ const ItemCard = ({
                     <ItemProperty name="Вес" value={item.weight + " кг"} />
                     {showAddToDraftOrderBtn && (
                         <Box>
-                            <Button
-                                variant="contained"
-                                onClick={addToDraftOrder}
-                                fullWidth
-                            >
-                                Добавить в корзину
-                            </Button>
+                            {isAddedToDraftOrder(order, item.id) ? (
+                                <Button
+                                    variant="outlined"
+                                    onClick={handleDeleteFromOrder}
+                                    fullWidth
+                                >
+                                    Удалить из корзины
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="contained"
+                                    onClick={handleAddToDraftOrder}
+                                    fullWidth
+                                >
+                                    Добавить в корзину
+                                </Button>
+                            )}
                         </Box>
                     )}
                 </CardContent>

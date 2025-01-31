@@ -88,6 +88,7 @@ const ItemsPage = () => {
                                 size={{ xs: 2, sm: 3, md: 3 }}
                             >
                                 <ItemCard
+                                    key={item.id}
                                     item={item}
                                     showAddToDraftOrderBtn={
                                         isAuthenticated &&

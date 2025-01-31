@@ -63,7 +63,7 @@ export const useItemsProducersList = () =>
             api.get(`/items/producers`).then((response) => response.data)
     );
 
-export const useItem = (id: string) =>
+export const useItem = (id: number) =>
     useQuery(
         ["Item"],
         (): Promise<T_Item> =>

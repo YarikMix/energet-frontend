@@ -13,11 +13,10 @@ import { T_Item } from "entities/Item/model/types/Item.ts";
 import { useNavigate } from "react-router-dom";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import * as React from "react";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
 import {
-    addItemToOrder,
+    addItemToDraftOrder,
     deleteItemFromOrder,
     handleUpdateItemCount,
     toggleSelectItem,
@@ -28,17 +27,27 @@ import { useSelector } from "react-redux";
 import { isAddedToDraftOrder } from "entities/Item/lib/isAddedToDraftOrder.ts";
 import { InputCounter } from "shared/InputCounter/InputCounter.tsx";
 import { useDebounce } from "use-debounce";
+import {
+    addToFavourites,
+    removeFromFavourites,
+} from "entities/Item/api/itemsApi.ts";
+import {
+    getIsAuthenticated,
+    getIsBuyer,
+} from "entities/User/model/selectors/getUser.ts";
 
 interface IProps {
     item: T_Item;
     showAddToDraftOrderBtn?: boolean;
     isBinPage?: boolean;
+    onToggleFavourite: () => void;
 }
 
 const ItemCard = ({
     item,
     showAddToDraftOrderBtn = false,
     isBinPage = false,
+    onToggleFavourite = () => {},
 }: IProps) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -48,6 +57,11 @@ const ItemCard = ({
     const [error, setError] = useState(false);
 
     const { order, items } = useSelector((state) => state.orderReducer);
+
+    const [isFavourite, setIsFavourite] = useState<boolean>(false);
+
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const isBuyer = useSelector(getIsBuyer);
 
     const [isChecked, setIsChecked] = useState<boolean>(
         items?.includes(item.id)
@@ -60,14 +74,19 @@ const ItemCard = ({
     const handleAddToDraftOrder = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        dispatch(addItemToOrder(item.id));
+        dispatch(addItemToDraftOrder(item.id));
     };
 
-    const handleAddItemToFavourites = (e) => {
+    const handleToggleItemFavourite = async (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log("handleAddItemToFavourites");
-        // TODO
+        await dispatch(
+            isFavourite
+                ? removeFromFavourites(item.id)
+                : addToFavourites(item.id)
+        );
+        setIsFavourite(!isFavourite);
+        onToggleFavourite();
     };
 
     const handleDeleteFromOrder = (e) => {
@@ -98,7 +117,12 @@ const ItemCard = ({
     }, [debouncedCount]);
 
     useEffect(() => {
-        setCount(item.count);
+        setCount(item?.count);
+        if (!item.favourite) {
+            setIsFavourite(false);
+        } else {
+            setIsFavourite(item.favourite);
+        }
     }, [item]);
 
     useEffect(() => {
@@ -146,12 +170,17 @@ const ItemCard = ({
                     </Box>
                     <Box display="flex" justifyContent="space-between">
                         <Box>
-                            <IconButton
-                                onClick={handleAddItemToFavourites}
-                                sx={{ width: 56, height: 56 }}
-                            >
-                                <FavoriteBorderIcon />
-                            </IconButton>
+                            <Checkbox
+                                icon={<FavoriteBorder />}
+                                checkedIcon={<Favorite />}
+                                checked={isFavourite}
+                                onClick={handleToggleItemFavourite}
+                                inputProps={{ "aria-label": "controlled" }}
+                                sx={{
+                                    width: 56,
+                                    height: 56,
+                                }}
+                            />
                             <IconButton
                                 onClick={handleDeleteFromOrder}
                                 sx={{ width: 56, height: 56 }}
@@ -195,18 +224,22 @@ const ItemCard = ({
             sx={{ maxWidth: 345, position: "relative" }}
             onClick={handleOpenItemDetailsPage}
         >
-            <Checkbox
-                icon={<FavoriteBorder />}
-                checkedIcon={<Favorite />}
-                onClick={handleAddItemToFavourites}
-                sx={{
-                    position: "absolute",
-                    top: "10px",
-                    right: "10px",
-                    zIndex: 2,
-                    color: "#fff",
-                }}
-            />
+            {isAuthenticated && isBuyer && (
+                <Checkbox
+                    icon={<FavoriteBorder />}
+                    checkedIcon={<Favorite />}
+                    checked={isFavourite}
+                    onClick={handleToggleItemFavourite}
+                    inputProps={{ "aria-label": "controlled" }}
+                    sx={{
+                        position: "absolute",
+                        top: "10px",
+                        right: "10px",
+                        zIndex: 2,
+                        color: "#fff",
+                    }}
+                />
+            )}
             <CardActionArea disableRipple={true}>
                 <CardMedia
                     component="img"

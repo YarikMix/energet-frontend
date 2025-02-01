@@ -8,17 +8,20 @@ import {
     Typography,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useItem } from "entities/Item/api/itemsApi.ts";
+import {
+    addToFavourites,
+    removeFromFavourites,
+    useItem,
+} from "entities/Item/api/itemsApi.ts";
 import { useSelector } from "react-redux";
 import {
     getIsAuthenticated,
-    getUser,
+    getIsBuyer,
 } from "entities/User/model/selectors/getUser.ts";
-import { E_UserRole } from "entities/User/model/types/User.ts";
 import * as React from "react";
 import { useState } from "react";
 import {
-    addItemToOrder,
+    addItemToDraftOrder,
     deleteItemFromOrder,
 } from "entities/Order/lib/slices/DraftOrderSlice.ts";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
@@ -29,18 +32,18 @@ export const ItemPage = () => {
 
     const isAuthenticated = useSelector(getIsAuthenticated);
     const dispatch = useAppDispatch();
-    const user = useSelector(getUser);
+    const isBuyer = useSelector(getIsBuyer);
 
     const order = useSelector((state) => state.orderReducer.order);
 
-    const { data: item, isLoading } = useItem(id as number);
+    const { data: item, isLoading, refetch } = useItem(id as number);
 
     const [currentTab, setCurrentTab] = useState(0);
 
     const handleAddToDraftOrder = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        dispatch(addItemToOrder(id as number));
+        dispatch(addItemToDraftOrder(id as number));
     };
 
     const handleDeleteFromOrder = (e) => {
@@ -52,6 +55,17 @@ export const ItemPage = () => {
     if (isLoading || !item) {
         return <div>isLoading</div>;
     }
+
+    const handleToggleItemFavourite = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        await dispatch(
+            item.favourite
+                ? removeFromFavourites(item.id)
+                : addToFavourites(item.id)
+        );
+        refetch();
+    };
 
     const ItemProperty = ({ name, value }) => {
         return (
@@ -134,10 +148,16 @@ export const ItemPage = () => {
                         />
                         <ItemProperty name="Вес" value={item.weight + " кг"} />
                     </Box>
-                    {isAuthenticated && user?.role == E_UserRole.Buyer && (
+                    {isAuthenticated && isBuyer && (
                         <Box fullWidth sx={{ display: "flex", gap: "14px" }}>
                             <Button
-                                variant="contained"
+                                variant={
+                                    (isAddedToDraftOrder(order, id as number)
+                                        ? "outlined"
+                                        : "contained") as
+                                        | "outlined"
+                                        | "contained"
+                                }
                                 sx={{ display: "flex", flex: 1 }}
                                 onClick={(e) =>
                                     isAddedToDraftOrder(order, id as number)
@@ -151,10 +171,19 @@ export const ItemPage = () => {
                             </Button>
 
                             <Button
-                                variant="outlined"
+                                variant={
+                                    (item.favourite
+                                        ? "outlined"
+                                        : "contained") as
+                                        | "outlined"
+                                        | "contained"
+                                }
                                 sx={{ display: "flex", flex: 1 }}
+                                onClick={handleToggleItemFavourite}
                             >
-                                В избранное
+                                {item.favourite
+                                    ? "Из избранного"
+                                    : "В избранное"}
                             </Button>
                         </Box>
                     )}

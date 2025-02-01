@@ -9,6 +9,7 @@ export type T_Item = {
     image: string;
     owner: number;
     count?: number;
+    favourite?: boolean;
 };
 
 export enum E_ItemStatus {

@@ -31,7 +31,6 @@ export const handleRegister = createAsyncThunk<
 export const handleLogout = createAsyncThunk<void, void, AsyncThunkConfig>(
     "logout",
     async function () {
-        console.log("handleLogout");
         await api.post("/auth/logout/");
     }
 );

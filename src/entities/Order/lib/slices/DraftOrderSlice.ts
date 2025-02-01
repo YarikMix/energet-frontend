@@ -54,19 +54,24 @@ export const deleteItemFromOrder = createAsyncThunk<
     return response.data;
 });
 
-export const addItemToOrder = createAsyncThunk<
+export const addItemToDraftOrder = createAsyncThunk<
     T_Order,
     number,
     AsyncThunkConfig
->("add_item_to_order", async function (itemId, thunkAPI) {
-    const state = thunkAPI.getState();
-
+>("add_item_to_order", async function (itemId) {
     const response = await api.post(
-        `/orders/${state.orderReducer.order.id}/add_item/${itemId}`
+        `/orders/add_item_to_draft_order/${itemId}/`
     );
 
     return response.data;
 });
+
+export const deleteDraftOrder = createAsyncThunk<void, void, AsyncThunkConfig>(
+    "delete_draft_order",
+    async function () {
+        await api.delete("/orders/draft/");
+    }
+);
 
 const draftOrderSlice = createSlice({
     name: "user",
@@ -105,9 +110,16 @@ const draftOrderSlice = createSlice({
             }
         );
         builder.addCase(
-            addItemToOrder.fulfilled,
+            addItemToDraftOrder.fulfilled,
             (state: T_DraftOrderState, action: PayloadAction<T_Order>) => {
                 state.order = action.payload;
+            }
+        );
+        builder.addCase(
+            deleteDraftOrder.fulfilled,
+            (state: T_DraftOrderState) => {
+                state.order = null;
+                state.items = [];
             }
         );
     },

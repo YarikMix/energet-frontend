@@ -110,7 +110,7 @@ const Header = () => {
                         sx={{ px: 3 }}
                         icon={
                             <Badge
-                                badgeContent={order?.items.length}
+                                badgeContent={order?.items?.length}
                                 color="primary"
                                 sx={{ transform: "translateX(45px)" }}
                             ></Badge>

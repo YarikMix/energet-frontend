@@ -14,6 +14,7 @@ import { formatItemsCount } from "entities/Order/lib/formatItemsCount.ts";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
+    deleteDraftOrder,
     handleFetchDraftOrder,
     selectAllItems,
     unselectAllItems,
@@ -48,15 +49,10 @@ export const BinPage = () => {
     };
 
     const handleDeleteDraftOrder = () => {
-        // TODO
-        console.log("handleDeleteDraftOrder");
+        dispatch(deleteDraftOrder());
     };
 
-    if (!order) {
-        return <div>Loading</div>;
-    }
-
-    if (!order.items.length) {
+    if (!order || !order.items.length) {
         return (
             <Container
                 sx={{

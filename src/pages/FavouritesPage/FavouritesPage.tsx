@@ -1,22 +1,22 @@
-import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
-import {
-    useItemsList,
-    useItemsProducersList,
-    useItemsTypesList,
-} from "entities/Item/api/itemsApi.ts";
-import { Box, Container, Grid2, Pagination, Typography } from "@mui/material";
-import MultipleSelect from "shared/MultipleSelect/MultipleSelect.tsx";
-import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
-import { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
 import { useSelector } from "react-redux";
 import {
     getIsAuthenticated,
     getUser,
 } from "entities/User/model/selectors/getUser.ts";
+import { useState } from "react";
+import { useDebounce } from "use-debounce";
+import {
+    useFavouriteList,
+    useItemsProducersList,
+    useItemsTypesList,
+} from "entities/Item/api/itemsApi.ts";
+import { Box, Container, Grid2, Typography } from "@mui/material";
+import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
+import MultipleSelect from "shared/MultipleSelect/MultipleSelect.tsx";
+import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
 import { E_UserRole } from "entities/User/model/types/User.ts";
 
-const ItemsPage = () => {
+export const FavouritesPage = () => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const user = useSelector(getUser);
 
@@ -29,24 +29,15 @@ const ItemsPage = () => {
 
     const [debouncedName] = useDebounce(name, 250);
 
-    const [page, setPage] = useState(1);
-
-    const { data: itemsList, refetch } = useItemsList({
+    const { data: itemsList, refetch } = useFavouriteList({
         searchParams: [debouncedName, selectedItemTypes, selectedItemProducers],
-        page,
     });
 
     const { data: itemsTypes } = useItemsTypesList();
 
     const { data: itemsProducers } = useItemsProducersList();
 
-    const handleChange = (e, pageIdx) => {
-        setPage(pageIdx);
-    };
-
-    useEffect(() => {
-        setPage(1);
-    }, [debouncedName, selectedItemTypes, selectedItemProducers]);
+    console.log(itemsList);
 
     return (
         <Container>
@@ -72,14 +63,14 @@ const ItemsPage = () => {
                     />
                 </Box>
             </Box>
-            {itemsList && itemsList.items?.length > 0 ? (
+            {itemsList && itemsList?.length > 0 ? (
                 <Box>
                     <Grid2
                         container
                         spacing={{ xs: 2, md: 3 }}
                         columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                     >
-                        {itemsList.items.map((item) => (
+                        {itemsList.map((item) => (
                             <Grid2 key={item.id} size={{ xs: 2, sm: 3, md: 3 }}>
                                 <ItemCard
                                     key={item.id}
@@ -88,33 +79,19 @@ const ItemsPage = () => {
                                         isAuthenticated &&
                                         user?.role == E_UserRole.Buyer
                                     }
+                                    onToggleFavourite={() => refetch()}
                                 />
                             </Grid2>
                         ))}
                     </Grid2>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            mt: 5,
-                        }}
-                    >
-                        <Pagination
-                            count={itemsList?.total_pages}
-                            page={page}
-                            onChange={handleChange}
-                        />
-                    </Box>
                 </Box>
             ) : (
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 15 }}>
                     <Typography variant="h4" color="text.secondary">
-                        Оборудование не найдено
+                        Список избранного пуст
                     </Typography>
                 </Box>
             )}
         </Container>
     );
 };
-
-export default ItemsPage;

@@ -40,6 +40,10 @@ export const BinPage = () => {
         return items.length == order?.items?.length;
     };
 
+    const isSelectedAny = () => {
+        return items.length > 0;
+    };
+
     const handleUnselectAll = () => {
         dispatch(unselectAllItems());
     };
@@ -50,6 +54,11 @@ export const BinPage = () => {
 
     const handleDeleteDraftOrder = () => {
         dispatch(deleteDraftOrder());
+    };
+
+    const handleDeleteItemsFromDraftOrder = () => {
+        // TODO
+        console.log("handleDeleteItemsFromDraftOrder");
     };
 
     if (!order || !order.items.length) {
@@ -112,6 +121,15 @@ export const BinPage = () => {
                             onClick={handleDeleteDraftOrder}
                         >
                             Удалить все
+                        </Typography>
+                    )}
+                    {!selectedAll && isSelectedAny() && (
+                        <Typography
+                            color="error.main"
+                            sx={{ cursor: "pointer" }}
+                            onClick={handleDeleteItemsFromDraftOrder}
+                        >
+                            Удалить
                         </Typography>
                     )}
                 </Box>

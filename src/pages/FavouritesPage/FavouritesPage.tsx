@@ -37,8 +37,6 @@ export const FavouritesPage = () => {
 
     const { data: itemsProducers } = useItemsProducersList();
 
-    console.log(itemsList);
-
     return (
         <Container>
             <Box

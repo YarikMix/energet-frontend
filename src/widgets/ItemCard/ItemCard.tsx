@@ -40,7 +40,7 @@ interface IProps {
     item: T_Item;
     showAddToDraftOrderBtn?: boolean;
     isBinPage?: boolean;
-    onToggleFavourite: () => void;
+    onToggleFavourite?: () => void;
 }
 
 const ItemCard = ({
@@ -86,7 +86,9 @@ const ItemCard = ({
                 : addToFavourites(item.id)
         );
         setIsFavourite(!isFavourite);
-        onToggleFavourite();
+        if (onToggleFavourite) {
+            onToggleFavourite();
+        }
     };
 
     const handleDeleteFromOrder = (e) => {

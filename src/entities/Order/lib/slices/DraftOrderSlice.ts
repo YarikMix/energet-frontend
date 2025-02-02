@@ -51,6 +51,8 @@ export const deleteItemFromOrder = createAsyncThunk<
         `/orders/${state.orderReducer.order.id}/delete_item/${itemId}`
     );
 
+    thunkAPI.dispatch(unselectItem(itemId));
+
     return response.data;
 });
 
@@ -70,6 +72,32 @@ export const deleteDraftOrder = createAsyncThunk<void, void, AsyncThunkConfig>(
     "delete_draft_order",
     async function () {
         await api.delete("/orders/draft/");
+    }
+);
+
+export const deleteItemsFromDraftOrder = createAsyncThunk<
+    T_Order,
+    void,
+    AsyncThunkConfig
+>("delete_items_from_draft_order", async function (_, thunkAPI) {
+    const state = thunkAPI.getState();
+
+    const response = await api.post(
+        `/orders/${state.orderReducer.order.id}/delete_items/`,
+        { items: state.orderReducer.items }
+    );
+
+    return response.data;
+});
+
+export const formDraftOrder = createAsyncThunk<void, void, AsyncThunkConfig>(
+    "update_draft_order_status_user",
+    async function (_, thunkAPI) {
+        const state = thunkAPI.getState();
+
+        await api.put(
+            `/orders/${state.orderReducer.order.id}/update_status_user/`
+        );
     }
 );
 
@@ -117,6 +145,20 @@ const draftOrderSlice = createSlice({
         );
         builder.addCase(
             deleteDraftOrder.fulfilled,
+            (state: T_DraftOrderState) => {
+                state.order = null;
+                state.items = [];
+            }
+        );
+        builder.addCase(
+            deleteItemsFromDraftOrder.fulfilled,
+            (state: T_DraftOrderState, action: PayloadAction<T_Order>) => {
+                state.order = action.payload;
+                state.items = [];
+            }
+        );
+        builder.addCase(
+            formDraftOrder.fulfilled,
             (state: T_DraftOrderState) => {
                 state.order = null;
                 state.items = [];

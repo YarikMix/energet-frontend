@@ -15,6 +15,8 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
     deleteDraftOrder,
+    deleteItemsFromDraftOrder,
+    formDraftOrder,
     handleFetchDraftOrder,
     selectAllItems,
     unselectAllItems,
@@ -57,8 +59,11 @@ export const BinPage = () => {
     };
 
     const handleDeleteItemsFromDraftOrder = () => {
-        // TODO
-        console.log("handleDeleteItemsFromDraftOrder");
+        dispatch(deleteItemsFromDraftOrder());
+    };
+
+    const handleFormDraftOrder = () => {
+        dispatch(formDraftOrder());
     };
 
     if (!order || !order.items.length) {
@@ -173,7 +178,10 @@ export const BinPage = () => {
                                     {calculateTotalPrice(order)} ₽
                                 </Typography>
                             </Box>
-                            <Button variant="contained">
+                            <Button
+                                variant="contained"
+                                onClick={handleFormDraftOrder}
+                            >
                                 Перейти к оформлению
                             </Button>
                         </Card>

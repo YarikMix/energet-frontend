@@ -37,7 +37,7 @@ export default function MultipleSelect({ label, options, onChange }: IProps) {
     const [selectedOptions, setSelectedOptions] = React.useState<string[]>([]);
 
     if (!options) {
-        return <div>sadfasdf</div>;
+        return <div></div>;
     }
 
     const handleChange = (event: SelectChangeEvent<string[]>) => {

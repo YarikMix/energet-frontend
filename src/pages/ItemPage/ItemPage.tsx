@@ -19,13 +19,14 @@ import {
     getIsBuyer,
 } from "entities/User/model/selectors/getUser.ts";
 import * as React from "react";
-import { useState } from "react";
 import {
     addItemToDraftOrder,
     deleteItemFromOrder,
 } from "entities/Order/lib/slices/DraftOrderSlice.ts";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { isAddedToDraftOrder } from "entities/Item/lib/isAddedToDraftOrder.ts";
+import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
+import useTabs from "shared/utils/useTabs.tsx";
 
 export const ItemPage = () => {
     const { id } = useParams<{ id: number }>();
@@ -38,7 +39,9 @@ export const ItemPage = () => {
 
     const { data: item, isLoading, refetch } = useItem(id as number);
 
-    const [currentTab, setCurrentTab] = useState(0);
+    const tabs = ["Особенности", "Характеристики", "Документация"];
+
+    const { currentTab, TabsComponent } = useTabs(tabs);
 
     const handleAddToDraftOrder = (e) => {
         e.preventDefault();
@@ -81,38 +84,6 @@ export const ItemPage = () => {
                 <Typography>{value}</Typography>
             </Box>
         );
-    };
-
-    interface TabPanelProps {
-        children?: React.ReactNode;
-        index: number;
-    }
-
-    const a11yProps = (index: number) => {
-        return {
-            id: `simple-tab-${index}`,
-            "aria-controls": `simple-tabpanel-${index}`,
-        };
-    };
-
-    const CustomTabPanel = (props: TabPanelProps) => {
-        const { children, index, ...other } = props;
-
-        return (
-            <div
-                role="tabpanel"
-                hidden={currentTab !== index}
-                id={`simple-tabpanel-${index}`}
-                aria-labelledby={`simple-tab-${index}`}
-                {...other}
-            >
-                {currentTab === index && <Box sx={{ p: 3 }}>{children}</Box>}
-            </div>
-        );
-    };
-
-    const handleChange = (event: React.SyntheticEvent, newTab: number) => {
-        setCurrentTab(newTab);
     };
 
     return (
@@ -190,25 +161,31 @@ export const ItemPage = () => {
                 </Box>
             </Box>
             <Box>
-                <Tabs value={currentTab} onChange={handleChange}>
-                    <Tab label="Особенности" {...a11yProps(0)} />
-                    <Tab label="Характеристики" {...a11yProps(1)} />
-                    <Tab label="Документация" {...a11yProps(2)} />
-                </Tabs>
-                <CustomTabPanel index={0} sx={{ overflow: "hidden" }}>
-                    TODO
-                </CustomTabPanel>
-                <CustomTabPanel index={1}>
-                    <Box sx={{ width: "400px" }}>
-                        <ItemProperty name="Тип" value={item.item_type.name} />
-                        <ItemProperty
-                            name="Производитель"
-                            value={item.item_producer.name}
-                        />
-                        <ItemProperty name="Вес" value={item.weight + " кг"} />
-                    </Box>
-                </CustomTabPanel>
-                <CustomTabPanel index={2}>TODO</CustomTabPanel>
+                {TabsComponent({})}
+                <Box sx={{ pt: 3 }}>
+                    <TabPanel currentTab={currentTab} index={0}>
+                        TODO
+                    </TabPanel>
+                    <TabPanel currentTab={currentTab} index={1}>
+                        <Box sx={{ width: "400px" }}>
+                            <ItemProperty
+                                name="Тип"
+                                value={item.item_type.name}
+                            />
+                            <ItemProperty
+                                name="Производитель"
+                                value={item.item_producer.name}
+                            />
+                            <ItemProperty
+                                name="Вес"
+                                value={item.weight + " кг"}
+                            />
+                        </Box>
+                    </TabPanel>
+                    <TabPanel currentTab={currentTab} index={2}>
+                        TODO
+                    </TabPanel>
+                </Box>
             </Box>
         </Container>
     );

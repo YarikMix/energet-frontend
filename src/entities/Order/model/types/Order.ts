@@ -5,7 +5,9 @@ export type T_Order = {
     status: E_OrderStatus;
     items: T_Item[];
     created_date: string;
+    formation_date: string;
     owner: number;
+    price?: number;
 };
 
 export enum E_OrderStatus {

@@ -39,16 +39,14 @@ export const ProfilePage = () => {
                     {TabsComponent({
                         orientation: "vertical",
                         tabHeight: 96,
-                        extraChild: (
-                            <Button
-                                onClick={logoutBtnClicked}
-                                variant="outlined"
-                                sx={{ mt: 5 }}
-                            >
-                                Выйти
-                            </Button>
-                        ),
                     })}
+                    <Button
+                        onClick={logoutBtnClicked}
+                        variant="outlined"
+                        sx={{ mt: 5, width: "100%" }}
+                    >
+                        Выйти
+                    </Button>
                 </Box>
                 <Box width="100%">
                     <TabPanel currentTab={currentTab} index={0}>

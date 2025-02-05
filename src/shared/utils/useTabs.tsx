@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import { Tab, Tabs } from "@mui/material";
 import { a11yProps } from "shared/utils/a11yProps.tsx";
 import { withStyles } from "@mui/styles";
@@ -6,7 +6,6 @@ import { withStyles } from "@mui/styles";
 interface TabsComponentProps {
     orientation?: "horizontal" | "vertical";
     tabHeight?: string | number;
-    extraChild?: ReactNode;
 }
 
 const useTabs = (tabs: string[]) => {
@@ -19,7 +18,6 @@ const useTabs = (tabs: string[]) => {
     const TabsComponent = ({
         orientation = "horizontal",
         tabHeight = "auto",
-        extraChild,
     }: TabsComponentProps) => {
         const StyledTab = withStyles({
             root: {
@@ -41,7 +39,6 @@ const useTabs = (tabs: string[]) => {
                 {tabs.map((name, idx) => (
                     <StyledTab label={name} {...a11yProps(idx)} key={idx} />
                 ))}
-                {React.isValidElement(extraChild) && extraChild}
             </Tabs>
         );
     };

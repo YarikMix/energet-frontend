@@ -4,7 +4,6 @@ import { formatDate } from "shared/utils/date.ts";
 import { useState } from "react";
 import { Order } from "src/widgets/Order/Order.tsx";
 import { ORDER_STATUSES } from "src/app/consts.ts";
-import { E_OrderStatus } from "entities/Order/model/types/Order.ts";
 
 export const Orders = () => {
     const [selectedOrder, setSelectedOrder] = useState<number | null>(null);

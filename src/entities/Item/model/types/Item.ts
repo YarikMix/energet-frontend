@@ -6,6 +6,7 @@ export type T_Item = {
     status: E_ItemStatus;
     price: number;
     weight: number;
+    power: number;
     image: string;
     owner: number;
     count?: number;

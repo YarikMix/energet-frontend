@@ -1,34 +1,72 @@
 import {
     Box,
     Button,
+    CircularProgress,
     Container,
     Stack,
     Step,
     StepButton,
     Stepper,
+    Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { CoordsPicker } from "src/widgets/CoordsPicker/CoordsPicker.tsx";
 import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
+import { Consumption } from "src/widgets/Consumption/Consumption.tsx";
+import { Optimization } from "src/widgets/Optimization/Optimization.tsx";
+import {
+    useAppDispatch,
+    useAppSelector,
+} from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { calculateFetch } from "entities/Configurator/lib/slices/configuratorSlice.ts";
 
 export const ConfiguratorPage = () => {
     const steps = ["Локация", "Потребление", "Оптимизация", "Результат"];
 
     const [step, setStep] = useState(0);
 
-    const [coords, setCoords] = useState<number[]>(null);
+    const { loading } = useAppSelector((state) => state.configuratorReducer);
 
-    const handleStep = (index) => {
+    const dispatch = useAppDispatch();
+
+    const handleStep = async (index) => {
         if (index < 0 || index > 3) {
             return;
         }
 
         setStep(index);
+
+        if (index == 3) {
+            await fetchConfigurator();
+            setStep(3);
+        }
     };
 
     const handleOpenNextStep = () => {
         handleStep(step + 1);
     };
+
+    const fetchConfigurator = async () => {
+        dispatch(calculateFetch());
+    };
+
+    if (loading) {
+        return (
+            <Stack
+                direction="column"
+                gap={5}
+                sx={{ width: "100%", height: "800px" }}
+                alignItems="center"
+                justifyContent="center"
+            >
+                <CircularProgress size={48} />
+                <Typography variant="h5" textAlign="center">
+                    Выполняется обработка данных,
+                    <br /> идет подсчет результатов
+                </Typography>
+            </Stack>
+        );
+    }
 
     return (
         <Container sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -51,16 +89,13 @@ export const ConfiguratorPage = () => {
                 <Box display="flex" justifyContent="space-between">
                     <Box>
                         <TabPanel currentTab={step} index={0}>
-                            <CoordsPicker
-                                coords={coords}
-                                setCoords={setCoords}
-                            />
+                            <CoordsPicker />
                         </TabPanel>
                         <TabPanel currentTab={step} index={1}>
-                            Потребление
+                            <Consumption />
                         </TabPanel>
                         <TabPanel currentTab={step} index={2}>
-                            Оптимизация
+                            <Optimization />
                         </TabPanel>
                         <TabPanel currentTab={step} index={3}>
                             Результат

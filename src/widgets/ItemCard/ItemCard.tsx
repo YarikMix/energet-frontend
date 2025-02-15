@@ -278,6 +278,14 @@ const ItemCard = ({
                         value={item.item_producer.name}
                     />
                     <ItemProperty name="Вес" value={item.weight + " кг"} />
+                    <ItemProperty
+                        name={
+                            item.item_type.name == "Аккумулятор"
+                                ? "Ёмкость"
+                                : "Мощность"
+                        }
+                        value={item.power + " вт"}
+                    />
                     {showAddToDraftOrderBtn && (
                         <Box>
                             {isAddedToDraftOrder(order, item.id) ? (

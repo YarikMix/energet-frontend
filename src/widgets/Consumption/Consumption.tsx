@@ -13,7 +13,7 @@ import { ConsumptionSeasons } from "src/widgets/Consumption/ConsumptionSeasons/C
 import { ConsumptionMonth } from "src/widgets/Consumption/ConsumptionMonth/ConsumptionMonth.tsx";
 
 export const Consumption = () => {
-    const [consumptionType, setConsumptionType] = useState(1);
+    const [consumptionType, setConsumptionType] = useState(2);
 
     const handleChange = (e) => {
         setConsumptionType(parseInt(e.target.value));

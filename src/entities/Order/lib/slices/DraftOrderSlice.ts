@@ -5,6 +5,7 @@ import {
     T_Order,
     T_UpdateItemCount,
 } from "entities/Order/model/types/Order.ts";
+import { T_Item } from "entities/Item/model/types/Item.ts";
 
 type T_DraftOrderState = {
     order?: T_Order | null;
@@ -64,6 +65,16 @@ export const addItemToDraftOrder = createAsyncThunk<
     const response = await api.post(
         `/orders/add_item_to_draft_order/${itemId}/`
     );
+
+    return response.data;
+});
+
+export const addItemsToDraftOrder = createAsyncThunk<
+    T_Order,
+    T_Item[],
+    AsyncThunkConfig
+>("add_item_to_order", async function (items) {
+    const response = await api.post(`/orders/add_items_to_draft_order/`, items);
 
     return response.data;
 });

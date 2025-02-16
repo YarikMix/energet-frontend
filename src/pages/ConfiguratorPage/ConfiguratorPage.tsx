@@ -18,14 +18,24 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "src/app/providers/StoreProvider/hooks/hooks.ts";
-import { calculateFetch } from "entities/Configurator/lib/slices/configuratorSlice.ts";
+import {
+    calculateFetch,
+    resetConfigurator,
+} from "entities/Configurator/lib/slices/configuratorSlice.ts";
+import { ConfiguratorResultTable } from "src/widgets/ConfiguratorResultTable/ConfiguratorResultTable.tsx";
+import { addItemsToDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
+import { useNavigate } from "react-router-dom";
 
 export const ConfiguratorPage = () => {
     const steps = ["Локация", "Потребление", "Оптимизация", "Результат"];
 
     const [step, setStep] = useState(0);
 
-    const { loading } = useAppSelector((state) => state.configuratorReducer);
+    const { loading, items } = useAppSelector(
+        (state) => state.configuratorReducer
+    );
+
+    const navigate = useNavigate();
 
     const dispatch = useAppDispatch();
 
@@ -50,6 +60,23 @@ export const ConfiguratorPage = () => {
         dispatch(calculateFetch());
     };
 
+    const handleAddResultToDraftOrder = async () => {
+        const list = items.map((item) => ({
+            id: item.item.id,
+            count: item.total_count,
+        }));
+        await dispatch(addItemsToDraftOrder(list));
+        navigate("/bin");
+        dispatch(resetConfigurator());
+        setStep(0);
+    };
+
+    const isLastStep = step == 3;
+
+    if (isLastStep && !items && !loading) {
+        return <></>;
+    }
+
     if (loading) {
         return (
             <Stack
@@ -67,6 +94,8 @@ export const ConfiguratorPage = () => {
             </Stack>
         );
     }
+
+    const nextStepBtnVisible = !isLastStep;
 
     return (
         <Container sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -98,17 +127,31 @@ export const ConfiguratorPage = () => {
                             <Optimization />
                         </TabPanel>
                         <TabPanel currentTab={step} index={3}>
-                            Результат
+                            <Stack gap={3}>
+                                <Typography variant="h6">
+                                    Оптимальная конфигурация
+                                </Typography>
+                                <ConfiguratorResultTable />
+                                <Button
+                                    variant="contained"
+                                    sx={{ maxWidth: 200 }}
+                                    onClick={handleAddResultToDraftOrder}
+                                >
+                                    Добавить в корзину
+                                </Button>
+                            </Stack>
                         </TabPanel>
                     </Box>
                     <Box>
-                        <Button
-                            variant="contained"
-                            sx={{ width: "140px", fontSize: 14 }}
-                            onClick={handleOpenNextStep}
-                        >
-                            Далее
-                        </Button>
+                        {nextStepBtnVisible && (
+                            <Button
+                                variant="contained"
+                                sx={{ width: "140px", fontSize: 14 }}
+                                onClick={handleOpenNextStep}
+                            >
+                                Далее
+                            </Button>
+                        )}
                     </Box>
                 </Box>
             </Stack>

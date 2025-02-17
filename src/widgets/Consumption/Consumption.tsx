@@ -7,7 +7,6 @@ import {
     RadioGroup,
 } from "@mui/material";
 import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
-import { ConsumptionTemplate } from "src/widgets/Consumption/ConsumptionTemplate/ConsumptionTemplate.tsx";
 import { ConsumptionConstant } from "src/widgets/Consumption/ConsumptionConstant/ConsumptionConstant.tsx";
 import { ConsumptionSeasons } from "src/widgets/Consumption/ConsumptionSeasons/ConsumptionSeasons.tsx";
 import { ConsumptionMonth } from "src/widgets/Consumption/ConsumptionMonth/ConsumptionMonth.tsx";
@@ -34,14 +33,14 @@ export const Consumption = () => {
                     value={consumptionType}
                     onChange={handleChange}
                 >
-                    <FormControlLabel
-                        value={0}
-                        control={<Radio />}
-                        label="Шаблон потребления"
-                    />
-                    <TabPanel currentTab={consumptionType} index={0}>
-                        <ConsumptionTemplate />
-                    </TabPanel>
+                    {/*<FormControlLabel*/}
+                    {/*    value={0}*/}
+                    {/*    control={<Radio />}*/}
+                    {/*    label="Шаблон потребления"*/}
+                    {/*/>*/}
+                    {/*<TabPanel currentTab={consumptionType} index={0}>*/}
+                    {/*    <ConsumptionTemplate />*/}
+                    {/*</TabPanel>*/}
                     <FormControlLabel
                         value={1}
                         control={<Radio />}

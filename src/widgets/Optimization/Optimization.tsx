@@ -235,26 +235,26 @@ export const Optimization = () => {
                             control={<Radio />}
                             label="Минимизация CAPEX"
                         />
-                        <FormControlLabel
-                            value={1}
-                            control={<Radio />}
-                            label="Минимизация OPEX"
-                        />
+                        {/*<FormControlLabel*/}
+                        {/*    value={1}*/}
+                        {/*    control={<Radio />}*/}
+                        {/*    label="Минимизация OPEX"*/}
+                        {/*/>*/}
                         <FormControlLabel
                             value={2}
                             control={<Radio />}
                             label="Минимизация стоимости электроэнергии"
                         />
-                        <FormControlLabel
-                            value={3}
-                            control={<Radio />}
-                            label="Максимальная надежность"
-                        />
-                        <FormControlLabel
-                            value={4}
-                            control={<Radio />}
-                            label="Минимальный углеродный след"
-                        />
+                        {/*<FormControlLabel*/}
+                        {/*    value={3}*/}
+                        {/*    control={<Radio />}*/}
+                        {/*    label="Максимальная надежность"*/}
+                        {/*/>*/}
+                        {/*<FormControlLabel*/}
+                        {/*    value={4}*/}
+                        {/*    control={<Radio />}*/}
+                        {/*    label="Минимальный углеродный след"*/}
+                        {/*/>*/}
                     </RadioGroup>
                 </FormControl>
             </ListItem>

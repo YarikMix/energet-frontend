@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     FormControl,
     FormControlLabel,
@@ -8,14 +8,19 @@ import {
 } from "@mui/material";
 import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
 import { ConsumptionConstant } from "src/widgets/Consumption/ConsumptionConstant/ConsumptionConstant.tsx";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { updateConsumptionType } from "entities/Configurator/lib/slices/configuratorSlice.ts";
 import { ConsumptionSeasons } from "src/widgets/Consumption/ConsumptionSeasons/ConsumptionSeasons.tsx";
-import { ConsumptionMonth } from "src/widgets/Consumption/ConsumptionMonth/ConsumptionMonth.tsx";
+import { getConsumptionType } from "entities/Configurator/model/selectors/getConsumption.ts";
 
 export const Consumption = () => {
-    const [consumptionType, setConsumptionType] = useState(2);
+    const type = useSelector(getConsumptionType);
+
+    const dispatch = useAppDispatch();
 
     const handleChange = (e) => {
-        setConsumptionType(parseInt(e.target.value));
+        dispatch(updateConsumptionType(parseInt(e.target.value)));
     };
 
     return (
@@ -30,7 +35,7 @@ export const Consumption = () => {
                 <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
-                    value={consumptionType}
+                    value={type}
                     onChange={handleChange}
                 >
                     {/*<FormControlLabel*/}
@@ -46,7 +51,7 @@ export const Consumption = () => {
                         control={<Radio />}
                         label="Постоянное потребление"
                     />
-                    <TabPanel currentTab={consumptionType} index={1}>
+                    <TabPanel currentTab={type} index={1}>
                         <ConsumptionConstant />
                     </TabPanel>
                     <FormControlLabel
@@ -54,7 +59,7 @@ export const Consumption = () => {
                         control={<Radio />}
                         label="Потребление по сезоннам"
                     />
-                    <TabPanel currentTab={consumptionType} index={2}>
+                    <TabPanel currentTab={type} index={2}>
                         <ConsumptionSeasons />
                     </TabPanel>
                     <FormControlLabel
@@ -62,8 +67,8 @@ export const Consumption = () => {
                         control={<Radio />}
                         label="Потребление по месяцам"
                     />
-                    <TabPanel currentTab={consumptionType} index={3}>
-                        <ConsumptionMonth />
+                    <TabPanel currentTab={type} index={3}>
+                        {/*<ConsumptionMonth />*/}
                     </TabPanel>
                 </RadioGroup>
             </FormControl>

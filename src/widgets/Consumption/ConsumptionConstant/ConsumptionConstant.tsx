@@ -1,24 +1,23 @@
 import React from "react";
 import { ConsumptionPowerInput } from "shared/ConsumptionPowerInput/ConsumptionPowerInput.tsx";
 import { Box } from "@mui/material";
-import {
-    useAppDispatch,
-    useAppSelector,
-} from "src/app/providers/StoreProvider/hooks/hooks.ts";
-import { updatePower } from "entities/Configurator/lib/slices/configuratorSlice.ts";
+import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { useSelector } from "react-redux";
+import { getConsumptionConst } from "entities/Configurator/model/selectors/getConsumption.ts";
+import { updateConsumptionConst } from "entities/Configurator/lib/slices/configuratorSlice.ts";
 
 export const ConsumptionConstant = () => {
-    const { power } = useAppSelector((state) => state.configuratorReducer);
+    const consumption = useSelector(getConsumptionConst);
 
     const dispatch = useAppDispatch();
 
-    const setPower = (value) => {
-        dispatch(updatePower(value));
+    const setPower = (value: number) => {
+        dispatch(updateConsumptionConst(value));
     };
 
     return (
         <Box p={3}>
-            <ConsumptionPowerInput value={power} setValue={setPower} />
+            <ConsumptionPowerInput value={consumption} setValue={setPower} />
         </Box>
     );
 };

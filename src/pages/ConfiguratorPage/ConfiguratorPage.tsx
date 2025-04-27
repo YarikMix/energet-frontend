@@ -21,6 +21,7 @@ import {
 import {
     calculateFetch,
     resetConfigurator,
+    saveDraftCalculation,
 } from "entities/Configurator/lib/slices/configuratorSlice.ts";
 import { ConfiguratorResultTable } from "src/widgets/ConfiguratorResultTable/ConfiguratorResultTable.tsx";
 import { addItemsToDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
@@ -62,11 +63,17 @@ export const ConfiguratorPage = () => {
 
     const handleAddResultToDraftOrder = async () => {
         const list = items.map((item) => ({
-            id: item.item.id,
-            count: item.total_count,
+            id: item.id,
+            count: item.count,
         }));
         await dispatch(addItemsToDraftOrder(list));
         navigate("/bin");
+        dispatch(resetConfigurator());
+        setStep(0);
+    };
+
+    const handleExitFromConfigurator = async () => {
+        navigate("/");
         dispatch(resetConfigurator());
         setStep(0);
     };
@@ -94,6 +101,35 @@ export const ConfiguratorPage = () => {
             </Stack>
         );
     }
+
+    if (!loading && items && !items.length) {
+        return (
+            <Stack
+                direction="column"
+                gap={5}
+                sx={{ width: "100%", height: "800px" }}
+                alignItems="center"
+                justifyContent="center"
+            >
+                <Typography variant="h5" textAlign="center">
+                    Подходящий комплект не найден
+                </Typography>
+                <Button
+                    variant="contained"
+                    onClick={handleExitFromConfigurator}
+                >
+                    Вернуться на главную
+                </Button>
+            </Stack>
+        );
+    }
+
+    const saveToDraft = async () => {
+        navigate("/");
+        await dispatch(saveDraftCalculation());
+        dispatch(resetConfigurator());
+        setStep(0);
+    };
 
     const nextStepBtnVisible = !isLastStep;
 
@@ -132,13 +168,22 @@ export const ConfiguratorPage = () => {
                                     Оптимальная конфигурация
                                 </Typography>
                                 <ConfiguratorResultTable />
-                                <Button
-                                    variant="contained"
-                                    sx={{ maxWidth: 200 }}
-                                    onClick={handleAddResultToDraftOrder}
-                                >
-                                    Добавить в корзину
-                                </Button>
+                                <Stack direction="row" gap={4}>
+                                    <Button
+                                        variant="contained"
+                                        sx={{ maxWidth: 200 }}
+                                        onClick={handleAddResultToDraftOrder}
+                                    >
+                                        Добавить в корзину
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        sx={{ maxWidth: 200 }}
+                                        onClick={saveToDraft}
+                                    >
+                                        Сохранить черновик
+                                    </Button>
+                                </Stack>
                             </Stack>
                         </TabPanel>
                     </Box>

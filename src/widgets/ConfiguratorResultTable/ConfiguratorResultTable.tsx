@@ -29,12 +29,12 @@ export const ConfiguratorResultTable = () => {
     ];
 
     const rows = items.map((item) => ({
-        id: item.item.id,
-        name: item.item.name,
-        power: item.item.power + " Вт",
-        type: item.item.item_type.name,
-        price: item.item.price + " ₽",
-        count: item.total_count,
+        id: item.id,
+        name: item.name,
+        power: item.power + " Вт",
+        type: item.item_type.name,
+        price: item.price + " ₽",
+        count: item.count,
     }));
 
     return (

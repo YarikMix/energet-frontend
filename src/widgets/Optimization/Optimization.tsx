@@ -21,17 +21,12 @@ import {
     updateEnSource,
     updateEnStorage,
 } from "entities/Configurator/lib/slices/configuratorSlice.ts";
+import getOptimization from "entities/Configurator/model/selectors/getOptimization.ts";
 
 export const Optimization = () => {
-    const state = useAppSelector((state) => state.configuratorReducer);
+    const { enSource, enDSource, enStorage } = useAppSelector(getOptimization);
 
     const dispatch = useAppDispatch();
-
-    const [radio1, setRadio1] = useState(0);
-
-    const handleChangeRadio1 = (e) => {
-        setRadio1(parseInt(e.target.value));
-    };
 
     const [radio2, setRadio2] = useState(0);
 
@@ -45,42 +40,86 @@ export const Optimization = () => {
         setRadio3(parseInt(e.target.value));
     };
 
+    const isSourcesEnabledAll = Object.entries({
+        ...enSource,
+        ...enDSource,
+    }).every((source) => source[1] == 1);
+
+    const handleEnableAllSources = () => {
+        dispatch(
+            updateEnSource({
+                solar: 1,
+                wind: 1,
+                TEG: 1,
+            })
+        );
+
+        dispatch(
+            updateEnDSource({
+                DGS: 1,
+                FC: 1,
+            })
+        );
+    };
+
+    const handleDisableAllSources = () => {
+        if (isSourcesEnabledAll) {
+            dispatch(
+                updateEnSource({
+                    solar: 0,
+                    wind: 0,
+                    TEG: 0,
+                })
+            );
+
+            dispatch(
+                updateEnDSource({
+                    DGS: 0,
+                    FC: 0,
+                })
+            );
+        }
+    };
+
     return (
         <List sx={{ listStyle: "decimal", pl: 4 }}>
             <ListItem sx={{ display: "list-item" }}>
                 <ListItemText primary="Выбор источников энергии" />
                 <FormControl>
-                    <RadioGroup value={radio1} onChange={handleChangeRadio1}>
+                    <RadioGroup value={isSourcesEnabledAll ? 0 : 1}>
                         <FormControlLabel
                             value={0}
-                            control={<Radio defaultChecked />}
+                            control={<Radio checked={isSourcesEnabledAll} />}
                             label="Включить в расчет все"
+                            onClick={handleEnableAllSources}
                         />
                         <FormControlLabel
                             value={1}
-                            control={<Radio />}
+                            control={<Radio checked={!isSourcesEnabledAll} />}
                             label="Выбрать некоторые"
+                            onClick={handleDisableAllSources}
                         />
                         <Box p={2}>
-                            <TabPanel currentTab={radio1} index={1}>
+                            <TabPanel
+                                currentTab={isSourcesEnabledAll ? 0 : 1}
+                                index={1}
+                            >
                                 <FormGroup>
                                     <FormControlLabel
                                         control={
                                             <Checkbox
                                                 checked={Boolean(
-                                                    state.enSource.solar
+                                                    enSource.solar
                                                 )}
                                             />
                                         }
                                         label="Солнечная панель"
                                         onClick={(e) => {
-                                            console.log(state.enSource.solar);
+                                            console.log(enSource.solar);
                                             dispatch(
                                                 updateEnSource({
-                                                    ...state.enSource,
-                                                    solar:
-                                                        1 -
-                                                        state.enSource.solar,
+                                                    ...enSource,
+                                                    solar: 1 - enSource.solar,
                                                 })
                                             );
                                             e.preventDefault();
@@ -97,37 +136,15 @@ export const Optimization = () => {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={Boolean(
-                                                    state.enSource.TEG
-                                                )}
-                                            />
-                                        }
-                                        label="Термоэлектрический генератор"
-                                        onClick={(e) => {
-                                            dispatch(
-                                                updateEnSource({
-                                                    ...state.enSource,
-                                                    TEG: 1 - state.enSource.TEG,
-                                                })
-                                            );
-                                            e.preventDefault();
-                                        }}
-                                    />
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={Boolean(
-                                                    state.enSource.wind
-                                                )}
+                                                checked={Boolean(enSource.wind)}
                                             />
                                         }
                                         label="Ветрогенератор"
                                         onClick={(e) => {
                                             dispatch(
                                                 updateEnSource({
-                                                    ...state.enSource,
-                                                    wind:
-                                                        1 - state.enSource.wind,
+                                                    ...enSource,
+                                                    wind: 1 - enSource.wind,
                                                 })
                                             );
                                             e.preventDefault();
@@ -136,19 +153,32 @@ export const Optimization = () => {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={Boolean(
-                                                    state.enDSource.DGS
-                                                )}
+                                                checked={Boolean(enSource.TEG)}
+                                            />
+                                        }
+                                        label="Термоэлектрический генератор"
+                                        onClick={(e) => {
+                                            dispatch(
+                                                updateEnSource({
+                                                    ...enSource,
+                                                    TEG: 1 - enSource.TEG,
+                                                })
+                                            );
+                                            e.preventDefault();
+                                        }}
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={Boolean(enDSource.DGS)}
                                             />
                                         }
                                         label="Дизель"
                                         onClick={(e) => {
-                                            console.log("123");
                                             dispatch(
                                                 updateEnDSource({
-                                                    ...state.enDSource,
-                                                    DGS:
-                                                        1 - state.enDSource.DGS,
+                                                    ...enDSource,
+                                                    DGS: 1 - enDSource.DGS,
                                                 })
                                             );
                                             e.preventDefault();
@@ -184,17 +214,15 @@ export const Optimization = () => {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={Boolean(
-                                                    state.enStorage.AB
-                                                )}
+                                                checked={Boolean(enStorage.AB)}
                                             />
                                         }
                                         label="Аккумуляторная батарея"
                                         onClick={(e) => {
                                             dispatch(
                                                 updateEnStorage({
-                                                    ...state.enStorage,
-                                                    AB: 1 - state.enStorage.AB,
+                                                    ...enStorage,
+                                                    AB: 1 - enStorage.AB,
                                                 })
                                             );
                                             e.preventDefault();

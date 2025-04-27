@@ -56,6 +56,7 @@ export const Orders = () => {
                         paddingRight="28px"
                         sx={{ cursor: "pointer" }}
                         onClick={() => openOrder(order.id)}
+                        key={order.id}
                     >
                         <Stack direction="row" spacing={5}>
                             <Typography

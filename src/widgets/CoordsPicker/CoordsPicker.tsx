@@ -5,14 +5,18 @@ import {
     useAppSelector,
 } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { updateCoords } from "entities/Configurator/lib/slices/configuratorSlice.ts";
+import { DEFAULT_COORDS } from "shared/utils/consts.ts";
 
 export const CoordsPicker = () => {
-    const { coords } = useAppSelector((state) => state.configuratorReducer);
+    const { coords } = useAppSelector(
+        (state) => state.configuratorReducer.configuration
+    );
 
     const dispatch = useAppDispatch();
 
     const handleClick = (e) => {
-        dispatch(updateCoords(e.get("coords")));
+        const newCoords = e.get("coords").map((value) => +value.toFixed(2));
+        dispatch(updateCoords(newCoords));
     };
 
     const isCoordsValid = () => {
@@ -23,12 +27,11 @@ export const CoordsPicker = () => {
         <Stack gap={2}>
             <Typography variant="span" fontSize={20} sx={{ mb: 5 }}>
                 Введите координаты:{" "}
-                {isCoordsValid() &&
-                    `${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}`}
+                {isCoordsValid() && `${coords[0]}, ${coords[1]}`}
             </Typography>
             <Map
                 defaultState={{
-                    center: isCoordsValid() ? coords : [55.75, 37.57],
+                    center: isCoordsValid() ? coords : DEFAULT_COORDS,
                     zoom: 9,
                 }}
                 onClick={handleClick}

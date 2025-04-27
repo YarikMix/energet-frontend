@@ -10,6 +10,7 @@ import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
 import * as React from "react";
 import { Profile } from "src/widgets/Profile/Profile.tsx";
 import { Orders } from "src/widgets/Orders/Orders.tsx";
+import { ConfiguratorDrafts } from "src/widgets/ConfiguratorDrafts/ConfiguratorDrafts.tsx";
 
 export const ProfilePage = () => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -55,8 +56,12 @@ export const ProfilePage = () => {
                     <TabPanel currentTab={currentTab} index={1}>
                         <Orders />
                     </TabPanel>
-                    <TabPanel currentTab={currentTab} index={2}>
-                        TODO
+                    <TabPanel
+                        currentTab={currentTab}
+                        index={2}
+                        style={{ height: "100%" }}
+                    >
+                        <ConfiguratorDrafts />
                     </TabPanel>
                 </Box>
             </Stack>

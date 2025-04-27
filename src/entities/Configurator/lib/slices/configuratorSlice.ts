@@ -108,6 +108,16 @@ export const saveDraftCalculation = createAsyncThunk<
     });
 });
 
+export const deleteDraftConfigurator = createAsyncThunk<
+    T_Configuration[],
+    string,
+    AsyncThunkConfig
+>("delete_configurator_draft", async function (draft_id) {
+    const response = await api.delete(`/drafts/${draft_id}`);
+
+    return response.data;
+});
+
 export const fetchConfiguratorDrafts = createAsyncThunk<
     T_Configuration[],
     void,
@@ -293,6 +303,12 @@ const configuratorSlice = createSlice({
         });
         builder.addCase(
             fetchConfiguratorDrafts.fulfilled,
+            (state: IState, action: PayloadAction<T_Configuration[]>) => {
+                state.drafts = action.payload;
+            }
+        );
+        builder.addCase(
+            deleteDraftConfigurator.fulfilled,
             (state: IState, action: PayloadAction<T_Configuration[]>) => {
                 state.drafts = action.payload;
             }

@@ -5,6 +5,7 @@ import {
     useAppSelector,
 } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import {
+    deleteDraftConfigurator,
     fetchConfiguratorDrafts,
     openDraftConfigurator,
 } from "entities/Configurator/lib/slices/configuratorSlice.ts";
@@ -25,6 +26,10 @@ export const ConfiguratorDrafts = () => {
     const openDraftInConfigurator = (draft) => {
         dispatch(openDraftConfigurator(draft));
         navigate("/configurator");
+    };
+
+    const handleDeleteDraft = (draft_id) => {
+        dispatch(deleteDraftConfigurator(draft_id));
     };
 
     if (!drafts || !drafts.length) {
@@ -73,12 +78,19 @@ export const ConfiguratorDrafts = () => {
                         >
                             Черновик №{draft.id}
                         </Typography>
-                        <Button
-                            variant="contained"
-                            onClick={() => openDraftInConfigurator(draft)}
+                        <Stack
+                            direction="row"
+                            gap={4}
+                            onClick={() => handleDeleteDraft(draft.id)}
                         >
-                            Открыть в конфигураторе
-                        </Button>
+                            <Button variant="outlined">Удалить</Button>
+                            <Button
+                                variant="contained"
+                                onClick={() => openDraftInConfigurator(draft)}
+                            >
+                                Открыть в конфигураторе
+                            </Button>
+                        </Stack>
                     </Stack>
                     <Stack
                         direction="column"

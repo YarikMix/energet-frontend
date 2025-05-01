@@ -26,8 +26,10 @@ const Nav = ({ tabs, extraTabs = [], children }) => {
     );
     let currentTab = routeMatch ? routeMatch.pattern?.path : false;
 
-    if (pathname === "/register") {
-        currentTab = "/login";
+    if (tabs.find((tab) => tab.extraPaths?.includes(pathname))) {
+        currentTab = tabs.find((tab) =>
+            tab.extraPaths?.includes(pathname)
+        ).path;
     }
 
     return (

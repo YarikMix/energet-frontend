@@ -54,6 +54,7 @@ const Header = () => {
         {
             id: 5,
             path: "/login",
+            extraPaths: ["/register"],
             label: "Вход",
             needAuth: false,
             icon: <PersonOutlineIcon className={styles.icon} />,

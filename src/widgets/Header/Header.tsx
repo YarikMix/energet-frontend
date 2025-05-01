@@ -3,41 +3,62 @@ import Logo from "assets/logo.svg";
 import styles from "./Header.module.scss";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
-import { Badge, Box, Container, Tab, Tabs } from "@mui/material";
-import { FavoriteBorderOutlined } from "@mui/icons-material";
-import { useRouteMatch } from "src/app/Router/AppRouter.tsx";
+import { Badge, Box, Container, Tab } from "@mui/material";
 import { useEffect } from "react";
-import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import {
+    useAppDispatch,
+    useAppSelector,
+} from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { handleFetchDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
+import getUserRole from "entities/User/model/selectors/getRole.ts";
+import { E_UserRole } from "entities/User/model/types/User.ts";
+import Nav, { T_Tab } from "src/widgets/Nav/Nav.tsx";
 
 const Header = () => {
-    const isAuthenticated = useSelector(getIsAuthenticated);
+    const isAuthenticated = useAppSelector(getIsAuthenticated);
+    const role = useAppSelector(getUserRole);
     const dispatch = useAppDispatch();
+    const order = useAppSelector((state) => state.orderReducer.order);
 
-    const leftTabs = ["/", "/configurator"];
-    const leftRouteMatch = useRouteMatch(leftTabs);
-    const currentLeftTab = leftRouteMatch
-        ? leftRouteMatch.pattern?.path
-        : false;
-
-    const rightTabs = [
-        "/profile",
-        "/favourites",
-        "/login",
-        "/register",
-        "/bin",
+    const leftTabs: T_Tab[] = [
+        {
+            id: 1,
+            path: "/",
+            label: role == E_UserRole.Producer ? "Мои товары" : "Каталог",
+        },
+        {
+            id: 2,
+            path: "/configurator",
+            label: "Конфигуратор",
+            needAuth: true,
+            roles: [E_UserRole],
+        },
     ];
-    const rightRouteMatch = useRouteMatch(rightTabs);
-    let currentRightTab = rightRouteMatch
-        ? rightRouteMatch.pattern?.path
-        : false;
-    if (currentRightTab === "/register" || currentRightTab === "/login") {
-        currentRightTab = "/auth";
-    }
 
-    const order = useSelector((state) => state.orderReducer.order);
+    const rightTabs: T_Tab[] = [
+        {
+            id: 3,
+            path: "/profile",
+            label: "Профиль",
+            needAuth: true,
+            icon: <PersonOutlineIcon className={styles.icon} />,
+        },
+        {
+            id: 4,
+            path: "/login",
+            label: "Вход",
+            needAuth: false,
+            icon: <PersonOutlineIcon className={styles.icon} />,
+        },
+        {
+            id: 5,
+            path: "/favourites",
+            label: "Избранное",
+            needAuth: true,
+            roles: [E_UserRole.Buyer],
+        },
+    ];
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -56,57 +77,20 @@ const Header = () => {
             }}
             fullWidth
         >
-            <Tabs value={currentLeftTab}>
-                <Tab label="Каталог" value="/" to="/" component={Link} />
-                <Tab
-                    label="Конфигуратор"
-                    value="/configurator"
-                    to="/configurator"
-                    component={Link}
-                    hidden={!isAuthenticated}
-                />
-            </Tabs>
+            <Nav tabs={leftTabs} />
 
             <Link to="/">
                 <img src={Logo as string} alt="" />
             </Link>
 
             <Box>
-                <Tabs value={currentRightTab}>
-                    <Tab
-                        label="Профиль"
-                        value="/profile"
-                        to="/profile"
-                        component={Link}
-                        hidden={!isAuthenticated}
-                        icon={<PersonOutlineIcon className={styles.icon} />}
-                        iconPosition="start"
-                    />
-                    <Tab
-                        label="Вход"
-                        value="/auth"
-                        to="/login"
-                        component={Link}
-                        hidden={isAuthenticated}
-                        icon={<PersonOutlineIcon className={styles.icon} />}
-                        iconPosition="start"
-                    />
-                    <Tab
-                        label="Избранное"
-                        value="/favourites"
-                        to="/favourites"
-                        component={Link}
-                        hidden={!isAuthenticated}
-                        icon={
-                            <FavoriteBorderOutlined className={styles.icon} />
-                        }
-                        iconPosition="start"
-                    />
+                <Nav tabs={rightTabs} extraTabs={["/bin"]}>
                     <Tab
                         value="/bin"
                         to="/bin"
                         component={Link}
-                        hidden={!isAuthenticated}
+                        hidden={!isAuthenticated || role !== E_UserRole.Buyer}
+                        label="Корзина"
                         sx={{ px: 3 }}
                         icon={
                             <Badge
@@ -115,9 +99,8 @@ const Header = () => {
                                 sx={{ transform: "translateX(45px)" }}
                             ></Badge>
                         }
-                        label={"Корзина"}
                     />
-                </Tabs>
+                </Nav>
             </Box>
         </Container>
     );

@@ -1,0 +1,55 @@
+import { useRouteMatch } from "src/app/Router/AppRouter.tsx";
+import { Tab, Tabs } from "@mui/material";
+import { Link } from "react-router-dom";
+import * as React from "react";
+import { useAppSelector } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
+import getUserRole from "entities/User/model/selectors/getRole.ts";
+import { E_UserRole } from "entities/User/model/types/User.ts";
+
+export type T_Tab = {
+    id: number;
+    path: string;
+    label: string;
+    needAuth?: boolean;
+    roles?: E_UserRole[];
+    icon?: React.ReactElement;
+};
+
+const Nav = ({ tabs, extraTabs = [], children }) => {
+    const isAuthenticated = useAppSelector(getIsAuthenticated);
+    const role = useAppSelector(getUserRole);
+
+    const routeMatch = useRouteMatch(
+        tabs.map((tab) => tab.path).concat(extraTabs)
+    );
+    let currentTab = routeMatch ? routeMatch.pattern?.path : false;
+
+    if (currentTab === "/register") {
+        currentTab = "/login";
+    }
+
+    return (
+        <Tabs value={currentTab}>
+            {tabs.map((route) => (
+                <Tab
+                    key={route.id}
+                    label={route.label}
+                    value={route.path}
+                    to={route.path}
+                    component={Link}
+                    icon={route.icon}
+                    iconPosition="start"
+                    hidden={
+                        (route.needAuth !== undefined &&
+                            route.needAuth !== isAuthenticated) ||
+                        (route.roles && !route.roles.includes(role))
+                    }
+                />
+            ))}
+            {children}
+        </Tabs>
+    );
+};
+
+export default Nav;

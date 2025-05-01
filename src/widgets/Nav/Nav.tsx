@@ -1,6 +1,6 @@
 import { useRouteMatch } from "src/app/Router/AppRouter.tsx";
 import { Tab, Tabs } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import * as React from "react";
 import { useAppSelector } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
@@ -19,13 +19,14 @@ export type T_Tab = {
 const Nav = ({ tabs, extraTabs = [], children }) => {
     const isAuthenticated = useAppSelector(getIsAuthenticated);
     const role = useAppSelector(getUserRole);
+    const { pathname } = useLocation();
 
     const routeMatch = useRouteMatch(
         tabs.map((tab) => tab.path).concat(extraTabs)
     );
     let currentTab = routeMatch ? routeMatch.pattern?.path : false;
 
-    if (currentTab === "/register") {
+    if (pathname === "/register") {
         currentTab = "/login";
     }
 

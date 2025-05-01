@@ -34,25 +34,32 @@ const Header = () => {
             needAuth: true,
             roles: [E_UserRole],
         },
+        {
+            id: 3,
+            path: "/orders",
+            label: "Заказы",
+            needAuth: true,
+            roles: [E_UserRole.Moderator],
+        },
     ];
 
     const rightTabs: T_Tab[] = [
         {
-            id: 3,
+            id: 4,
             path: "/profile",
             label: "Профиль",
             needAuth: true,
             icon: <PersonOutlineIcon className={styles.icon} />,
         },
         {
-            id: 4,
+            id: 5,
             path: "/login",
             label: "Вход",
             needAuth: false,
             icon: <PersonOutlineIcon className={styles.icon} />,
         },
         {
-            id: 5,
+            id: 6,
             path: "/favourites",
             label: "Избранное",
             needAuth: true,

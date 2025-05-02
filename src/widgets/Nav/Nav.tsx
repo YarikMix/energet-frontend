@@ -1,6 +1,6 @@
 import { useRouteMatch } from "src/app/Router/AppRouter.tsx";
 import { Tab, Tabs } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as React from "react";
 import { useAppSelector } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
@@ -19,35 +19,35 @@ export type T_Tab = {
 const Nav = ({ tabs, extraTabs = [], children }) => {
     const isAuthenticated = useAppSelector(getIsAuthenticated);
     const role = useAppSelector(getUserRole);
-    const { pathname } = useLocation();
 
-    const routeMatch = useRouteMatch(
-        tabs.map((tab) => tab.path).concat(extraTabs)
-    );
+    const routeMatch = useRouteMatch([
+        ...extraTabs,
+        ...tabs.flatMap((tab) => [tab.path, ...(tab.extraPaths || [])]),
+    ]);
+
     let currentTab = routeMatch ? routeMatch.pattern?.path : false;
 
-    if (tabs.find((tab) => tab.extraPaths?.includes(pathname))) {
-        currentTab = tabs.find((tab) =>
-            tab.extraPaths?.includes(pathname)
-        ).path;
+    const foundTab = tabs.find((tab) => tab.extraPaths?.includes(currentTab));
+    if (foundTab) {
+        currentTab = foundTab.path;
     }
+
+    const isHidden = (tab: T_Tab) =>
+        (tab.needAuth !== undefined && tab.needAuth !== isAuthenticated) ||
+        (tab.roles && !tab.roles.includes(role));
 
     return (
         <Tabs value={currentTab}>
-            {tabs.map((route) => (
+            {tabs.map((tab) => (
                 <Tab
-                    key={route.id}
-                    label={route.label}
-                    value={route.path}
-                    to={route.path}
+                    key={tab.id}
+                    label={tab.label}
+                    value={tab.path}
+                    to={tab.path}
                     component={Link}
-                    icon={route.icon}
+                    icon={tab.icon}
                     iconPosition="start"
-                    hidden={
-                        (route.needAuth !== undefined &&
-                            route.needAuth !== isAuthenticated) ||
-                        (route.roles && !route.roles.includes(role))
-                    }
+                    hidden={isHidden(tab)}
                 />
             ))}
             {children}

@@ -222,7 +222,7 @@ const ItemCard = ({
 
     return (
         <Card
-            sx={{ maxWidth: 345, position: "relative" }}
+            sx={{ maxWidth: 345, position: "relative", height: "100%" }}
             onClick={handleOpenItemDetailsPage}
         >
             {isAuthenticated && isBuyer && (
@@ -241,71 +241,75 @@ const ItemCard = ({
                     }}
                 />
             )}
-            <CardActionArea disableRipple={true}>
-                <CardMedia
-                    component="img"
-                    height="140"
-                    image={`/images/${item.image}`}
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {item.name}
-                    </Typography>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            mb: 2,
-                        }}
-                    >
-                        <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-                            Цена
+            <CardActionArea disableRipple={true} sx={{ height: "100%" }}>
+                <Box style={{ height: "100%" }}>
+                    <CardMedia
+                        component="img"
+                        height="140"
+                        image={`/images/${item.image}`}
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                            {item.name}
                         </Typography>
-                        <Typography
+                        <Box
                             sx={{
-                                color: "#319CFF",
-                                fontSize: 18,
+                                display: "flex",
+                                justifyContent: "space-between",
+                                mb: 2,
                             }}
                         >
-                            {item.price}₽
-                        </Typography>
-                    </Box>
-                    <ItemProperty name="Тип" value={item.item_type.name} />
-                    <ItemProperty
-                        name="Производитель"
-                        value={item.item_producer.name}
-                    />
-                    <ItemProperty name="Вес" value={item.weight + " кг"} />
-                    <ItemProperty
-                        name={
-                            item.item_type.name == "Аккумулятор"
-                                ? "Ёмкость"
-                                : "Мощность"
-                        }
-                        value={item.power + " вт"}
-                    />
-                    {showAddToDraftOrderBtn && (
-                        <Box>
-                            {isAddedToDraftOrder(order, item.id) ? (
-                                <Button
-                                    variant="outlined"
-                                    onClick={handleDeleteFromOrder}
-                                    fullWidth
-                                >
-                                    Удалить из корзины
-                                </Button>
-                            ) : (
-                                <Button
-                                    variant="contained"
-                                    onClick={handleAddToDraftOrder}
-                                    fullWidth
-                                >
-                                    Добавить в корзину
-                                </Button>
-                            )}
+                            <Typography
+                                sx={{ color: "text.secondary", mb: 1.5 }}
+                            >
+                                Цена
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    color: "#319CFF",
+                                    fontSize: 18,
+                                }}
+                            >
+                                {item.price}₽
+                            </Typography>
                         </Box>
-                    )}
-                </CardContent>
+                        <ItemProperty name="Тип" value={item.item_type.name} />
+                        <ItemProperty
+                            name="Производитель"
+                            value={item.item_producer.name}
+                        />
+                        <ItemProperty name="Вес" value={item.weight + " кг"} />
+                        <ItemProperty
+                            name={
+                                item.item_type.name == "Аккумулятор"
+                                    ? "Ёмкость"
+                                    : "Мощность"
+                            }
+                            value={item.power + " вт"}
+                        />
+                        {showAddToDraftOrderBtn && (
+                            <Box>
+                                {isAddedToDraftOrder(order, item.id) ? (
+                                    <Button
+                                        variant="outlined"
+                                        onClick={handleDeleteFromOrder}
+                                        fullWidth
+                                    >
+                                        Удалить из корзины
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleAddToDraftOrder}
+                                        fullWidth
+                                    >
+                                        Добавить в корзину
+                                    </Button>
+                                )}
+                            </Box>
+                        )}
+                    </CardContent>
+                </Box>
             </CardActionArea>
         </Card>
     );

@@ -80,7 +80,11 @@ const ItemsPage = () => {
                         columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                     >
                         {itemsList.items.map((item) => (
-                            <Grid2 key={item.id} size={{ xs: 2, sm: 3, md: 3 }}>
+                            <Grid2
+                                key={item.id}
+                                size={{ xs: 2, sm: 3, md: 3 }}
+                                alignItems="stretch"
+                            >
                                 <ItemCard
                                     key={item.id}
                                     item={item}

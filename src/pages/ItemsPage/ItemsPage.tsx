@@ -77,12 +77,12 @@ const ItemsPage = () => {
                     <Grid2
                         container
                         spacing={{ xs: 2, md: 3 }}
-                        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                        columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 3 }}
                     >
                         {itemsList.items.map((item) => (
                             <Grid2
                                 key={item.id}
-                                size={{ xs: 2, sm: 3, md: 3 }}
+                                size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
                                 alignItems="stretch"
                             >
                                 <ItemCard

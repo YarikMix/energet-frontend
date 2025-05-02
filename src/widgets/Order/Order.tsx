@@ -39,7 +39,7 @@ export const Order = ({ order }: { order: T_Order }) => {
                             <Link
                                 component={RouterLink}
                                 to={`/items/${item.id}`}
-                                width={100}
+                                width={150}
                             >
                                 {item.name}
                             </Link>

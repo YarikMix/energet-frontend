@@ -33,7 +33,7 @@ const Header = () => {
             path: "/configurator",
             label: "Конфигуратор",
             needAuth: true,
-            roles: [E_UserRole],
+            roles: [E_UserRole.Buyer],
         },
         {
             id: 3,
@@ -83,25 +83,23 @@ const Header = () => {
                 <img src={Logo as string} alt="" />
             </Link>
 
-            <Box>
-                <Nav tabs={rightTabs} extraTabs={["/bin"]}>
-                    <Tab
-                        value="/bin"
-                        to="/bin"
-                        component={Link}
-                        hidden={!isAuthenticated || role !== E_UserRole.Buyer}
-                        label="Корзина"
-                        sx={{ px: 3 }}
-                        icon={
-                            <Badge
-                                badgeContent={order?.items?.length}
-                                color="primary"
-                                sx={{ transform: "translateX(45px)" }}
-                            ></Badge>
-                        }
-                    />
-                </Nav>
-            </Box>
+            <Nav tabs={rightTabs} extraTabs={["/bin"]}>
+                <Tab
+                    value="/bin"
+                    to="/bin"
+                    component={Link}
+                    hidden={!isAuthenticated || role !== E_UserRole.Buyer}
+                    label="Корзина"
+                    sx={{ px: 3 }}
+                    icon={
+                        <Badge
+                            badgeContent={order?.items?.length}
+                            color="primary"
+                            sx={{ transform: "translateX(45px)" }}
+                        ></Badge>
+                    }
+                />
+            </Nav>
         </Container>
     );
 };

@@ -15,7 +15,7 @@ export const CoordsPicker = () => {
     const dispatch = useAppDispatch();
 
     const handleClick = (e) => {
-        const newCoords = e.get("coords").map((value) => +value.toFixed(2));
+        const newCoords = e.get("coords");
         dispatch(updateCoords(newCoords));
     };
 
@@ -27,7 +27,8 @@ export const CoordsPicker = () => {
         <Stack gap={2}>
             <Typography variant="span" fontSize={20} sx={{ mb: 5 }}>
                 Введите координаты:{" "}
-                {isCoordsValid() && `${coords[0]}, ${coords[1]}`}
+                {isCoordsValid() &&
+                    `${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}`}
             </Typography>
             <Map
                 defaultState={{

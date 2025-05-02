@@ -17,8 +17,9 @@ export type T_ConfigurationResult = {
 };
 
 export type T_Configuration = {
+    id?: number;
     coords: [number, number];
-    consumption_type: number;
+    consumptionType: number;
     consumptionConst: number;
     consumptionSeasons: number[];
     consumptionMonth: number[];
@@ -35,7 +36,7 @@ export type T_Configuration = {
         AB: 0 | 1;
         SC: 0 | 1;
     };
-    id?: number;
+    optimizationType: number;
 };
 
 interface IState {
@@ -50,7 +51,7 @@ const initialState: IState = {
     drafts: [],
     configuration: {
         coords: DEFAULT_COORDS,
-        consumption_type: 1,
+        consumptionType: 1,
         consumptionConst: 100,
         consumptionSeasons: [100, 100, 100, 100],
         consumptionMonth: [],
@@ -67,6 +68,7 @@ const initialState: IState = {
             AB: 1, // аккамуляторная батерея
             SC: 1, // суперконденсатор (пока нет)
         },
+        optimizationType: 1,
     },
     loading: false,
     items: null,
@@ -83,28 +85,28 @@ export const saveDraftCalculation = createAsyncThunk<
 
     const configuration = state.configuratorReducer.configuration;
 
-    const consumption_type = configuration.consumption_type;
+    const consumptionType = configuration.consumptionType;
 
     const getConsumption = () => {
-        if (consumption_type == 1) {
+        if (consumptionType == 1) {
             return [configuration.consumptionConst];
-        } else if (consumption_type == 2) {
+        } else if (consumptionType == 2) {
             return configuration.consumptionSeasons;
-        } else if (consumption_type == 3) {
+        } else if (consumptionType == 3) {
             return configuration.consumptionMonth;
         }
     };
 
     await api.post("/drafts/", {
         coords: configuration.coords,
-        consumption_type: consumption_type,
+        consumption_type: consumptionType,
         consumption_value: getConsumption(),
         energy_sources: {
             ...configuration.enSource,
             ...configuration.enDSource,
         },
         energy_storages: configuration.enStorage,
-        optimization_target: 0,
+        optimization_target: configuration.optimizationType,
     });
 });
 
@@ -145,17 +147,17 @@ export const calculateFetch = createAsyncThunk<
     const configuration = state.configuratorReducer.configuration;
 
     const getConsumption = () => {
-        if (configuration.consumption_type == 1) {
+        if (configuration.consumptionType == 1) {
             return {
                 name: "Постоянное потребление",
                 value: configuration.consumptionConst,
             };
-        } else if (configuration.consumption_type == 2) {
+        } else if (configuration.consumptionType == 2) {
             return {
                 name: "Зимнее и летнее потребление",
                 value: configuration.consumptionSeasons,
             };
-        } else if (configuration.consumptionMonth == 3) {
+        } else if (configuration.consumptionType == 3) {
             return {
                 name: "Потребление по месяцам",
                 value: configuration.consumptionMonth,
@@ -195,7 +197,10 @@ export const calculateFetch = createAsyncThunk<
         //     d_target: 0.02,
         // },
         OptTarget: {
-            target: "Надежность энергоснабжения (минимизация LCOE)",
+            target:
+                configuration.optimizationType == 1
+                    ? "Надежность энергоснабжения (минимизация LCOE)"
+                    : "Минимизация стоимости электроэнергии",
             value: 0.3,
             d_target: 0.02,
         },
@@ -228,7 +233,7 @@ const configuratorSlice = createSlice({
             state.configuration.coords = action.payload;
         },
         updateConsumptionType: (state: IState, action) => {
-            state.configuration.consumption_type = action.payload;
+            state.configuration.consumptionType = action.payload;
         },
         updateConsumptionConst: (state: IState, action) => {
             state.configuration.consumptionConst = action.payload;
@@ -257,7 +262,7 @@ const configuratorSlice = createSlice({
         openDraftConfigurator: (state: IState, action) => {
             state.configuration.coords = action.payload.coords;
 
-            state.configuration.consumption_type =
+            state.configuration.consumptionType =
                 action.payload.consumption_type;
 
             if (action.payload.consumption_type == 1) {
@@ -286,6 +291,12 @@ const configuratorSlice = createSlice({
                 AB: action.payload.energy_storages.AB,
                 SC: action.payload.energy_storages.SC,
             };
+
+            state.configuration.optimizationType =
+                action.payload.optimization_target;
+        },
+        updateOptimizationType: (state: IState, action) => {
+            state.configuration.optimizationType = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -325,6 +336,7 @@ export const {
     updateEnSource,
     updateEnDSource,
     updateEnStorage,
+    updateOptimizationType,
     updateLoading,
     resetConfigurator,
     openDraftConfigurator,

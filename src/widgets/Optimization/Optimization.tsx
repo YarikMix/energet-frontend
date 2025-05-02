@@ -20,11 +20,13 @@ import {
     updateEnDSource,
     updateEnSource,
     updateEnStorage,
+    updateOptimizationType,
 } from "entities/Configurator/lib/slices/configuratorSlice.ts";
 import getOptimization from "entities/Configurator/model/selectors/getOptimization.ts";
 
 export const Optimization = () => {
-    const { enSource, enDSource, enStorage } = useAppSelector(getOptimization);
+    const { enSource, enDSource, enStorage, optimizationType } =
+        useAppSelector(getOptimization);
 
     const dispatch = useAppDispatch();
 
@@ -34,10 +36,10 @@ export const Optimization = () => {
         setRadio2(parseInt(e.target.value));
     };
 
-    const [radio3, setRadio3] = useState(0);
+    console.log("optimizationType", optimizationType);
 
     const handleChangeRadio3 = (e) => {
-        setRadio3(parseInt(e.target.value));
+        dispatch(updateOptimizationType(parseInt(e.target.value)));
     };
 
     const isSourcesEnabledAll = Object.entries({
@@ -115,7 +117,6 @@ export const Optimization = () => {
                                         }
                                         label="Солнечная панель"
                                         onClick={(e) => {
-                                            console.log(enSource.solar);
                                             dispatch(
                                                 updateEnSource({
                                                     ...enSource,
@@ -173,7 +174,7 @@ export const Optimization = () => {
                                                 checked={Boolean(enDSource.DGS)}
                                             />
                                         }
-                                        label="Дизель"
+                                        label="Дизельный генератор"
                                         onClick={(e) => {
                                             dispatch(
                                                 updateEnDSource({
@@ -257,9 +258,12 @@ export const Optimization = () => {
             <ListItem sx={{ display: "list-item" }}>
                 <ListItemText primary="Целевой показатель оптимизации:" />
                 <FormControl>
-                    <RadioGroup value={radio3} onChange={handleChangeRadio3}>
+                    <RadioGroup
+                        value={optimizationType}
+                        onChange={handleChangeRadio3}
+                    >
                         <FormControlLabel
-                            value={0}
+                            value={1}
                             control={<Radio />}
                             label="Минимизация CAPEX"
                         />

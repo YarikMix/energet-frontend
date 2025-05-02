@@ -4,6 +4,7 @@ type T_Optimization = {
     enSource: Record<string, number>;
     enDSource: Record<string, number>;
     enStorage: Record<string, number>;
+    optimizationType: number;
 };
 
 const getOptimization = (state: RootState): T_Optimization =>

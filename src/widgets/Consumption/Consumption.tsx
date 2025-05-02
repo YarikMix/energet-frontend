@@ -15,7 +15,7 @@ import { ConsumptionSeasons } from "src/widgets/Consumption/ConsumptionSeasons/C
 import { getConsumptionType } from "entities/Configurator/model/selectors/getConsumption.ts";
 
 export const Consumption = () => {
-    const type = useSelector(getConsumptionType);
+    const consumptionType = useSelector(getConsumptionType);
 
     const dispatch = useAppDispatch();
 
@@ -35,7 +35,7 @@ export const Consumption = () => {
                 <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
-                    value={type}
+                    value={consumptionType}
                     onChange={handleChange}
                 >
                     {/*<FormControlLabel*/}
@@ -51,7 +51,7 @@ export const Consumption = () => {
                         control={<Radio />}
                         label="Постоянное потребление"
                     />
-                    <TabPanel currentTab={type} index={1}>
+                    <TabPanel currentTab={consumptionType} index={1}>
                         <ConsumptionConstant />
                     </TabPanel>
                     <FormControlLabel
@@ -59,7 +59,7 @@ export const Consumption = () => {
                         control={<Radio />}
                         label="Потребление по сезоннам"
                     />
-                    <TabPanel currentTab={type} index={2}>
+                    <TabPanel currentTab={consumptionType} index={2}>
                         <ConsumptionSeasons />
                     </TabPanel>
                     <FormControlLabel
@@ -67,7 +67,7 @@ export const Consumption = () => {
                         control={<Radio />}
                         label="Потребление по месяцам"
                     />
-                    <TabPanel currentTab={type} index={3}>
+                    <TabPanel currentTab={consumptionType} index={3}>
                         {/*<ConsumptionMonth />*/}
                     </TabPanel>
                 </RadioGroup>

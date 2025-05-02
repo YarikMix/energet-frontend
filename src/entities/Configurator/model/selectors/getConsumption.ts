@@ -1,7 +1,7 @@
 import { RootState } from "src/app/providers/StoreProvider";
 
 export const getConsumptionType = (state: RootState): number =>
-    state.configuratorReducer.configuration.consumption_type;
+    state.configuratorReducer.configuration.consumptionType;
 
 export const getConsumptionConst = (state: RootState): number =>
     state.configuratorReducer.configuration.consumptionConst;

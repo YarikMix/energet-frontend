@@ -138,8 +138,7 @@ const ItemCard = ({
                     <CardMedia
                         component="img"
                         sx={{ width: "100%", height: "100%" }}
-                        image={item.image as string}
-                        alt=""
+                        image={`/images/${item.image}`}
                     />
                 </Box>
                 <CardContent
@@ -246,8 +245,7 @@ const ItemCard = ({
                 <CardMedia
                     component="img"
                     height="140"
-                    image={item.image as string}
-                    alt=""
+                    image={`/images/${item.image}`}
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">

@@ -75,19 +75,10 @@ const Header = () => {
     }, [isAuthenticated]);
 
     return (
-        <Container
-            sx={{
-                padding: "10px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                mb: 3,
-            }}
-            fullWidth
-        >
+        <Container className={styles.container}>
             <Nav tabs={leftTabs} />
 
-            <Link to="/">
+            <Link to="/" className={styles.logo}>
                 <img src={Logo as string} alt="" />
             </Link>
 

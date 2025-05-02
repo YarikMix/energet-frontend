@@ -1,12 +1,4 @@
-import {
-    Box,
-    Button,
-    CardMedia,
-    Container,
-    Tab,
-    Tabs,
-    Typography,
-} from "@mui/material";
+import { Box, Button, CardMedia, Container, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import {
     addToFavourites,
@@ -93,8 +85,7 @@ export const ItemPage = () => {
                     <CardMedia
                         component="img"
                         height="400"
-                        image={item.image as string}
-                        alt="green iguana"
+                        image={`/images/${item.image}`}
                     />
                 </Box>
                 <Box

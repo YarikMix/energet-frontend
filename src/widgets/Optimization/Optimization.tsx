@@ -10,7 +10,7 @@ import {
     Radio,
     RadioGroup,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
 import {
     useAppDispatch,
@@ -20,32 +20,22 @@ import {
     updateEnDSource,
     updateEnSource,
     updateEnStorage,
-    updateOptimizationType,
 } from "entities/Configurator/lib/slices/configuratorSlice.ts";
 import getOptimization from "entities/Configurator/model/selectors/getOptimization.ts";
 
 export const Optimization = () => {
-    const { enSource, enDSource, enStorage, optimizationType } =
-        useAppSelector(getOptimization);
+    const { enSource, enDSource, enStorage } = useAppSelector(getOptimization);
 
     const dispatch = useAppDispatch();
-
-    const [radio2, setRadio2] = useState(0);
-
-    const handleChangeRadio2 = (e) => {
-        setRadio2(parseInt(e.target.value));
-    };
-
-    console.log("optimizationType", optimizationType);
-
-    const handleChangeRadio3 = (e) => {
-        dispatch(updateOptimizationType(parseInt(e.target.value)));
-    };
 
     const isSourcesEnabledAll = Object.entries({
         ...enSource,
         ...enDSource,
     }).every((source) => source[1] == 1);
+
+    const isStoragesEnabledAll = Object.entries(enStorage).every(
+        (storage) => storage[1] == 1
+    );
 
     const handleEnableAllSources = () => {
         dispatch(
@@ -81,6 +71,24 @@ export const Optimization = () => {
                 })
             );
         }
+    };
+
+    const handleEnableAllStorages = () => {
+        dispatch(
+            updateEnStorage({
+                AB: 1,
+                SC: 1,
+            })
+        );
+    };
+
+    const handleDisableAllStorages = () => {
+        dispatch(
+            updateEnStorage({
+                AB: 0,
+                SC: 0,
+            })
+        );
     };
 
     return (
@@ -198,19 +206,24 @@ export const Optimization = () => {
             <ListItem sx={{ display: "list-item" }}>
                 <ListItemText primary="Выбор накопителя энергии" />
                 <FormControl>
-                    <RadioGroup value={radio2} onChange={handleChangeRadio2}>
+                    <RadioGroup value={isStoragesEnabledAll ? 0 : 1}>
                         <FormControlLabel
                             value={0}
                             control={<Radio />}
                             label="Включить в расчет все"
+                            onClick={handleEnableAllStorages}
                         />
                         <FormControlLabel
                             value={1}
                             control={<Radio />}
                             label="Выбрать некоторые"
+                            onClick={handleDisableAllStorages}
                         />
                         <Box p={2}>
-                            <TabPanel currentTab={radio2} index={1}>
+                            <TabPanel
+                                currentTab={isStoragesEnabledAll ? 0 : 1}
+                                index={1}
+                            >
                                 <FormGroup>
                                     <FormControlLabel
                                         control={
@@ -252,41 +265,6 @@ export const Optimization = () => {
                                 </FormGroup>
                             </TabPanel>
                         </Box>
-                    </RadioGroup>
-                </FormControl>
-            </ListItem>
-            <ListItem sx={{ display: "list-item" }}>
-                <ListItemText primary="Целевой показатель оптимизации:" />
-                <FormControl>
-                    <RadioGroup
-                        value={optimizationType}
-                        onChange={handleChangeRadio3}
-                    >
-                        <FormControlLabel
-                            value={1}
-                            control={<Radio />}
-                            label="Минимизация CAPEX"
-                        />
-                        {/*<FormControlLabel*/}
-                        {/*    value={1}*/}
-                        {/*    control={<Radio />}*/}
-                        {/*    label="Минимизация OPEX"*/}
-                        {/*/>*/}
-                        <FormControlLabel
-                            value={2}
-                            control={<Radio />}
-                            label="Минимизация стоимости электроэнергии"
-                        />
-                        {/*<FormControlLabel*/}
-                        {/*    value={3}*/}
-                        {/*    control={<Radio />}*/}
-                        {/*    label="Максимальная надежность"*/}
-                        {/*/>*/}
-                        {/*<FormControlLabel*/}
-                        {/*    value={4}*/}
-                        {/*    control={<Radio />}*/}
-                        {/*    label="Минимальный углеродный след"*/}
-                        {/*/>*/}
                     </RadioGroup>
                 </FormControl>
             </ListItem>

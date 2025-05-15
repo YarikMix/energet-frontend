@@ -57,16 +57,16 @@ const initialState: IState = {
         consumptionMonth: [],
         enSource: {
             solar: 1, // солнечная панель
-            wind: 1, // ветрогенератор
-            TEG: 1, // термоэлектрический генератор
+            wind: 0, // ветрогенератор
+            TEG: 0, // термоэлектрический генератор
         },
         enDSource: {
-            DGS: 1, // дизель
-            FC: 1, // топливный элемент (пока нет)
+            DGS: 0, // дизель
+            FC: 0, // топливный элемент (пока нет)
         },
         enStorage: {
             AB: 1, // аккамуляторная батерея
-            SC: 1, // суперконденсатор (пока нет)
+            SC: 0, // суперконденсатор (пока нет)
         },
         optimizationType: 1,
     },
@@ -151,16 +151,19 @@ export const calculateFetch = createAsyncThunk<
             return {
                 name: "Постоянное потребление",
                 value: configuration.consumptionConst,
+                type: "Классика",
             };
         } else if (configuration.consumptionType == 2) {
             return {
                 name: "Зимнее и летнее потребление",
                 value: configuration.consumptionSeasons,
+                type: "Классика",
             };
         } else if (configuration.consumptionType == 3) {
             return {
                 name: "Потребление по месяцам",
                 value: configuration.consumptionMonth,
+                type: "Классика",
             };
         }
     };
@@ -168,58 +171,9 @@ export const calculateFetch = createAsyncThunk<
     const response = await api.post("/configurator/", {
         coords: configuration.coords,
         load: getConsumption(),
-        // load: {
-        //     name: "Постоянное потребление",
-        //     value: state.configuratorReducer.power,
-        // },
-        ElCost: 0, // 0 если не выбран шаблон потребления
-
         EnSource: configuration.enSource,
         EnDSource: configuration.enDSource,
-        // EnStorage: configuration.enStorage,
-        // EnSource: {
-        //     solar: 1, // солнечная панель
-        //     wind: 0, // ветрогенератор
-        //     TEG: 0, // термоэлектрический генератор
-        // },
-        // EnDSource: {
-        //     DGS: 0, // дизель
-        //     FC: 0, // топливный элемент (пока нет)
-        // },
-        EnStorage: {
-            AB: 0, // аккамуляторная батерея
-            SC: 0, // суперконденсатор (пока нет)
-        },
-
-        // OptTarget: {
-        //     target: "Минимизация стоимости электроэнергии",
-        //     value: 0.3,
-        //     d_target: 0.02,
-        // },
-        OptTarget: {
-            target:
-                configuration.optimizationType == 1
-                    ? "Надежность энергоснабжения (минимизация LCOE)"
-                    : "Минимизация стоимости электроэнергии",
-            value: 0.3,
-            d_target: 0.02,
-        },
-        Additions: {
-            pitch: 15,
-            shading: [],
-            shadinggg: [
-                [-1.047, -0.52, 5, 6],
-                [0.52, 1.047, 7, 3],
-                [0.52, 1.047, 7, 3],
-                [-1.047, -0.52, 5, 6],
-            ],
-            WTorient: 22,
-            WTheight: 10,
-        },
-        Options: {
-            N_steps: 10,
-            step: 0.2,
-        },
+        EnStorage: configuration.enStorage,
     });
 
     return response.data;

@@ -2,7 +2,7 @@ import { Paper } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useAppSelector } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 
-export const ConfiguratorResultTable = () => {
+const ConfiguratorResultItemsTable = () => {
     const { items } = useAppSelector((state) => state.configuratorReducer);
 
     const columns: GridColDef[] = [
@@ -43,3 +43,5 @@ export const ConfiguratorResultTable = () => {
         </Paper>
     );
 };
+
+export default ConfiguratorResultItemsTable;

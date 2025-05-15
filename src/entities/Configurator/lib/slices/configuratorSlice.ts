@@ -14,6 +14,7 @@ export type T_ConfigurationResultItem = {
 export type T_ConfigurationResult = {
     items: T_ConfigurationResultItem[];
     total_price: number;
+    params: T_ConfigurationParams;
 };
 
 export type T_Configuration = {
@@ -39,12 +40,22 @@ export type T_Configuration = {
     optimizationType: number;
 };
 
+export type T_ConfigurationParams = {
+    RPS: string;
+    LCOE: string;
+    CapEx: string;
+    OpEx: string;
+    Economy: string;
+    NPV: string;
+};
+
 interface IState {
     drafts: T_Configuration[];
     configuration: T_Configuration;
     loading: boolean;
     items: T_ConfigurationResultItem[] | null;
     total_price: number | null;
+    params: T_ConfigurationParams | null;
 }
 
 const initialState: IState = {
@@ -73,6 +84,7 @@ const initialState: IState = {
     loading: false,
     items: null,
     total_price: null,
+    params: null,
 };
 
 export const saveDraftCalculation = createAsyncThunk<
@@ -260,6 +272,7 @@ const configuratorSlice = createSlice({
                 state.loading = false;
                 state.items = action.payload.items;
                 state.total_price = action.payload.total_price;
+                state.params = action.payload.params;
             }
         );
         builder.addCase(calculateFetch.rejected, (state: IState) => {

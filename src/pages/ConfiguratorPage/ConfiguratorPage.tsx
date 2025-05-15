@@ -23,9 +23,10 @@ import {
     resetConfigurator,
     saveDraftCalculation,
 } from "entities/Configurator/lib/slices/configuratorSlice.ts";
-import { ConfiguratorResultTable } from "src/widgets/ConfiguratorResultTable/ConfiguratorResultTable.tsx";
+import { ConfiguratorResultTable } from "src/widgets/ConfiguratorResultItemsTable/ConfiguratorResultTable.tsx";
 import { addItemsToDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
 import { useNavigate } from "react-router-dom";
+import ConfiguratorResultPage from "src/widgets/ConfiguratorResultPage/ConfiguratorResultPage.tsx";
 
 export const ConfiguratorPage = () => {
     const steps = ["Локация", "Потребление", "Оптимизация", "Результат"];
@@ -59,17 +60,6 @@ export const ConfiguratorPage = () => {
 
     const fetchConfigurator = async () => {
         dispatch(calculateFetch());
-    };
-
-    const handleAddResultToDraftOrder = async () => {
-        const list = items.map((item) => ({
-            id: item.id,
-            count: item.count,
-        }));
-        await dispatch(addItemsToDraftOrder(list));
-        navigate("/bin");
-        dispatch(resetConfigurator());
-        setStep(0);
     };
 
     const handleExitFromConfigurator = async () => {
@@ -163,28 +153,10 @@ export const ConfiguratorPage = () => {
                             <Optimization />
                         </TabPanel>
                         <TabPanel currentTab={step} index={3}>
-                            <Stack gap={3}>
-                                <Typography variant="h6">
-                                    Оптимальная конфигурация
-                                </Typography>
-                                <ConfiguratorResultTable />
-                                <Stack direction="row" gap={4}>
-                                    <Button
-                                        variant="contained"
-                                        sx={{ maxWidth: 200 }}
-                                        onClick={handleAddResultToDraftOrder}
-                                    >
-                                        Добавить в корзину
-                                    </Button>
-                                    <Button
-                                        variant="outlined"
-                                        sx={{ maxWidth: 200 }}
-                                        onClick={saveToDraft}
-                                    >
-                                        Сохранить черновик
-                                    </Button>
-                                </Stack>
-                            </Stack>
+                            <ConfiguratorResultPage
+                                setStep={setStep}
+                                items={items}
+                            />
                         </TabPanel>
                     </Box>
                     <Box>

@@ -31,7 +31,7 @@ export const ItemPage = () => {
 
     const { data: item, isLoading, refetch } = useItem(id as number);
 
-    const tabs = ["Особенности", "Характеристики", "Документация"];
+    const tabs = ["Особенности", "Характеристики"];
 
     const { currentTab, TabsComponent } = useTabs(tabs);
 
@@ -47,8 +47,8 @@ export const ItemPage = () => {
         dispatch(deleteItemFromOrder(id as number));
     };
 
-    if (isLoading || !item) {
-        return <div>isLoading</div>;
+    if (isLoading || !item || item.id != id) {
+        return null;
     }
 
     const handleToggleItemFavourite = async (e) => {

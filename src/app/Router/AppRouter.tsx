@@ -1,10 +1,4 @@
-import {
-    matchPath,
-    Navigate,
-    Route,
-    Routes,
-    useLocation,
-} from "react-router-dom";
+import { matchPath, Route, Routes, useLocation } from "react-router-dom";
 import ItemsPage from "pages/ItemsPage/ItemsPage.tsx";
 import LoginPage from "pages/LoginPage/LoginPage.tsx";
 import RegisterPage from "pages/RegisterPage/RegisterPage.tsx";
@@ -13,6 +7,8 @@ import { ItemPage } from "pages/ItemPage/ItemPage.tsx";
 import { BinPage } from "pages/BinPage/BinPage.tsx";
 import { FavouritesPage } from "pages/FavouritesPage/FavouritesPage.tsx";
 import { ConfiguratorPage } from "pages/ConfiguratorPage/ConfiguratorPage.tsx";
+import ItemEditPage from "pages/ItemEditPage/ItemEditPage.tsx";
+import NotFoundPage from "pages/NotFoundPage/NotFoundPage.tsx";
 
 export const useRouteMatch = (patterns: readonly string[]) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -33,6 +29,7 @@ export const AppRouter = () => {
     return (
         <Routes>
             <Route path="/" element={<ItemsPage />} />
+            <Route path="/items/:id/edit" element={<ItemEditPage />} />
             <Route path="/items/:id" element={<ItemPage />} />
             <Route path="/login/" element={<LoginPage />} />
             <Route path="/register/" element={<RegisterPage />} />
@@ -40,7 +37,7 @@ export const AppRouter = () => {
             <Route path="/configurator/" element={<ConfiguratorPage />} />
             <Route path="/favourites/" element={<FavouritesPage />} />
             <Route path="/bin/" element={<BinPage />} />
-            <Route path="*" element={<Navigate replace to="/" />} />
+            <Route path="*" element={<NotFoundPage />} />
         </Routes>
     );
 };

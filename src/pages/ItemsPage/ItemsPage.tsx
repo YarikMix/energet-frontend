@@ -10,15 +10,14 @@ import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useSelector } from "react-redux";
-import {
-    getIsAuthenticated,
-    getUser,
-} from "entities/User/model/selectors/getUser.ts";
+import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
 import { E_UserRole } from "entities/User/model/types/User.ts";
+import ItemsTable from "src/widgets/ItemsTable/ItemsTable.tsx";
+import getIsProducer from "entities/User/model/selectors/isProducer.ts";
 
 const ItemsPage = () => {
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const user = useSelector(getUser);
+    const isProducer = useSelector(getIsProducer);
 
     const [name, setName] = useState("");
 
@@ -48,6 +47,40 @@ const ItemsPage = () => {
         setPage(1);
     }, [debouncedName, selectedItemTypes, selectedItemProducers]);
 
+    if (!itemsList) {
+        return null;
+    }
+
+    if (isProducer) {
+        return (
+            <Container>
+                <Box
+                    mb={5}
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <SearchInput onChange={setName} onIconClick={refetch} />
+                    <Box>
+                        <MultipleSelect
+                            label="Тип товара"
+                            options={itemsTypes}
+                            onChange={setSelectedItemTypes}
+                        />
+                        <MultipleSelect
+                            label="Производитель"
+                            options={itemsProducers}
+                            onChange={setSelectedItemProducers}
+                        />
+                    </Box>
+                </Box>
+                <ItemsTable items={itemsList.items} />
+            </Container>
+        );
+    }
+
     return (
         <Container>
             <Box
@@ -72,7 +105,7 @@ const ItemsPage = () => {
                     />
                 </Box>
             </Box>
-            {itemsList && itemsList.items?.length > 0 ? (
+            {itemsList.items?.length > 0 ? (
                 <Box>
                     <Grid2
                         container

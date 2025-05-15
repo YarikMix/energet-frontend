@@ -25,7 +25,7 @@ const Header = () => {
         {
             id: 1,
             path: "/",
-            extraPaths: ["/items/:id"],
+            extraPaths: ["/items/:id", "/items/:id/edit"],
             label: role == E_UserRole.Producer ? "Мои товары" : "Каталог",
         },
         {

@@ -57,14 +57,14 @@ export const Profile = () => {
                 <TextField label="Телефон" value={user.phone} />
                 <TextField label="Почта" value={user.email} />
             </Box>
-            <Box sx={{ display: "flex", gap: "10px" }}>
-                <Button onClick={handleSaveProfile} variant="contained">
-                    Сохранить
-                </Button>
-                <Button onClick={openChangePasswordModal} variant="outlined">
-                    Изменить пароль
-                </Button>
-            </Box>
+            {/*<Box sx={{ display: "flex", gap: "10px" }}>*/}
+            {/*    <Button onClick={handleSaveProfile} variant="contained">*/}
+            {/*        Сохранить*/}
+            {/*    </Button>*/}
+            {/*    <Button onClick={openChangePasswordModal} variant="outlined">*/}
+            {/*        Изменить пароль*/}
+            {/*    </Button>*/}
+            {/*</Box>*/}
         </>
     );
 };

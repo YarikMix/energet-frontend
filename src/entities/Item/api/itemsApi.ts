@@ -119,3 +119,21 @@ export const removeFromFavourites = createAsyncThunk<
 
     return response.data;
 });
+
+export const updateItem = createAsyncThunk<void, object, AsyncThunkConfig>(
+    "update_item",
+    async function ({ id, data }) {
+        const response = await api.put(`/items/${id}/`, data);
+
+        return response.data;
+    }
+);
+
+export const deleteItem = createAsyncThunk<void, number, AsyncThunkConfig>(
+    "delete_item",
+    async function (id) {
+        const response = await api.delete(`/items/${id}/`);
+
+        return response.data;
+    }
+);

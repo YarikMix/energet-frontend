@@ -1,0 +1,127 @@
+import { Button, Container, Stack, TextField, Typography } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteItem, updateItem, useItem } from "entities/Item/api/itemsApi.ts";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import getIsProducer from "entities/User/model/selectors/isProducer.ts";
+import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { E_ItemStatus } from "entities/Item/model/types/Item.ts";
+
+const ItemEditPage = () => {
+    const { id } = useParams<{ id: number }>();
+    const isProducer = useSelector(getIsProducer);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    const { data: item, isLoading } = useItem(id as number);
+
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState("");
+    const [power, setPower] = useState("");
+
+    useEffect(() => {
+        if (item) {
+            setName(item.name);
+            setPrice(item.price as string);
+            setPower(item.power as string);
+        }
+    }, [item]);
+
+    useEffect(() => {
+        if (!isProducer) {
+            navigate("/");
+        }
+    }, []);
+
+    if (isLoading || !item || !id) {
+        return null;
+    }
+
+    if (item.status == E_ItemStatus.Deleted) {
+        return (
+            <Container>
+                <Stack gap={4}>
+                    <Typography variant="h5">
+                        Данное оборудование удалено
+                    </Typography>
+                    <Button
+                        onClick={() => navigate("/")}
+                        variant="contained"
+                        sx={{ width: "200px" }}
+                    >
+                        Назад
+                    </Button>
+                </Stack>
+            </Container>
+        );
+    }
+    const handleSaveItem = async () => {
+        console.log("handleSaveItem");
+
+        await dispatch(
+            updateItem({
+                id,
+                data: {
+                    name,
+                    price,
+                    power,
+                },
+            })
+        );
+        navigate("/");
+    };
+
+    const handleDeleteItem = async () => {
+        console.log("handleDeleteItem");
+        await dispatch(deleteItem(id));
+        navigate("/");
+    };
+
+    return (
+        <Container>
+            <Stack direction="column" gap={5} width={400}>
+                <Typography variant="h5">
+                    Редактирование оборудования
+                </Typography>
+                <TextField
+                    label="Название"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+                <TextField
+                    label="Цена"
+                    value={price}
+                    type="number"
+                    onChange={(e) => setPrice(parseInt(e.target.value))}
+                />
+                <TextField
+                    label="Мощность"
+                    value={power}
+                    type="number"
+                    onChange={(e) => setPower(parseInt(e.target.value))}
+                />
+                {/*<TextField label="Производитель" value={user.name} />*/}
+                {/*<TextField label="Тип" value={user.name} />*/}
+                <Stack gap={4} direction="row">
+                    <Button
+                        onClick={handleSaveItem}
+                        variant="contained"
+                        fullWidth
+                    >
+                        Сохранить
+                    </Button>
+                    <Button
+                        onClick={handleDeleteItem}
+                        variant="outlined"
+                        fullWidth
+                    >
+                        Удалить
+                    </Button>
+                </Stack>
+            </Stack>
+        </Container>
+    );
+};
+
+export default ItemEditPage;

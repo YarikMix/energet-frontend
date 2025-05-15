@@ -1,7 +1,10 @@
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
+import {
+    getIsAuthenticated,
+    getUser,
+} from "entities/User/model/selectors/getUser.ts";
 import { Box, Button, Container, Stack } from "@mui/material";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { handleLogout } from "entities/User/lib/slices/UserSlice.ts";
@@ -11,9 +14,11 @@ import * as React from "react";
 import { Profile } from "src/widgets/Profile/Profile.tsx";
 import { Orders } from "src/widgets/Orders/Orders.tsx";
 import { ConfiguratorDrafts } from "src/widgets/ConfiguratorDrafts/ConfiguratorDrafts.tsx";
+import { E_UserRole } from "entities/User/model/types/User.ts";
 
 export const ProfilePage = () => {
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const user = useSelector(getUser);
 
     const navigate = useNavigate();
 
@@ -29,7 +34,13 @@ export const ProfilePage = () => {
         dispatch(handleLogout());
     };
 
-    const tabs = ["Личные данные", "Заказы", "Черновики"];
+    const isBuyer = user.role == E_UserRole.Buyer;
+
+    const tabs = ["Личные данные"];
+
+    if (isBuyer) {
+        tabs.push("Заказы", "Черновики");
+    }
 
     const { currentTab, TabsComponent } = useTabs(tabs);
 

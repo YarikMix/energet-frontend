@@ -8,6 +8,9 @@ export type T_User = {
     id: number;
     role: E_UserRole;
     is_authenticated: boolean;
+    name?: string;
+    phone?: string;
+    email?: string;
 };
 
 export type T_UserState = {

@@ -1,14 +1,19 @@
+import { Box, CircularProgress } from "@mui/material";
+import { handleFetchDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
+import { handleCheckUser } from "entities/User/lib/slices/UserSlice.ts";
+import getIsBuyer from "entities/User/model/selectors/isBuyer.ts";
+import { useEffect, useState } from "react";
+import {
+    useAppDispatch,
+    useAppSelector,
+} from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { AppRouter } from "src/app/Router/AppRouter.tsx";
 import Header from "src/widgets/Header/Header.tsx";
 import { Reset } from "styled-reset";
 import styles from "./App.module.scss";
-import { AppRouter } from "src/app/Router/AppRouter.tsx";
-import { useEffect, useState } from "react";
-import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
-import { handleCheckUser } from "entities/User/lib/slices/UserSlice.ts";
-import { Box, CircularProgress } from "@mui/material";
-import { handleFetchDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
 
 function App() {
+    const isBuyer = useAppSelector(getIsBuyer);
     const [isLoading, setIsLoading] = useState(false);
 
     const dispatch = useAppDispatch();
@@ -23,9 +28,15 @@ function App() {
         dispatch(handleFetchDraftOrder());
     };
 
+    const onAppStarted = async () => {
+        await checkUser();
+        if (isBuyer) {
+            await fetchDraftOrder();
+        }
+    };
+
     useEffect(() => {
-        checkUser();
-        fetchDraftOrder();
+        onAppStarted();
     }, []);
 
     return (

@@ -1,20 +1,40 @@
-import { T_Order } from "entities/Order/model/types/Order.ts";
 import { Box, Link, Stack, Typography } from "@mui/material";
-import { formatDate } from "shared/utils/date.ts";
-import React from "react";
-import { OrderStatusBar } from "shared/OrderStatusBar/OrderStatusBar.tsx";
+import { E_OrderStatus, T_Order } from "entities/Order/model/types/Order.ts";
+import getIsModerator from "entities/User/model/selectors/isModerator.ts";
 import { Link as RouterLink } from "react-router-dom";
+import { Dropdown } from "shared/Dropdown/Dropdown.tsx";
+import { OrderStatusBar } from "shared/OrderStatusBar/OrderStatusBar.tsx";
+import { formatDate } from "shared/utils/date.ts";
+import { useAppSelector } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 
-export const Order = ({ order }: { order: T_Order }) => {
+const ORDER_STATUSES = [
+    {
+        id: 1,
+        name: "В пути",
+    },
+    {
+        id: 2,
+        name: "Доставлен",
+    },
+    {
+        id: 3,
+        name: "Отменен",
+    },
+];
+
+interface Props {
+    order: T_Order;
+    handleChangeOrderStatus?: (status) => void;
+}
+
+export const Order = ({ order, handleChangeOrderStatus }: Props) => {
+    const isModerator = useAppSelector(getIsModerator);
+
     return (
         <Stack gap={8}>
-            <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-            >
+            <Stack alignItems="center" gap={3} direction="row">
                 <Box display="flex" alignItems="center" gap={5}>
-                    <Typography variant="span" color="#4D4D4D" fontSize={20}>
+                    <Typography color="#4D4D4D" fontSize={20}>
                         Заказ №{order.id}
                     </Typography>
                     <Typography color="text.secondary">
@@ -22,7 +42,6 @@ export const Order = ({ order }: { order: T_Order }) => {
                     </Typography>
                 </Box>
                 <Typography
-                    variant="span"
                     color="#4D4D4D"
                     fontSize={20}
                     width={100}
@@ -30,12 +49,16 @@ export const Order = ({ order }: { order: T_Order }) => {
                 >
                     {order.price} ₽
                 </Typography>
-            </Box>
+            </Stack>
             <OrderStatusBar status={order.status} />
             <Stack gap={3}>
                 {order.items.map((item) => {
                     return (
-                        <Stack direction="row" gap={5}>
+                        <Stack
+                            direction="row"
+                            gap={5}
+                            sx={{ alignItems: "center" }}
+                        >
                             <Link
                                 component={RouterLink}
                                 to={`/items/${item.id}`}
@@ -49,6 +72,33 @@ export const Order = ({ order }: { order: T_Order }) => {
                     );
                 })}
             </Stack>
+            {isModerator && (
+                <Stack direction="row" gap={10}>
+                    <Box>
+                        <Typography color="#4D4D4D" fontSize={20} mb={3}>
+                            Личные данные
+                        </Typography>
+                        <Stack gap={2}>
+                            <Typography>{order.owner.name}</Typography>
+                            <Typography>{order.owner.email}</Typography>
+                            <Typography>{order.owner.phone}</Typography>
+                        </Stack>
+                    </Box>
+                    <Box>
+                        <Typography color="#4D4D4D" fontSize={20} mb={3}>
+                            Статус
+                        </Typography>
+                        <Dropdown
+                            options={ORDER_STATUSES}
+                            value={order.status}
+                            onChange={(status) =>
+                                handleChangeOrderStatus?.(status)
+                            }
+                            disabled={order.status != E_OrderStatus.InWork}
+                        />
+                    </Box>
+                </Stack>
+            )}
         </Stack>
     );
 };

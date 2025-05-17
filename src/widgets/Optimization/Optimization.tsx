@@ -10,18 +10,17 @@ import {
     Radio,
     RadioGroup,
 } from "@mui/material";
-import React from "react";
-import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
-import {
-    useAppDispatch,
-    useAppSelector,
-} from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import {
     updateEnDSource,
     updateEnSource,
     updateEnStorage,
 } from "entities/Configurator/lib/slices/configuratorSlice.ts";
 import getOptimization from "entities/Configurator/model/selectors/getOptimization.ts";
+import {
+    useAppDispatch,
+    useAppSelector,
+} from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
 
 export const Optimization = () => {
     const { enSource, enDSource, enStorage } = useAppSelector(getOptimization);
@@ -163,18 +162,10 @@ export const Optimization = () => {
                                         control={
                                             <Checkbox
                                                 checked={Boolean(enSource.TEG)}
+                                                disabled
                                             />
                                         }
                                         label="Термоэлектрический генератор"
-                                        onClick={(e) => {
-                                            dispatch(
-                                                updateEnSource({
-                                                    ...enSource,
-                                                    TEG: 1 - enSource.TEG,
-                                                })
-                                            );
-                                            e.preventDefault();
-                                        }}
                                     />
                                     <FormControlLabel
                                         control={

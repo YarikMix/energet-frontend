@@ -1,4 +1,5 @@
 import { T_Item } from "entities/Item/model/types/Item.ts";
+import { T_User } from "entities/User/model/types/User.ts";
 
 export type T_Order = {
     id: number;
@@ -6,7 +7,7 @@ export type T_Order = {
     items: T_Item[];
     created_date: string;
     formation_date: string;
-    owner: number;
+    owner: T_User;
     price?: number;
 };
 

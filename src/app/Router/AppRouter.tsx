@@ -1,14 +1,15 @@
-import { matchPath, Route, Routes, useLocation } from "react-router-dom";
+import { BinPage } from "pages/BinPage/BinPage.tsx";
+import { ConfiguratorPage } from "pages/ConfiguratorPage/ConfiguratorPage.tsx";
+import { FavouritesPage } from "pages/FavouritesPage/FavouritesPage.tsx";
+import ItemEditPage from "pages/ItemEditPage/ItemEditPage.tsx";
+import { ItemPage } from "pages/ItemPage/ItemPage.tsx";
 import ItemsPage from "pages/ItemsPage/ItemsPage.tsx";
 import LoginPage from "pages/LoginPage/LoginPage.tsx";
-import RegisterPage from "pages/RegisterPage/RegisterPage.tsx";
-import { ProfilePage } from "pages/ProfilePage/ProfilePage.tsx";
-import { ItemPage } from "pages/ItemPage/ItemPage.tsx";
-import { BinPage } from "pages/BinPage/BinPage.tsx";
-import { FavouritesPage } from "pages/FavouritesPage/FavouritesPage.tsx";
-import { ConfiguratorPage } from "pages/ConfiguratorPage/ConfiguratorPage.tsx";
-import ItemEditPage from "pages/ItemEditPage/ItemEditPage.tsx";
 import NotFoundPage from "pages/NotFoundPage/NotFoundPage.tsx";
+import { OrdersTablePage } from "pages/OrdersTablePage/OrdersTablePage.tsx";
+import { ProfilePage } from "pages/ProfilePage/ProfilePage.tsx";
+import RegisterPage from "pages/RegisterPage/RegisterPage.tsx";
+import { matchPath, Route, Routes, useLocation } from "react-router-dom";
 
 export const useRouteMatch = (patterns: readonly string[]) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -37,6 +38,7 @@ export const AppRouter = () => {
             <Route path="/configurator/" element={<ConfiguratorPage />} />
             <Route path="/favourites/" element={<FavouritesPage />} />
             <Route path="/bin/" element={<BinPage />} />
+            <Route path="/orders" element={<OrdersTablePage />} />
             <Route path="*" element={<NotFoundPage />} />
         </Routes>
     );

@@ -1,12 +1,21 @@
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Paper } from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 
 const ItemsTable = ({ items }) => {
     const navigate = useNavigate();
 
     const columns: GridColDef[] = [
-        { field: "name", headerName: "Название", width: 200 },
+        {
+            field: "id",
+            headerName: "ID",
+            width: 90,
+        },
+        {
+            field: "name",
+            headerName: "Название",
+            width: 200,
+        },
         {
             field: "type",
             headerName: "Тип",

@@ -1,24 +1,17 @@
-import * as React from "react";
-import Logo from "assets/logo.svg";
-import styles from "./Header.module.scss";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import { Link } from "react-router-dom";
-import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
-import { Badge, Box, Container, Tab } from "@mui/material";
-import { useEffect } from "react";
-import {
-    useAppDispatch,
-    useAppSelector,
-} from "src/app/providers/StoreProvider/hooks/hooks.ts";
-import { handleFetchDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
+import { Badge, Container, Tab } from "@mui/material";
+import Logo from "assets/logo.svg";
 import getUserRole from "entities/User/model/selectors/getRole.ts";
+import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
 import { E_UserRole } from "entities/User/model/types/User.ts";
+import { Link } from "react-router-dom";
+import { useAppSelector } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import Nav, { T_Tab } from "src/widgets/Nav/Nav.tsx";
+import styles from "./Header.module.scss";
 
 const Header = () => {
     const isAuthenticated = useAppSelector(getIsAuthenticated);
     const role = useAppSelector(getUserRole);
-    const dispatch = useAppDispatch();
     const order = useAppSelector((state) => state.orderReducer.order);
 
     const leftTabs: T_Tab[] = [
@@ -68,12 +61,6 @@ const Header = () => {
             roles: [E_UserRole.Buyer],
         },
     ];
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            dispatch(handleFetchDraftOrder());
-        }
-    }, [isAuthenticated]);
 
     return (
         <Container className={styles.container}>

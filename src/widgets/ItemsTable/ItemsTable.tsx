@@ -44,9 +44,11 @@ const ItemsTable = ({ items }) => {
             <DataGrid
                 rows={items}
                 columns={columns}
-                hideFooter={true}
                 onRowClick={handleRowClick}
                 localeText={{ noRowsLabel: "Оборудование не найдено" }}
+                initialState={{
+                    pagination: { paginationModel: { pageSize: 5 } },
+                }}
             />
         </Paper>
     );

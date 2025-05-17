@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { getUser } from "entities/User/model/selectors/getUser.ts";
 import { E_UserRole } from "entities/User/model/types/User.ts";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 
 export const Profile = () => {

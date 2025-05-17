@@ -11,13 +11,16 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useSelector } from "react-redux";
 import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
-import { E_UserRole } from "entities/User/model/types/User.ts";
 import ItemsTable from "src/widgets/ItemsTable/ItemsTable.tsx";
 import getIsProducer from "entities/User/model/selectors/isProducer.ts";
+import getIsBuyer from "entities/User/model/selectors/isBuyer.ts";
+import getIsModerator from "entities/User/model/selectors/isModerator.ts";
 
 const ItemsPage = () => {
+    const isBuyer = useSelector(getIsBuyer);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isProducer = useSelector(getIsProducer);
+    const isModerator = useSelector(getIsModerator);
 
     const [name, setName] = useState("");
 
@@ -51,7 +54,7 @@ const ItemsPage = () => {
         return null;
     }
 
-    if (isProducer) {
+    if (isProducer || isModerator) {
         return (
             <Container>
                 <Box
@@ -79,6 +82,10 @@ const ItemsPage = () => {
                 <ItemsTable items={itemsList.items} />
             </Container>
         );
+    }
+
+    if (!isBuyer && isAuthenticated) {
+        return null;
     }
 
     return (
@@ -122,8 +129,7 @@ const ItemsPage = () => {
                                     key={item.id}
                                     item={item}
                                     showAddToDraftOrderBtn={
-                                        isAuthenticated &&
-                                        user?.role == E_UserRole.Buyer
+                                        isAuthenticated && isBuyer
                                     }
                                 />
                             </Grid2>

@@ -7,10 +7,12 @@ import { useSelector } from "react-redux";
 import getIsProducer from "entities/User/model/selectors/isProducer.ts";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { E_ItemStatus } from "entities/Item/model/types/Item.ts";
+import getIsModerator from "entities/User/model/selectors/isModerator.ts";
 
 const ItemEditPage = () => {
     const { id } = useParams<{ id: number }>();
     const isProducer = useSelector(getIsProducer);
+    const isModerator = useSelector(getIsModerator);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
@@ -29,10 +31,10 @@ const ItemEditPage = () => {
     }, [item]);
 
     useEffect(() => {
-        if (!isProducer) {
+        if (!isProducer && !isModerator) {
             navigate("/");
         }
-    }, []);
+    }, [isProducer, isModerator]);
 
     if (isLoading || !item || !id) {
         return null;
@@ -43,7 +45,7 @@ const ItemEditPage = () => {
             <Container>
                 <Stack gap={4}>
                     <Typography variant="h5">
-                        Данное оборудование удалено
+                        Данное оборудование снято с продажи
                     </Typography>
                     <Button
                         onClick={() => navigate("/")}
@@ -57,8 +59,6 @@ const ItemEditPage = () => {
         );
     }
     const handleSaveItem = async () => {
-        console.log("handleSaveItem");
-
         await dispatch(
             updateItem({
                 id,
@@ -73,7 +73,6 @@ const ItemEditPage = () => {
     };
 
     const handleDeleteItem = async () => {
-        console.log("handleDeleteItem");
         await dispatch(deleteItem(id));
         navigate("/");
     };
@@ -116,7 +115,7 @@ const ItemEditPage = () => {
                         variant="outlined"
                         fullWidth
                     >
-                        Удалить
+                        Снять с продажи
                     </Button>
                 </Stack>
             </Stack>

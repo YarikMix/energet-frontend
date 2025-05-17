@@ -14,9 +14,10 @@ import * as React from "react";
 import { Profile } from "src/widgets/Profile/Profile.tsx";
 import { Orders } from "src/widgets/Orders/Orders.tsx";
 import { ConfiguratorDrafts } from "src/widgets/ConfiguratorDrafts/ConfiguratorDrafts.tsx";
-import { E_UserRole } from "entities/User/model/types/User.ts";
+import getIsBuyer from "entities/User/model/selectors/isBuyer.ts";
 
 export const ProfilePage = () => {
+    const isBuyer = useSelector(getIsBuyer);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const user = useSelector(getUser);
 
@@ -34,8 +35,6 @@ export const ProfilePage = () => {
         dispatch(handleLogout());
     };
 
-    const isBuyer = user.role == E_UserRole.Buyer;
-
     const tabs = ["Личные данные"];
 
     if (isBuyer) {
@@ -43,6 +42,10 @@ export const ProfilePage = () => {
     }
 
     const { currentTab, TabsComponent } = useTabs(tabs);
+
+    if (!user || !isAuthenticated) {
+        return null;
+    }
 
     return (
         <Container sx={{ pt: 5 }}>

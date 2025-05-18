@@ -1,26 +1,13 @@
-import {
-    Box,
-    Button,
-    CardMedia,
-    Container,
-    Stack,
-    TextField,
-    Typography,
-} from "@mui/material";
-import {
-    deleteItem,
-    updateItem,
-    updateItemImage,
-    useItem,
-} from "entities/Item/api/itemsApi.ts";
+import { Button, Container, Stack, TextField, Typography } from "@mui/material";
+import { deleteItem, updateItem, useItem } from "entities/Item/api/itemsApi.ts";
 import { E_ItemStatus } from "entities/Item/model/types/Item.ts";
 import getIsModerator from "entities/User/model/selectors/isModerator.ts";
 import getIsProducer from "entities/User/model/selectors/isProducer.ts";
 import { useEffect, useState } from "react";
-import ImageUploading, { ImageListType } from "react-images-uploading";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { ItemImageUploader } from "src/widgets/ItemImageUploader/ItemImageUploader.tsx";
 
 const ItemEditPage = () => {
     const { id } = useParams<{ id: number }>();
@@ -34,13 +21,6 @@ const ItemEditPage = () => {
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
     const [power, setPower] = useState("");
-
-    const [images, setImages] = useState<ImageListType>([]);
-
-    const onChange = (imageList: ImageListType) => {
-        setImages(imageList);
-        dispatch(updateItemImage({ item_id: id, image: imageList[0].file }));
-    };
 
     useEffect(() => {
         if (item) {
@@ -98,7 +78,7 @@ const ItemEditPage = () => {
     };
 
     return (
-        <Container>
+        <Container sx={{ display: "flex", justifyContent: "center" }}>
             <Stack direction="column" gap={5} width={400}>
                 <Typography variant="h5">
                     Редактирование оборудования
@@ -122,44 +102,7 @@ const ItemEditPage = () => {
                 />
                 {/*<Dropdown label="Тип" value={type} />*/}
                 {/*<Dropdown label="Производитель" value={producer} />*/}
-                <Box sx={{ width: 250, height: 250 }}>
-                    <ImageUploading
-                        value={images}
-                        onChange={onChange}
-                        dataURLKey="data_url"
-                    >
-                        {({ imageList, onImageUpload }) => (
-                            <Stack
-                                gap={3}
-                                alignItems
-                                sx={{ width: "100%", height: "100%" }}
-                            >
-                                {imageList.map((image, index) => (
-                                    <div key={index}>
-                                        <CardMedia
-                                            component="img"
-                                            image={image.data_url}
-                                            alt="Загруженное изображение"
-                                            width="200"
-                                        />
-                                    </div>
-                                ))}
-
-                                {imageList.length === 0 && (
-                                    <CardMedia
-                                        sx={{ width: "100%", height: "100%" }}
-                                        image={`/images/${item?.image}`}
-                                        alt="Дефолтное изображение"
-                                    />
-                                )}
-
-                                <Button onClick={onImageUpload}>
-                                    Изменить изображение
-                                </Button>
-                            </Stack>
-                        )}
-                    </ImageUploading>
-                </Box>
+                <ItemImageUploader item={item} />
                 <Stack gap={4} direction="row">
                     <Button
                         onClick={handleSaveItem}

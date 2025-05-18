@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AsyncThunkConfig } from "@reduxjs/toolkit/src/createAsyncThunk.ts";
 import { T_Item, T_ItemOption } from "entities/Item/model/types/Item.ts";
 import { useQuery } from "react-query";
+import { getFormDataFromObject } from "shared/utils/getFormDataFromObject.ts";
 import { api } from "src/app/api.ts";
 import { ITEMS_PAGE_SIZE } from "src/app/consts.ts";
 
@@ -148,6 +149,17 @@ export const updateItemImage = createAsyncThunk<void, object, AsyncThunkConfig>(
             `/items/${item_id}/update_image/`,
             form_data
         );
+
+        return response.data;
+    }
+);
+
+export const createItem = createAsyncThunk<void, object, AsyncThunkConfig>(
+    "create_item",
+    async function (data) {
+        const form_data = getFormDataFromObject(data);
+
+        const response = await api.post(`/items/`, form_data);
 
         return response.data;
     }

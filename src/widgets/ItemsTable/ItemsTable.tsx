@@ -37,10 +37,10 @@ const ItemsTable = ({ items }) => {
     ];
 
     const formatStatus = (status: number) => {
-        if (status == 1) {
+        if (status == 0) {
             return "Подтвержден";
-        } else if (status == 2) {
-            return "Удален";
+        } else if (status == 1) {
+            return "Снят с продажи";
         }
     };
 

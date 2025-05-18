@@ -1,18 +1,21 @@
 import { Button, CardMedia, Stack } from "@mui/material";
-import { updateItemImage } from "entities/Item/api/itemsApi.ts";
-import { T_Item } from "entities/Item/model/types/Item.ts";
 import { useState } from "react";
-import ImageUploading, { ImageListType } from "react-images-uploading";
-import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import ImageUploading, {
+    ImageListType,
+    ImageType,
+} from "react-images-uploading";
 
-export const ItemImageUploader = ({ item }: { item: T_Item }) => {
+interface Props {
+    defaultImage: string;
+    onChange?: (value: ImageType) => void;
+}
+
+export const ItemImageUploader = ({ defaultImage, onChange }: Props) => {
     const [images, setImages] = useState<ImageListType>([]);
-
-    const dispatch = useAppDispatch();
 
     const getItemImageSrc = (imageList: ImageListType) => {
         if (imageList.length === 0) {
-            return `/images/${item.image}`;
+            return defaultImage;
         }
 
         return imageList[0].data_url;
@@ -20,9 +23,7 @@ export const ItemImageUploader = ({ item }: { item: T_Item }) => {
 
     const onImageChange = (imageList: ImageListType) => {
         setImages(imageList);
-        dispatch(
-            updateItemImage({ item_id: item.id, image: imageList[0].file })
-        );
+        onChange?.(imageList[0].file);
     };
 
     return (

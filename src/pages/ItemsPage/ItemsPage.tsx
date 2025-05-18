@@ -1,20 +1,27 @@
-import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
+import {
+    Box,
+    Container,
+    Grid2,
+    Pagination,
+    Stack,
+    Typography,
+} from "@mui/material";
 import {
     useItemsList,
     useItemsProducersList,
     useItemsTypesList,
 } from "entities/Item/api/itemsApi.ts";
-import { Box, Container, Grid2, Pagination, Typography } from "@mui/material";
-import MultipleSelect from "shared/MultipleSelect/MultipleSelect.tsx";
-import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
-import { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
-import { useSelector } from "react-redux";
 import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
-import ItemsTable from "src/widgets/ItemsTable/ItemsTable.tsx";
-import getIsProducer from "entities/User/model/selectors/isProducer.ts";
 import getIsBuyer from "entities/User/model/selectors/isBuyer.ts";
 import getIsModerator from "entities/User/model/selectors/isModerator.ts";
+import getIsProducer from "entities/User/model/selectors/isProducer.ts";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import MultipleSelect from "shared/MultipleSelect/MultipleSelect.tsx";
+import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
+import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
+import ItemsTable from "src/widgets/ItemsTable/ItemsTable.tsx";
+import { useDebounce } from "use-debounce";
 
 const ItemsPage = () => {
     const isBuyer = useSelector(getIsBuyer);
@@ -66,7 +73,7 @@ const ItemsPage = () => {
                     }}
                 >
                     <SearchInput onChange={setName} onIconClick={refetch} />
-                    <Box>
+                    <Stack gap={2} direction="row" alignItems="center">
                         <MultipleSelect
                             label="Тип товара"
                             options={itemsTypes}
@@ -77,7 +84,7 @@ const ItemsPage = () => {
                             options={itemsProducers}
                             onChange={setSelectedItemProducers}
                         />
-                    </Box>
+                    </Stack>
                 </Box>
                 <ItemsTable items={itemsList.items} />
             </Container>

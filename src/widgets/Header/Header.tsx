@@ -23,6 +23,13 @@ const Header = () => {
         },
         {
             id: 2,
+            path: "/add_item",
+            label: "Добавить товар",
+            needAuth: true,
+            roles: [E_UserRole.Producer],
+        },
+        {
+            id: 2,
             path: "/configurator",
             label: "Конфигуратор",
             needAuth: true,

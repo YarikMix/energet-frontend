@@ -1,4 +1,3 @@
-import React from "react";
 import {
     FormControl,
     FormControlLabel,
@@ -6,13 +5,13 @@ import {
     Radio,
     RadioGroup,
 } from "@mui/material";
-import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
-import { ConsumptionConstant } from "src/widgets/Consumption/ConsumptionConstant/ConsumptionConstant.tsx";
+import { updateConsumptionType } from "entities/Configurator/lib/slices/configuratorSlice.ts";
+import { getConsumptionType } from "entities/Configurator/model/selectors/getConsumption.ts";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
-import { updateConsumptionType } from "entities/Configurator/lib/slices/configuratorSlice.ts";
+import { ConsumptionConstant } from "src/widgets/Consumption/ConsumptionConstant/ConsumptionConstant.tsx";
 import { ConsumptionSeasons } from "src/widgets/Consumption/ConsumptionSeasons/ConsumptionSeasons.tsx";
-import { getConsumptionType } from "entities/Configurator/model/selectors/getConsumption.ts";
+import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
 
 export const Consumption = () => {
     const consumptionType = useSelector(getConsumptionType);
@@ -49,7 +48,7 @@ export const Consumption = () => {
                     <FormControlLabel
                         value={1}
                         control={<Radio />}
-                        label="Постоянное потребление"
+                        label="Постоянное потребление (в год)"
                     />
                     <TabPanel currentTab={consumptionType} index={1}>
                         <ConsumptionConstant />

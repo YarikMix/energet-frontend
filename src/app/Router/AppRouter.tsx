@@ -1,6 +1,7 @@
 import { BinPage } from "pages/BinPage/BinPage.tsx";
 import { ConfiguratorPage } from "pages/ConfiguratorPage/ConfiguratorPage.tsx";
 import { FavouritesPage } from "pages/FavouritesPage/FavouritesPage.tsx";
+import { ItemAddPage } from "pages/ItemAddPage/ItemAddPage.tsx";
 import ItemEditPage from "pages/ItemEditPage/ItemEditPage.tsx";
 import { ItemPage } from "pages/ItemPage/ItemPage.tsx";
 import ItemsPage from "pages/ItemsPage/ItemsPage.tsx";
@@ -30,6 +31,7 @@ export const AppRouter = () => {
     return (
         <Routes>
             <Route path="/" element={<ItemsPage />} />
+            <Route path="/add_item" element={<ItemAddPage />} />
             <Route path="/items/:id/edit" element={<ItemEditPage />} />
             <Route path="/items/:id" element={<ItemPage />} />
             <Route path="/login/" element={<LoginPage />} />

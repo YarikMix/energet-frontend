@@ -125,8 +125,6 @@ export const OrdersTablePage = () => {
     ];
 
     const handleRowClick = (row) => {
-        console.log("handleRowClick");
-        console.log("row", row);
         setSelectedOrderId(row.id);
     };
 

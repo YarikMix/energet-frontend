@@ -4,8 +4,6 @@ import { E_OrderStatus } from "entities/Order/model/types/Order.ts";
 export const OrderStatusBar = ({ status }: { status: E_OrderStatus }) => {
     const steps = ["Черновик", "В пути", status == 3 ? "Отменен" : "Доставлен"];
 
-    console.log("status", status);
-
     const isDone =
         status == E_OrderStatus.Completed || status == E_OrderStatus.Rejected;
 

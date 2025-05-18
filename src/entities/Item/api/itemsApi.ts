@@ -1,9 +1,9 @@
-import { T_ItemOption, T_Item } from "entities/Item/model/types/Item.ts";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AsyncThunkConfig } from "@reduxjs/toolkit/src/createAsyncThunk.ts";
+import { T_Item, T_ItemOption } from "entities/Item/model/types/Item.ts";
 import { useQuery } from "react-query";
 import { api } from "src/app/api.ts";
 import { ITEMS_PAGE_SIZE } from "src/app/consts.ts";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { AsyncThunkConfig } from "@reduxjs/toolkit/src/createAsyncThunk.ts";
 
 interface IProps {
     searchParams: [string, number[], number[]];
@@ -133,6 +133,21 @@ export const deleteItem = createAsyncThunk<void, number, AsyncThunkConfig>(
     "delete_item",
     async function (id) {
         const response = await api.delete(`/items/${id}/`);
+
+        return response.data;
+    }
+);
+
+export const updateItemImage = createAsyncThunk<void, object, AsyncThunkConfig>(
+    "update_item_image",
+    async function ({ item_id, image }) {
+        const form_data = new FormData();
+        form_data.append("image", image, image.name);
+
+        const response = await api.put(
+            `/items/${item_id}/update_image/`,
+            form_data
+        );
 
         return response.data;
     }

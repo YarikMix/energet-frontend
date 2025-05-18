@@ -1,11 +1,18 @@
 import { Button, Container, Stack, TextField, Typography } from "@mui/material";
-import { deleteItem, updateItem, useItem } from "entities/Item/api/itemsApi.ts";
+import {
+    deleteItem,
+    updateItem,
+    useItem,
+    useItemsProducersList,
+    useItemsTypesList,
+} from "entities/Item/api/itemsApi.ts";
 import { E_ItemStatus } from "entities/Item/model/types/Item.ts";
 import getIsModerator from "entities/User/model/selectors/isModerator.ts";
 import getIsProducer from "entities/User/model/selectors/isProducer.ts";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { Dropdown } from "shared/Dropdown/Dropdown.tsx";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { ItemImageUploader } from "src/widgets/ItemImageUploader/ItemImageUploader.tsx";
 
@@ -22,11 +29,20 @@ const ItemEditPage = () => {
     const [price, setPrice] = useState("");
     const [power, setPower] = useState("");
 
+    const [type, setType] = useState<number>(null);
+    const [producer, setProducer] = useState<number>(null);
+
+    const { data: itemsTypes } = useItemsTypesList();
+
+    const { data: itemsProducers } = useItemsProducersList();
+
     useEffect(() => {
         if (item) {
             setName(item.name);
             setPrice(item.price as string);
             setPower(item.power as string);
+            setType(item.item_type.id);
+            setProducer(item.item_producer.id);
         }
     }, [item]);
 
@@ -66,6 +82,8 @@ const ItemEditPage = () => {
                     name,
                     price,
                     power,
+                    item_type: type,
+                    item_producer: producer,
                 },
             })
         );
@@ -76,6 +94,18 @@ const ItemEditPage = () => {
         await dispatch(deleteItem(id));
         navigate("/");
     };
+
+    const handleChangeItemType = (itemType) => {
+        setType(itemType);
+    };
+
+    const handleChangeItemProducer = (itemProducer) => {
+        setProducer(itemProducer);
+    };
+
+    if (!itemsTypes || !itemsProducers || !item || !type) {
+        return;
+    }
 
     return (
         <Container sx={{ display: "flex", justifyContent: "center" }}>
@@ -100,8 +130,18 @@ const ItemEditPage = () => {
                     type="number"
                     onChange={(e) => setPower(e.target.value)}
                 />
-                {/*<Dropdown label="Тип" value={type} />*/}
-                {/*<Dropdown label="Производитель" value={producer} />*/}
+                <Dropdown
+                    label="Тип"
+                    value={type}
+                    options={itemsTypes}
+                    onChange={handleChangeItemType}
+                />
+                <Dropdown
+                    label="Производитель"
+                    value={producer}
+                    options={itemsProducers}
+                    onChange={handleChangeItemProducer}
+                />
                 <ItemImageUploader item={item} />
                 <Stack gap={4} direction="row">
                     <Button

@@ -153,6 +153,7 @@ export const OrdersTablePage = () => {
                 }}
             >
                 <Dropdown
+                    label="Статус"
                     options={ORDER_STATUSES}
                     value={status}
                     onChange={handleChange}

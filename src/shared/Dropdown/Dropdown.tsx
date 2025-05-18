@@ -16,6 +16,7 @@ interface Props {
 }
 
 export const Dropdown = ({
+    label,
     options,
     value,
     onChange,
@@ -27,12 +28,12 @@ export const Dropdown = ({
 
     return (
         <FormControl sx={{ width: 200 }}>
-            <InputLabel id="demo-simple-select-label">Статус</InputLabel>
+            <InputLabel id="demo-simple-select-label">{label}</InputLabel>
             <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={value}
-                label="Статус"
+                label={label}
                 onChange={handleChange}
                 disabled={disabled}
             >

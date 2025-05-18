@@ -29,14 +29,14 @@ const Header = () => {
             roles: [E_UserRole.Producer],
         },
         {
-            id: 2,
+            id: 3,
             path: "/configurator",
             label: "Конфигуратор",
             needAuth: true,
             roles: [E_UserRole.Buyer],
         },
         {
-            id: 3,
+            id: 4,
             path: "/orders",
             label: "Заказы",
             needAuth: true,
@@ -46,14 +46,14 @@ const Header = () => {
 
     const rightTabs: T_Tab[] = [
         {
-            id: 4,
+            id: 5,
             path: "/profile",
             label: "Профиль",
             needAuth: true,
             icon: <PersonOutlineIcon className={styles.icon} />,
         },
         {
-            id: 5,
+            id: 6,
             path: "/login",
             extraPaths: ["/register"],
             label: "Вход",
@@ -61,7 +61,7 @@ const Header = () => {
             icon: <PersonOutlineIcon className={styles.icon} />,
         },
         {
-            id: 6,
+            id: 7,
             path: "/favourites",
             label: "Избранное",
             needAuth: true,

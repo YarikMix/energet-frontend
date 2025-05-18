@@ -1,4 +1,5 @@
-import { Button, Stack, Typography } from "@mui/material";
+import HelpIcon from "@mui/icons-material/Help";
+import { Button, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import {
     resetConfigurator,
     saveDraftCalculation,
@@ -12,6 +13,12 @@ import ConfiguratorResultParamsTable from "src/widgets/ConfiguratorResultParamsT
 const ConfiguratorResultPage = ({ items, setStep }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+
+    const calcTotalSum = () => {
+        return items.reduce(function (currentSum, currentItem) {
+            return currentSum + currentItem.price;
+        }, 0);
+    };
 
     const handleAddResultToDraftOrder = async () => {
         const list = items.map((item) => ({
@@ -33,13 +40,28 @@ const ConfiguratorResultPage = ({ items, setStep }) => {
 
     return (
         <Stack gap={3}>
-            <Typography variant="h6">
-                Оптимальные параметры (быстрая оценка)
-            </Typography>
+            <Stack direction="row" alignItems="center" gap={1}>
+                <Typography variant="h6">Оптимальные параметры</Typography>
+                <Tooltip title="Быстрая оценка">
+                    <IconButton>
+                        <HelpIcon />
+                    </IconButton>
+                </Tooltip>
+            </Stack>
             <ConfiguratorResultParamsTable />
-            <Typography variant="h6">
-                Оптимальная конфигурация (с уточненными стоимостными
-                показателями)
+            <Stack direction="row" alignItems="center" gap={1}>
+                <Typography variant="h6">Оптимальная конфигурация</Typography>
+                <Tooltip
+                    title="C уточненными стоимостными
+                    показателями"
+                >
+                    <IconButton>
+                        <HelpIcon />
+                    </IconButton>
+                </Tooltip>
+            </Stack>
+            <Typography variant="span" fontSize={18} color="#4D4D4D">
+                Суммарная цена: {calcTotalSum()} ₽
             </Typography>
             <ConfiguratorResultItemsTable />
             <Stack direction="row" gap={4}>

@@ -1,20 +1,32 @@
 import { Paper } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { formatConfiguratorResultParamValue } from "shared/utils/formatConfiguratorResultParamValue.ts";
+import { getConfiguratorResultParamDescription } from "shared/utils/getConfiguratorResultParamDescription.ts";
 import { useAppSelector } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 
 const ConfiguratorResultParamsTable = () => {
     const { params } = useAppSelector((state) => state.configuratorReducer);
     const columns: GridColDef[] = [
-        { field: "name", headerName: "Название", width: 200 },
-        { field: "value", headerName: "Значение", width: 200 },
+        {
+            field: "name",
+            headerName: "Название",
+            width: 200,
+        },
+        {
+            field: "value",
+            headerName: "Значение",
+            width: 200,
+            valueFormatter: (value, row) =>
+                formatConfiguratorResultParamValue(row.name, value),
+        },
         {
             field: "description",
             headerName: "Описание",
-            width: 200,
+            width: 500,
+            valueFormatter: (value, row) =>
+                getConfiguratorResultParamDescription(row.name),
         },
     ];
-
-    console.log("params", params);
 
     if (!params) {
         return null;

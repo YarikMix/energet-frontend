@@ -6,8 +6,16 @@ const ConfiguratorResultItemsTable = () => {
     const { items } = useAppSelector((state) => state.configuratorReducer);
 
     const columns: GridColDef[] = [
-        { field: "name", headerName: "Название", width: 200 },
-        { field: "type", headerName: "Тип", width: 200 },
+        {
+            field: "name",
+            headerName: "Название",
+            width: 200,
+        },
+        {
+            field: "type",
+            headerName: "Тип",
+            width: 200,
+        },
         {
             field: "power",
             headerName: "Мощность",

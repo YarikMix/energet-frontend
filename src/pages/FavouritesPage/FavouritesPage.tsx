@@ -1,20 +1,20 @@
-import { useSelector } from "react-redux";
-import {
-    getIsAuthenticated,
-    getUser,
-} from "entities/User/model/selectors/getUser.ts";
-import { useState } from "react";
-import { useDebounce } from "use-debounce";
+import { Box, Container, Grid2, Typography } from "@mui/material";
 import {
     useFavouriteList,
     useItemsProducersList,
     useItemsTypesList,
 } from "entities/Item/api/itemsApi.ts";
-import { Box, Container, Grid2, Typography } from "@mui/material";
-import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
-import MultipleSelect from "shared/MultipleSelect/MultipleSelect.tsx";
-import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
+import {
+    getIsAuthenticated,
+    getUser,
+} from "entities/User/model/selectors/getUser.ts";
 import { E_UserRole } from "entities/User/model/types/User.ts";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import MultipleSelect from "shared/MultipleSelect/MultipleSelect.tsx";
+import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
+import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
+import { useDebounce } from "use-debounce";
 
 export const FavouritesPage = () => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -50,7 +50,7 @@ export const FavouritesPage = () => {
                 <SearchInput onChange={setName} onIconClick={refetch} />
                 <Box>
                     <MultipleSelect
-                        label="Тип товара"
+                        label="Категория"
                         options={itemsTypes}
                         onChange={setSelectedItemTypes}
                     />

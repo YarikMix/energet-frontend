@@ -75,7 +75,7 @@ const ItemsPage = () => {
                     <SearchInput onChange={setName} onIconClick={refetch} />
                     <Stack gap={2} direction="row" alignItems="center">
                         <MultipleSelect
-                            label="Тип товара"
+                            label="Категория"
                             options={itemsTypes}
                             onChange={setSelectedItemTypes}
                         />
@@ -108,7 +108,7 @@ const ItemsPage = () => {
                 <SearchInput onChange={setName} onIconClick={refetch} />
                 <Box>
                     <MultipleSelect
-                        label="Тип товара"
+                        label="Категория"
                         options={itemsTypes}
                         onChange={setSelectedItemTypes}
                     />

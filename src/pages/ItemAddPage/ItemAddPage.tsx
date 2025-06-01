@@ -15,6 +15,7 @@ export const ItemAddPage = () => {
     const [price, setPrice] = useState("");
     const [power, setPower] = useState("");
     const [weight, setWeight] = useState("");
+    const [warehouse_count, setWarehouseCount] = useState("");
 
     const [type, setType] = useState<number>(null);
     const [producer, setProducer] = useState<number>(null);
@@ -46,6 +47,7 @@ export const ItemAddPage = () => {
                 item_type: type,
                 item_producer: producer,
                 image,
+                warehouse_count,
             })
         );
         navigate("/");
@@ -87,6 +89,12 @@ export const ItemAddPage = () => {
                     value={weight}
                     type="number"
                     onChange={(e) => setWeight(e.target.value)}
+                />
+                <TextField
+                    label="Кол-во на складе"
+                    value={warehouse_count}
+                    type="number"
+                    onChange={(e) => setWarehouseCount(e.target.value)}
                 />
                 <Dropdown
                     label="Тип"

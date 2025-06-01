@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AsyncThunkConfig } from "@reduxjs/toolkit/src/createAsyncThunk.ts";
-import { api } from "src/app/api.ts";
+import { T_Item } from "entities/Item/model/types/Item.ts";
 import {
     T_Order,
     T_UpdateItemCount,
 } from "entities/Order/model/types/Order.ts";
-import { T_Item } from "entities/Item/model/types/Item.ts";
+import { api } from "src/app/api.ts";
 
 type T_DraftOrderState = {
     order?: T_Order | null;

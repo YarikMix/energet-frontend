@@ -30,6 +30,7 @@ const ItemEditPage = () => {
     const [price, setPrice] = useState("");
     const [power, setPower] = useState("");
     const [weight, setWeight] = useState("");
+    const [warehouse_count, setWarehouseCount] = useState("");
 
     const [type, setType] = useState<number>(null);
     const [producer, setProducer] = useState<number>(null);
@@ -46,6 +47,7 @@ const ItemEditPage = () => {
             setWeight(item.weight as string);
             setType(item.item_type.id);
             setProducer(item.item_producer.id);
+            setWarehouseCount(item.warehouse_count);
         }
     }, [item]);
 
@@ -77,6 +79,7 @@ const ItemEditPage = () => {
             </Container>
         );
     }
+
     const handleSaveItem = async () => {
         await dispatch(
             updateItem({
@@ -88,6 +91,7 @@ const ItemEditPage = () => {
                     weight,
                     item_type: type,
                     item_producer: producer,
+                    warehouse_count: warehouse_count,
                 },
             })
         );
@@ -155,6 +159,12 @@ const ItemEditPage = () => {
                     value={producer}
                     options={itemsProducers}
                     onChange={handleChangeItemProducer}
+                />
+                <TextField
+                    label="Кол-во на складе"
+                    value={warehouse_count}
+                    type="number"
+                    onChange={(e) => setWarehouseCount(e.target.value)}
                 />
                 <ItemImageUploader
                     defaultImage={`/images/${item.image}`}

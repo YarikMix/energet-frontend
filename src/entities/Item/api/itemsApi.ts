@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AsyncThunkConfig } from "@reduxjs/toolkit/src/createAsyncThunk.ts";
+import { AxiosRequestConfig } from "axios";
 import { T_Item, T_ItemOption } from "entities/Item/model/types/Item.ts";
 import { useQuery } from "react-query";
 import { getFormDataFromObject } from "shared/utils/getFormDataFromObject.ts";
@@ -47,7 +48,7 @@ export const useItemsList = ({ searchParams, page }: IProps) =>
             }
 
             return api
-                .get(`/items`, { params })
+                .get(`/items`, { params } as AxiosRequestConfig)
                 .then((response) => response.data);
         },
         { keepPreviousData: true }
@@ -74,7 +75,7 @@ export const useFavouriteList = ({ searchParams, page }: IProps) =>
             return api
                 .get(`/favourites`, {
                     params,
-                })
+                } as AxiosRequestConfig)
                 .then((response) => response.data);
         },
         { keepPreviousData: true }

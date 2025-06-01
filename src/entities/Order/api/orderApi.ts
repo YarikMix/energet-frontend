@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AsyncThunkConfig } from "@reduxjs/toolkit/src/createAsyncThunk.ts";
+import { AxiosRequestConfig } from "axios";
 import { T_Order } from "entities/Order/model/types/Order.ts";
 import { useQuery } from "react-query";
 import { api } from "src/app/api.ts";
@@ -27,7 +28,7 @@ export const useOrdersList = (status) =>
         }
 
         return api
-            .get(`/orders/`, { params })
+            .get(`/orders/`, { params } as AxiosRequestConfig)
             .then((response) => response.data);
     });
 

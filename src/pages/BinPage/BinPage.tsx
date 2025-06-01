@@ -8,11 +8,8 @@ import {
     Grid2,
     Typography,
 } from "@mui/material";
-import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
 import { calculateTotalPrice } from "entities/Order/lib/calcTotalPrice.ts";
 import { formatItemsCount } from "entities/Order/lib/formatItemsCount.ts";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import {
     deleteDraftOrder,
     deleteItemsFromDraftOrder,
@@ -21,7 +18,10 @@ import {
     selectAllItems,
     unselectAllItems,
 } from "entities/Order/lib/slices/DraftOrderSlice.ts";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
 
 export const BinPage = () => {
     const dispatch = useAppDispatch();
@@ -182,7 +182,7 @@ export const BinPage = () => {
                                 variant="contained"
                                 onClick={handleFormDraftOrder}
                             >
-                                Перейти к оформлению
+                                Оформить
                             </Button>
                         </Card>
                     </Box>

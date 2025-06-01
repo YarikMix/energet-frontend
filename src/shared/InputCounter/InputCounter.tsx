@@ -1,7 +1,6 @@
-import { Box, IconButton, TextField } from "@mui/material";
-import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
-import * as React from "react";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { Box, IconButton, TextField } from "@mui/material";
 
 type Props = {
     value: number;
@@ -10,6 +9,7 @@ type Props = {
     max: number;
     error: boolean;
     setError: (value: boolean) => void;
+    errorMessage?: string;
 };
 
 export const InputCounter = ({
@@ -19,6 +19,7 @@ export const InputCounter = ({
     max,
     error,
     setError,
+    errorMessage,
 }: Props) => {
     const variantBackgroundColor = {
         filled: "primary.main",
@@ -70,18 +71,19 @@ export const InputCounter = ({
     };
 
     return (
-        <Box display="flex" alignItems="center" gap="10px">
+        <Box display="flex" alignItems="start" gap="10px">
             <MyIconButton variant="filled" onClick={handleDecrease}>
                 <RemoveIcon />
             </MyIconButton>
             <TextField
                 label="Количество"
                 variant="outlined"
-                sx={{ width: "125px" }}
+                sx={{ width: "125px", height: 80 }}
                 value={value}
                 onChange={handleInput}
                 type="number"
                 error={error}
+                helperText={value > max ? errorMessage : ""}
             />
             <MyIconButton variant="filled" onClick={handleIncrease}>
                 <AddIcon />

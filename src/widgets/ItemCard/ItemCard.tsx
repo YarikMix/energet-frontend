@@ -1,3 +1,5 @@
+import { Favorite, FavoriteBorder } from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
     Box,
     Button,
@@ -9,12 +11,12 @@ import {
     IconButton,
     Typography,
 } from "@mui/material";
+import {
+    addToFavourites,
+    removeFromFavourites,
+} from "entities/Item/api/itemsApi.ts";
+import { isAddedToDraftOrder } from "entities/Item/lib/isAddedToDraftOrder.ts";
 import { T_Item } from "entities/Item/model/types/Item.ts";
-import { useNavigate } from "react-router-dom";
-import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import * as React from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useEffect, useState } from "react";
 import {
     addItemToDraftOrder,
     deleteItemFromOrder,
@@ -22,19 +24,16 @@ import {
     toggleSelectItem,
     unselectItem,
 } from "entities/Order/lib/slices/DraftOrderSlice.ts";
-import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
-import { useSelector } from "react-redux";
-import { isAddedToDraftOrder } from "entities/Item/lib/isAddedToDraftOrder.ts";
-import { InputCounter } from "shared/InputCounter/InputCounter.tsx";
-import { useDebounce } from "use-debounce";
-import {
-    addToFavourites,
-    removeFromFavourites,
-} from "entities/Item/api/itemsApi.ts";
 import {
     getIsAuthenticated,
     getIsBuyer,
 } from "entities/User/model/selectors/getUser.ts";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { InputCounter } from "shared/InputCounter/InputCounter.tsx";
+import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { useDebounce } from "use-debounce";
 
 interface IProps {
     item: T_Item;
@@ -131,6 +130,12 @@ const ItemCard = ({
         setIsChecked(items.includes(item.id));
     }, [items]);
 
+    useEffect(() => {
+        if (count > item.warehouse_count) {
+            setError(true);
+        }
+    }, [item, count]);
+
     if (isBinPage) {
         return (
             <Card sx={{ display: "flex" }}>
@@ -189,14 +194,14 @@ const ItemCard = ({
                                 <DeleteIcon />
                             </IconButton>
                         </Box>
-
                         <InputCounter
                             value={count as number}
                             setValue={setCount}
                             error={error}
                             setError={setError}
+                            errorMessage={`Макс: ${item.warehouse_count} ед.`}
                             min={1}
-                            max={100}
+                            max={item.warehouse_count || 100}
                         />
                     </Box>
                 </CardContent>

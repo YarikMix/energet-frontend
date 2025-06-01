@@ -11,6 +11,7 @@ export type T_Item = {
     owner: number;
     count?: number;
     favourite?: boolean;
+    warehouse_count?: number;
 };
 
 export enum E_ItemStatus {

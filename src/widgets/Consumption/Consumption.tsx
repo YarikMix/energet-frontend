@@ -61,14 +61,14 @@ export const Consumption = () => {
                     <TabPanel currentTab={consumptionType} index={2}>
                         <ConsumptionSeasons />
                     </TabPanel>
-                    <FormControlLabel
-                        value={3}
-                        control={<Radio />}
-                        label="Потребление по месяцам"
-                    />
-                    <TabPanel currentTab={consumptionType} index={3}>
-                        {/*<ConsumptionMonth />*/}
-                    </TabPanel>
+                    {/*<FormControlLabel*/}
+                    {/*    value={3}*/}
+                    {/*    control={<Radio />}*/}
+                    {/*    label="Потребление по месяцам"*/}
+                    {/*/>*/}
+                    {/*<TabPanel currentTab={consumptionType} index={3}>*/}
+                    {/*    /!*<ConsumptionMonth />*!/*/}
+                    {/*</TabPanel>*/}
                 </RadioGroup>
             </FormControl>
         </div>

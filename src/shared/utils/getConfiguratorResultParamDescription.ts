@@ -1,6 +1,6 @@
 export const getConfiguratorResultParamDescription = (param: string) => {
     if (param == "RPS") {
-        return "Надежность энергоснабжения";
+        return "Надежность электроснабжения";
     }
 
     if (param == "LCOE") {

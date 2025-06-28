@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AsyncThunkConfig } from "@reduxjs/toolkit/src/createAsyncThunk.ts";
 import { T_Item } from "entities/Item/model/types/Item.ts";

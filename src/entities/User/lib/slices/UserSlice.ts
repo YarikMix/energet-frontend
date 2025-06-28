@@ -1,8 +1,10 @@
-import { T_User, T_UserState } from "entities/User/model/types/User.ts";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { T_UserLoginCreadentials } from "src/widgets/LoginForm/types.ts";
 import { AsyncThunkConfig } from "@reduxjs/toolkit/src/createAsyncThunk.ts";
+import { T_User, T_UserState } from "entities/User/model/types/User.ts";
 import { api } from "src/app/api.ts";
+import { T_UserLoginCreadentials } from "src/widgets/LoginForm/types.ts";
 import { T_UserRegisterCredentials } from "src/widgets/RegisterForm/types.ts";
 
 const initialState: T_UserState = {

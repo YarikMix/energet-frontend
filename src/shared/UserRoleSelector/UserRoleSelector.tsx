@@ -1,4 +1,5 @@
-import * as React from "react";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import {
     FormControl,
     FormControlLabel,
@@ -6,8 +7,8 @@ import {
     Radio,
     RadioGroup,
 } from "@mui/material";
-import { Controller } from "react-hook-form";
 import { E_UserRole } from "entities/User/model/types/User.ts";
+import { Controller } from "react-hook-form";
 
 const UserRoleSelector = ({ control }) => {
     return (

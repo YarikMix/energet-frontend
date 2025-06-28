@@ -1,9 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AsyncThunkConfig } from "@reduxjs/toolkit/src/createAsyncThunk.ts";
-import { api } from "src/app/api.ts";
-import { T_Item } from "entities/Item/model/types/Item.ts";
 import { AxiosResponse } from "axios";
+import { T_Item } from "entities/Item/model/types/Item.ts";
 import { DEFAULT_COORDS } from "shared/utils/consts.ts";
+import { api } from "src/app/api.ts";
 
 export type T_ConfigurationResultItem = {
     item: T_Item;

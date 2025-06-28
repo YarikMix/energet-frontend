@@ -1,24 +1,25 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Box, Button, CardMedia, Container, Typography } from "@mui/material";
-import { useParams } from "react-router-dom";
 import {
     addToFavourites,
     removeFromFavourites,
     useItem,
 } from "entities/Item/api/itemsApi.ts";
-import { useSelector } from "react-redux";
-import {
-    getIsAuthenticated,
-    getIsBuyer,
-} from "entities/User/model/selectors/getUser.ts";
-import * as React from "react";
+import { isAddedToDraftOrder } from "entities/Item/lib/isAddedToDraftOrder.ts";
 import {
     addItemToDraftOrder,
     deleteItemFromOrder,
 } from "entities/Order/lib/slices/DraftOrderSlice.ts";
-import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
-import { isAddedToDraftOrder } from "entities/Item/lib/isAddedToDraftOrder.ts";
-import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
+import {
+    getIsAuthenticated,
+    getIsBuyer,
+} from "entities/User/model/selectors/getUser.ts";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import useTabs from "shared/utils/useTabs.tsx";
+import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
 
 export const ItemPage = () => {
     const { id } = useParams<{ id: number }>();

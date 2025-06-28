@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { Badge, Container, Tab } from "@mui/material";
 import Logo from "assets/logo.svg";

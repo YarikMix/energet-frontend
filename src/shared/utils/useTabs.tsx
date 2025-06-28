@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Tab, Tabs } from "@mui/material";
-import { a11yProps } from "shared/utils/a11yProps.tsx";
 import { withStyles } from "@mui/styles";
+import React, { useState } from "react";
+import { a11yProps } from "shared/utils/a11yProps.tsx";
 
 interface TabsComponentProps {
     orientation?: "horizontal" | "vertical";

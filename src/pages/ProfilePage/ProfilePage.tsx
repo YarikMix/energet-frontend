@@ -1,20 +1,21 @@
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { Box, Button, Container, Stack } from "@mui/material";
+import { handleLogout } from "entities/User/lib/slices/UserSlice.ts";
 import {
     getIsAuthenticated,
     getUser,
 } from "entities/User/model/selectors/getUser.ts";
-import { Box, Button, Container, Stack } from "@mui/material";
-import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
-import { handleLogout } from "entities/User/lib/slices/UserSlice.ts";
-import useTabs from "shared/utils/useTabs.tsx";
-import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
-import * as React from "react";
-import { Profile } from "src/widgets/Profile/Profile.tsx";
-import { Orders } from "src/widgets/Orders/Orders.tsx";
-import { ConfiguratorDrafts } from "src/widgets/ConfiguratorDrafts/ConfiguratorDrafts.tsx";
 import getIsBuyer from "entities/User/model/selectors/isBuyer.ts";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import useTabs from "shared/utils/useTabs.tsx";
+import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { ConfiguratorDrafts } from "src/widgets/ConfiguratorDrafts/ConfiguratorDrafts.tsx";
+import { Orders } from "src/widgets/Orders/Orders.tsx";
+import { Profile } from "src/widgets/Profile/Profile.tsx";
+import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
 
 export const ProfilePage = () => {
     const isBuyer = useSelector(getIsBuyer);

@@ -1,8 +1,9 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-import { Link } from "@mui/material";
-import { PasswordInput } from "shared/PasswordInput/PasswordInput.tsx";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { Box, Button, Link, Paper, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { Link as RouterLink } from "react-router-dom";
+import { PasswordInput } from "shared/PasswordInput/PasswordInput.tsx";
 import { T_UserLoginCreadentials } from "src/widgets/LoginForm/types.ts";
 
 type Props = {

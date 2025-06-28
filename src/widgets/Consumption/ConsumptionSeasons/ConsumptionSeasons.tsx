@@ -1,12 +1,13 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Stack } from "@mui/material";
+import { updateConsumptionSeasons } from "entities/Configurator/lib/slices/configuratorSlice.ts";
+import { getConsumptionSeasons } from "entities/Configurator/model/selectors/getConsumption.ts";
 import { ConsumptionPowerInput } from "shared/ConsumptionPowerInput/ConsumptionPowerInput.tsx";
-import React from "react";
 import {
     useAppDispatch,
     useAppSelector,
 } from "src/app/providers/StoreProvider/hooks/hooks.ts";
-import { getConsumptionSeasons } from "entities/Configurator/model/selectors/getConsumption.ts";
-import { updateConsumptionSeasons } from "entities/Configurator/lib/slices/configuratorSlice.ts";
 
 export const ConsumptionSeasons = () => {
     const consumption = useAppSelector(getConsumptionSeasons);

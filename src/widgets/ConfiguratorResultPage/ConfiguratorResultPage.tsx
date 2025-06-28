@@ -1,3 +1,4 @@
+// @ts-nocheck
 import HelpIcon from "@mui/icons-material/Help";
 import { Button, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";

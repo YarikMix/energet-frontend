@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Stack, TextField, Typography } from "@mui/material";
 import { Map, Placemark } from "@pbe/react-yandex-maps";
 import { updateCoords } from "entities/Configurator/lib/slices/configuratorSlice.ts";

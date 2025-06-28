@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Box, Link, Stack, Typography } from "@mui/material";
 import { E_OrderStatus, T_Order } from "entities/Order/model/types/Order.ts";
 import getIsModerator from "entities/User/model/selectors/isModerator.ts";

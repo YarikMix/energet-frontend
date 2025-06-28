@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {

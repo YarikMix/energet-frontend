@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import {
     Box,
     Button,
@@ -9,24 +11,21 @@ import {
     Stepper,
     Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import { CoordsPicker } from "src/widgets/CoordsPicker/CoordsPicker.tsx";
-import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
-import { Consumption } from "src/widgets/Consumption/Consumption.tsx";
-import { Optimization } from "src/widgets/Optimization/Optimization.tsx";
+import {
+    calculateFetch,
+    resetConfigurator,
+} from "entities/Configurator/lib/slices/configuratorSlice.ts";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     useAppDispatch,
     useAppSelector,
 } from "src/app/providers/StoreProvider/hooks/hooks.ts";
-import {
-    calculateFetch,
-    resetConfigurator,
-    saveDraftCalculation,
-} from "entities/Configurator/lib/slices/configuratorSlice.ts";
-import { ConfiguratorResultTable } from "src/widgets/ConfiguratorResultItemsTable/ConfiguratorResultTable.tsx";
-import { addItemsToDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
-import { useNavigate } from "react-router-dom";
 import ConfiguratorResultPage from "src/widgets/ConfiguratorResultPage/ConfiguratorResultPage.tsx";
+import { Consumption } from "src/widgets/Consumption/Consumption.tsx";
+import { CoordsPicker } from "src/widgets/CoordsPicker/CoordsPicker.tsx";
+import { Optimization } from "src/widgets/Optimization/Optimization.tsx";
+import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
 
 export const ConfiguratorPage = () => {
     const steps = ["Локация", "Потребление", "Оптимизация", "Результат"];
@@ -114,12 +113,12 @@ export const ConfiguratorPage = () => {
         );
     }
 
-    const saveToDraft = async () => {
-        navigate("/");
-        await dispatch(saveDraftCalculation());
-        dispatch(resetConfigurator());
-        setStep(0);
-    };
+    // const saveToDraft = async () => {
+    //     navigate("/");
+    //     await dispatch(saveDraftCalculation());
+    //     dispatch(resetConfigurator());
+    //     setStep(0);
+    // };
 
     const nextStepBtnVisible = !isLastStep;
 

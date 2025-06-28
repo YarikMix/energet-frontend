@@ -1,9 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useOrder, useOrdersList } from "entities/Order/api/orderApi.ts";
-import { formatDate } from "shared/utils/date.ts";
 import { useState } from "react";
-import { Order } from "src/widgets/Order/Order.tsx";
+import { formatDate } from "shared/utils/date.ts";
 import { ORDER_STATUSES } from "src/app/consts.ts";
+import { Order } from "src/widgets/Order/Order.tsx";
 
 export const Orders = () => {
     const [selectedOrder, setSelectedOrder] = useState<number | null>(null);

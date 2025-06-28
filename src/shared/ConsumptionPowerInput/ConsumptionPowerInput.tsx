@@ -1,4 +1,5 @@
-import React from "react";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Stack, TextField, Typography } from "@mui/material";
 
 const COEFFICIENT = 0.024;

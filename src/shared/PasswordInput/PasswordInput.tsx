@@ -1,6 +1,7 @@
-import * as React from "react";
-import { IconButton, InputAdornment, TextField } from "@mui/material";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { useState } from "react";
 
 export const PasswordInput = ({

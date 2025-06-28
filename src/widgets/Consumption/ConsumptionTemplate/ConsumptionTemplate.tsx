@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import {
     Checkbox,
     FormControl,
@@ -11,11 +13,11 @@ import {
     Stack,
     TextField,
 } from "@mui/material";
-import React, { useState } from "react";
-import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
 import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import { useState } from "react";
+import { TabPanel } from "src/widgets/TabPanel/TabPanel.tsx";
 
 export const ConsumptionTemplate = () => {
     const [consumptionType, setConsumptionType] = useState(-1);

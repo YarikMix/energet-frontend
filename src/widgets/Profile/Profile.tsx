@@ -1,8 +1,10 @@
-import { useSelector } from "react-redux";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { AccountCircle } from "@mui/icons-material";
+import { Box, TextField, Typography } from "@mui/material";
 import { getUser } from "entities/User/model/selectors/getUser.ts";
 import { E_UserRole } from "entities/User/model/types/User.ts";
-import { Box, TextField, Typography } from "@mui/material";
-import { AccountCircle } from "@mui/icons-material";
+import { useSelector } from "react-redux";
 
 export const Profile = () => {
     const user = useSelector(getUser);

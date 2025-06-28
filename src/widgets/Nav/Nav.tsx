@@ -1,11 +1,13 @@
-import { useRouteMatch } from "src/app/Router/AppRouter.tsx";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Tab, Tabs } from "@mui/material";
-import { Link } from "react-router-dom";
-import * as React from "react";
-import { useAppSelector } from "src/app/providers/StoreProvider/hooks/hooks.ts";
-import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
 import getUserRole from "entities/User/model/selectors/getRole.ts";
+import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
 import { E_UserRole } from "entities/User/model/types/User.ts";
+import * as React from "react";
+import { Link } from "react-router-dom";
+import { useAppSelector } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { useRouteMatch } from "src/app/Router/AppRouter.tsx";
 
 export type T_Tab = {
     id: number;

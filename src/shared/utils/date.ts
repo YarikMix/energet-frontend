@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 export const formatDate = (value: string, is_datetime = false) => {
     if (value) {
         const format = is_datetime

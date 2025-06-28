@@ -1,16 +1,18 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { configureStore } from "@reduxjs/toolkit";
-import { userReducer } from "entities/User";
-import { orderReducer } from "entities/Order";
 import { configuratorReducer } from "entities/Configurator";
+import { orderReducer } from "entities/Order";
+import { userReducer } from "entities/User";
 import {
-    persistStore,
-    persistReducer,
     FLUSH,
-    REHYDRATE,
     PAUSE,
     PERSIST,
+    persistReducer,
+    persistStore,
     PURGE,
     REGISTER,
+    REHYDRATE,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 

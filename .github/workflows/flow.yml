@@ -47,7 +47,6 @@ jobs:
 
       - run: exit 1
 
-
       - name: Send Telegram Message
         if: failure()
         env:
@@ -62,7 +61,7 @@ jobs:
             🔹 *Job*: ${{ github.job }}
             
             🔗 Ссылка на джобу 🔗
-            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/${{ steps.jobs.outputs.html_url }}
+           ${{ steps.jobs.outputs.html_url }}
             
             🔗 Ссылка на пайплайн 🔗
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

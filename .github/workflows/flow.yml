@@ -1,10 +1,10 @@
 name: Deploy Frontend
 
-on: [push]
-
 concurrency:
-  "group": ${{ github.head_ref }}
-  "cancel-in-progress": true
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
+on: [push]
 
 jobs:
   notify-telegramm:

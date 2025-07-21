@@ -2,6 +2,10 @@ name: Deploy Frontend
 
 on: [push]
 
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   notify-telegramm:
     runs-on: ubuntu-latest
@@ -37,6 +41,8 @@ jobs:
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: |
           npm ci
+
+      - run: exit 1
 
       - name: Send Telegram Message
         if: failure()
@@ -156,6 +162,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [install-cache, lint, build]
     steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: .next
+
       - name: Очистка папки на сервере
         uses: appleboy/ssh-action@master
         with:
@@ -166,12 +178,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: sudo rm -rf /var/www/dist/*
 
-      - name: Upload build result
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: ./dist
-
       - name: Деплой на сервер
         uses: appleboy/scp-action@master
         with:
@@ -179,7 +185,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "dist/*"
+          source: build-output
           target: "/var/www/dist/"
           strip_components: 1
           overwrite: true

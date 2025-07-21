@@ -45,9 +45,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           job_name: ${{ github.job }}
 
-      - name: Output Current Job Log URL
-        run: echo ${{ steps.jobs.outputs.html_url }}
-
       - run: exit 1
 
 
@@ -63,6 +60,9 @@ jobs:
             🔹 *Репозиторий*: ${{ github.repository }}
             🔹 *Workflow*: ${{ github.workflow }}
             🔹 *Job*: ${{ github.job }}
+            
+            🔗 Ссылка на джобу 🔗
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/${{ steps.jobs.outputs.html_url }}
             
             🔗 Ссылка на пайплайн 🔗
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

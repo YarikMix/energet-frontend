@@ -39,7 +39,7 @@ jobs:
           npm ci
 
       - name: Get Current Job Log URL
-        uses: Tiryoh/gha-jobid-action@v0
+        uses: Tiryoh/gha-jobid-action@main
         if: failure()
         id: jobs
         with:
@@ -95,7 +95,7 @@ jobs:
         run: npm run lint
 
       - name: Get Current Job Log URL
-        uses: Tiryoh/gha-jobid-action@v0
+        uses: Tiryoh/gha-jobid-action@main
         if: failure()
         id: jobs
         with:
@@ -158,7 +158,7 @@ jobs:
           retention-days: 1
 
       - name: Get Current Job Log URL
-        uses: Tiryoh/gha-jobid-action@v0
+        uses: Tiryoh/gha-jobid-action@main
         if: failure()
         id: jobs
         with:
@@ -222,7 +222,7 @@ jobs:
           overwrite: true
 
       - name: Get Current Job Log URL
-        uses: Tiryoh/gha-jobid-action@v0
+        uses: Tiryoh/gha-jobid-action@main
         if: failure()
         id: jobs
         with:

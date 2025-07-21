@@ -25,6 +25,10 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
 
+const isSelectedAll = (items) => {
+    return items.length == order?.items?.length;
+};
+
 export const BinPage = () => {
     const dispatch = useAppDispatch();
 
@@ -34,15 +38,11 @@ export const BinPage = () => {
 
     useEffect(() => {
         dispatch(handleFetchDraftOrder());
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
-        setSelectedAll(isSelectedAll());
+        setSelectedAll(isSelectedAll(items));
     }, [items]);
-
-    const isSelectedAll = () => {
-        return items.length == order?.items?.length;
-    };
 
     const isSelectedAny = () => {
         return items.length > 0;

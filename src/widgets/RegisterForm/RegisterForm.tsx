@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
@@ -100,7 +100,7 @@ const RegisterForm = ({ onSubmit }: Props) => {
                 >
                     Зарегистрироваться
                 </Button>
-                <Box fullWidth sx={{ textAlign: "center", mt: 2 }}>
+                <Box sx={{ textAlign: "center", mt: 2, width: "100%" }}>
                     <Link component={RouterLink} to="/login">
                         Уже есть аккаунт? Войти
                     </Link>

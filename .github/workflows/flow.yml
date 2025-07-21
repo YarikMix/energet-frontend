@@ -41,7 +41,11 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
           MESSAGE: |
-            ❗ Произошла ошибка во время деплоя
+            ❗ Произошла ошибка во время деплоя ❗
+            
+            🔹 *Репозиторий*: \`${{ github.repository }}\`
+            🔹 *Workflow*: \`${{ github.workflow }}\
+            🔹 *Job*: \`${{ github.job }}\`
             
             🔗 Ссылка на пайплайн 🔗
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

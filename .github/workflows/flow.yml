@@ -10,15 +10,15 @@ jobs:
         node-version: [23]
     steps:
       - name: Checkout Commit
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@master
         with:
           node-version: ${{ matrix.node }}
 
       - name: Cache npm dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@main
         id: cache-dependencies
         with:
           path: node_modules
@@ -44,7 +44,7 @@ jobs:
           topic_id: '${{ secrets.TELEGRAM_TOPIC_ID }}'
 
       - name: Checkout репозитория
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@master
 
       - name: Установка Node.js
         uses: actions/setup-node@v3

@@ -3,6 +3,16 @@ name: Deploy Frontend
 on: [push]
 
 jobs:
+  notify-telegramm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify github action on Telegram
+        uses: EverythingSuckz/github-telegram-notify@main
+        with:
+          bot_token: '${{ secrets.TELEGRAM_TOKEN }}'
+          chat_id: '${{ secrets.TELEGRAM_CHAT_ID }}'
+          topic_id: '${{ secrets.TELEGRAM_TOPIC_ID }}'
+
   install-cache:
     runs-on: ubuntu-latest
     strategy:
@@ -31,9 +41,6 @@ jobs:
         run: |
           npm ci
 
-
-      - run: exit 1
-
       - name: Send Telegram Message
         if: failure()
         env:
@@ -43,9 +50,9 @@ jobs:
           MESSAGE: |
             ❗ Произошла ошибка во время деплоя ❗
             
-            🔹 *Репозиторий*: \`${{ github.repository }}\`
-            🔹 *Workflow*: \`${{ github.workflow }}\
-            🔹 *Job*: \`${{ github.job }}\`
+            🔹 *Репозиторий*: ${{ github.repository }}
+            🔹 *Workflow*: ${{ github.workflow }}
+            🔹 *Job*: ${{ github.job }}
             
             🔗 Ссылка на пайплайн 🔗
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -58,13 +65,6 @@ jobs:
     needs: install-cache
 
     steps:
-      - name: Notify github action on Telegram
-        uses: EverythingSuckz/github-telegram-notify@main
-        with:
-          bot_token: '${{ secrets.TELEGRAM_TOKEN }}'
-          chat_id: '${{ secrets.TELEGRAM_CHAT_ID }}'
-          topic_id: '${{ secrets.TELEGRAM_TOPIC_ID }}'
-
       - name: Checkout репозитория
         uses: actions/checkout@master
 

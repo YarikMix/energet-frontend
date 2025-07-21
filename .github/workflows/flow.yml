@@ -68,7 +68,8 @@ jobs:
           curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage' \
           -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
           -d "text=$MESSAGE" \
-          -d "reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}"
+          -d "reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}" \
+          -d "parse_mode=MarkdownV2"
 
   lint:
     runs-on: ubuntu-latest
@@ -264,8 +265,10 @@ jobs:
 
             🔗 Ссылка на прод 🔗
             ${{ secrets.PRODUCTION_URL || 'Отсутствует' }}
+            [Link Text](https://example.com)
         run: |
           curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage' \
           -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
           -d "text=$MESSAGE" \
           -d "reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}"
+          -d "parse_mode=MarkdownV2"

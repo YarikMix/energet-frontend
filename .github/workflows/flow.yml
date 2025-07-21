@@ -55,7 +55,7 @@ jobs:
           MESSAGE: |
             ❗ Произошла ошибка во время установки зависимостей ❗
             
-            🔹 Репозиторий: ${{ github.repository }}
+            🔹 Repo: ${{ github.repository }}
             🔹 Workflow: ${{ github.workflow }}
             🔹 Job: ${{ github.job }}
             
@@ -112,7 +112,7 @@ jobs:
           MESSAGE: |
             ❗ Произошла ошибка во время прогона линтера ❗
             
-            🔹 Репозиторий: ${{ github.repository }}
+            🔹 Repo: ${{ github.repository }}
             🔹 Workflow: ${{ github.workflow }}
             🔹 Job: ${{ github.job }}
             
@@ -175,7 +175,7 @@ jobs:
           MESSAGE: |
             ❗ Произошла ошибка во время сборки ❗
             
-            🔹 Репозиторий: ${{ github.repository }}
+            🔹 Repo: ${{ github.repository }}
             🔹 Workflow: ${{ github.workflow }}
             🔹 Job: ${{ github.job }}
             
@@ -239,7 +239,7 @@ jobs:
           MESSAGE: |
             ❗ Произошла ошибка во время деплоя ❗
             
-            🔹 Репозиторий: ${{ github.repository }}
+            🔹 Repo: ${{ github.repository }}
             🔹 Workflow: ${{ github.workflow }}
             🔹 Job: ${{ github.job }}
             

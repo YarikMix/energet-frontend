@@ -40,19 +40,14 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
+          MESSAGE: |
+            ❗ Произошла ошибка во время деплоя
+            
+            🔗 Ссылка на пайплайн 🔗
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          MESSAGE="❗ *Произошла ошибка во время установки зависимостей* ❗%0A%0A"
-          MESSAGE+="🔹 *Репозиторий*: \`${{ github.repository }}\`%0A"
-          MESSAGE+="🔹 *Workflow*: \`${{ github.workflow }}\`%0A"
-          MESSAGE+="🔹 *Job*: \`${{ github.job }}\`%0A%0A"
-          MESSAGE+="🔗 *Ссылка на пайплайн* 🔗%0A"
-          MESSAGE+="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}%0A%0A"
-      
-          curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
-          -d "chat_id=$TELEGRAM_CHAT_ID" \
-          -d "text=$MESSAGE" \
-          -d "reply_to_message_id=$TELEGRAM_TOPIC_ID" \
-          -d "parse_mode=MarkdownV2"
+          curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage' \
+          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}&text=$MESSAGE&reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}"
 
   build:
     runs-on: ubuntu-latest

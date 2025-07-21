@@ -53,7 +53,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
           MESSAGE: |
-            ❗ Произошла ошибка во время деплоя ❗
+            ❗ Произошла ошибка во время установки зависимостей ❗
             
             🔹 Репозиторий: ${{ github.repository }}
             🔹 Workflow: ${{ github.workflow }}
@@ -109,7 +109,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
           MESSAGE: |
-            ❗ Произошла ошибка во время деплоя ❗
+            ❗ Произошла ошибка во время прогона линтера ❗
             
             🔹 Репозиторий: ${{ github.repository }}
             🔹 Workflow: ${{ github.workflow }}
@@ -172,7 +172,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
           MESSAGE: |
-            ❗ Произошла ошибка во время деплоя ❗
+            ❗ Произошла ошибка во время сборки ❗
             
             🔹 Репозиторий: ${{ github.repository }}
             🔹 Workflow: ${{ github.workflow }}
@@ -260,7 +260,7 @@ jobs:
       - name: Send Telegram Message
         env:
           MESSAGE: |
-            ✅ Изменения успешно задеплоены
+            ✅ Изменения успешно задеплоены ✅
 
             🔗 Ссылка на прод 🔗
             ${{ secrets.PRODUCTION_URL || 'Отсутствует' }}

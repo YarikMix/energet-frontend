@@ -154,7 +154,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: build-output
-          path: .next
+          path: dist
           retention-days: 1
 
       - name: Get Current Job Log URL
@@ -197,7 +197,7 @@ jobs:
         uses: actions/download-artifact@main
         with:
           name: build-output
-          path: .next
+          path: dist
 
       - name: Очистка папки на сервере
         uses: appleboy/ssh-action@master
@@ -220,6 +220,14 @@ jobs:
           target: "/var/www/dist/"
           strip_components: 1
           overwrite: true
+
+      - name: Get Current Job Log URL
+        uses: Tiryoh/gha-jobid-action@v0
+        if: failure()
+        id: jobs
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          job_name: ${{ github.job }}
 
       - name: Send Telegram Message
         if: failure()

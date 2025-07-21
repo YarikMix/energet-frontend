@@ -31,7 +31,11 @@ jobs:
         run: |
           npm ci
 
+
+      - run: exit 1
+
       - name: Send Telegram Message
+        if: failure()
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -43,7 +47,6 @@ jobs:
           MESSAGE+="🔹 *Job*: \`${{ github.job }}\`%0A%0A"
           MESSAGE+="🔗 *Ссылка на пайплайн* 🔗%0A"
           MESSAGE+="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}%0A%0A"
-          MESSAGE+="*Последние ошибки*:%0A\`\`\`%0A$(jq -r '.jobs[] | select(.name == \"${{ github.job }}\") | .steps[] | select(.conclusion == \"failure\") | .name + \": \" + .output' \"$GITHUB_STEP_SUMMARY\" | head -c 4000)\`\`\`"
       
           curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
           -d "chat_id=$TELEGRAM_CHAT_ID" \

@@ -26,11 +26,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
-      - name: Install Dependencies
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: |
-          npm ci
-
       - name: Send Telegram Message
         if: failure()
         env:
@@ -38,7 +33,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
         run: |
-          MESSAGE="❗ *Произошла ошибка во время сборки* ❗%0A%0A"
+          MESSAGE="❗ *Произошла ошибка во время установки зависимостей* ❗%0A%0A"
           MESSAGE+="🔹 *Репозиторий*: \`${{ github.repository }}\`%0A"
           MESSAGE+="🔹 *Workflow*: \`${{ github.workflow }}\`%0A"
           MESSAGE+="🔹 *Job*: \`${{ github.job }}\`%0A%0A"

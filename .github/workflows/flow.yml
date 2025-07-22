@@ -148,8 +148,40 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
-      - name: Run tests
+      - name: Прогон тестов
         run: npm test
+
+      - name: Get Current Job Log URL
+        uses: Tiryoh/gha-jobid-action@main
+        if: failure()
+        id: jobs
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          job_name: ${{ github.job }}
+
+      - name: Send Telegram Message
+        if: failure()
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
+          MESSAGE: |
+            ❗ Произошла ошибка во время прогона юнит тестов ❗
+            
+            🔹 Repo: ${{ github.repository }}
+            🔹 Workflow: ${{ github.workflow }}
+            🔹 Job: ${{ github.job }}
+            
+            🔗 Ссылка на джобу 🔗
+            ${{ steps.jobs.outputs.html_url }}
+            
+            🔗 Ссылка на пайплайн 🔗
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage' \
+          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+          -d "text=$MESSAGE" \
+          -d "reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}"
 
   build:
     runs-on: ubuntu-latest

@@ -3,7 +3,7 @@ export const formatConfiguratorResultParamValue = (
     value: number
 ) => {
     if (param == "RPS") {
-        return 100 * value + " %";
+        return 100 * value;
     }
 
     if (param == "LCOE") {

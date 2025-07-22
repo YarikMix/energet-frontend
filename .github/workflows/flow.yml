@@ -127,9 +127,33 @@ jobs:
           -d "text=$MESSAGE" \
           -d "reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}"
 
+  unit-test:
+    runs-on: ubuntu-latest
+    needs: install-cache
+    steps:
+      - name: Checkout Commit
+        uses: actions/checkout@v2
+
+      - name: Установка Node.js
+        uses: actions/setup-node@master
+        with:
+          node-version: 23
+
+      - name: Restore npm dependencies
+        uses: actions/cache@master
+        id: cache-dependencies
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Run tests
+        run: npm test
+
   build:
     runs-on: ubuntu-latest
-    needs: [install-cache, lint]
+    needs: [install-cache, lint, unit-test]
     steps:
       - name: Checkout репозитория
         uses: actions/checkout@master
@@ -192,7 +216,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [install-cache, lint, build]
+    needs: build
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@main
@@ -256,7 +280,7 @@ jobs:
 
   notify-success:
     runs-on: ubuntu-latest
-    needs: [install-cache, lint, build, deploy]
+    needs: deploy
     steps:
       - name: Send Telegram Message
         env:

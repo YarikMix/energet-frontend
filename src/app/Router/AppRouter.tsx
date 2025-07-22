@@ -13,7 +13,6 @@ import RegisterPage from "pages/RegisterPage/RegisterPage.tsx";
 import { matchPath, Route, Routes, useLocation } from "react-router-dom";
 
 export const useRouteMatch = (patterns: readonly string[]) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { pathname } = useLocation();
 
     for (let i = 0; i < patterns.length; i += 1) {

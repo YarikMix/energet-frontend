@@ -3,7 +3,7 @@ name: Deploy Frontend
 on: [push]
 
 jobs:
-  notify-telegramm:
+  notify-commit:
     runs-on: ubuntu-latest
     steps:
       - name: Notify github action on Telegram

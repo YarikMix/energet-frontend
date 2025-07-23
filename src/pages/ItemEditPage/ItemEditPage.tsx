@@ -57,7 +57,7 @@ const ItemEditPage = () => {
         if (!isProducer && !isModerator) {
             navigate("/");
         }
-    }, [isProducer, isModerator, navigate]);
+    }, [isProducer, isModerator]);
 
     if (isLoading || !item || !id) {
         return null;

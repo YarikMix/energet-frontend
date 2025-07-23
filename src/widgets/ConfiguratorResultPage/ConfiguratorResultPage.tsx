@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import HelpIcon from "@mui/icons-material/Help";
 import { Button, IconButton, Stack, Tooltip, Typography } from "@mui/material";

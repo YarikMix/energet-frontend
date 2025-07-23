@@ -1,11 +1,11 @@
-import { Box, Stack, Typography } from "@mui/material";
-import { fetchConfiguratorDrafts } from "entities/Configurator/lib/slices/configuratorSlice.ts";
-import getConfiguratorDrafts from "entities/Configurator/model/selectors/getDrafts.ts";
 import { useEffect } from "react";
 import {
     useAppDispatch,
     useAppSelector,
 } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { fetchConfiguratorDrafts } from "entities/Configurator/lib/slices/configuratorSlice.ts";
+import getConfiguratorDrafts from "entities/Configurator/model/selectors/getDrafts.ts";
+import { Box, Stack, Typography } from "@mui/material";
 import ConfiguratorDraft from "src/widgets/ConfiguratorDraft/ConfiguratorDraft.tsx";
 
 export const ConfiguratorDrafts = () => {

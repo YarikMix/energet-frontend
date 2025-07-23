@@ -19,12 +19,10 @@ export const Profile = () => {
         return "Модератор";
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleSaveProfile = () => {
         // TODO
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const openChangePasswordModal = () => {
         // TODO
     };

@@ -38,7 +38,7 @@ export const BinPage = () => {
 
     useEffect(() => {
         dispatch(handleFetchDraftOrder());
-    }, [dispatch]);
+    }, []);
 
     useEffect(() => {
         setSelectedAll(isSelectedAll(items));

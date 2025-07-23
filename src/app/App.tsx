@@ -28,7 +28,6 @@ function App() {
         dispatch(handleFetchDraftOrder());
     };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const onAppStarted = async () => {
         await checkUser();
         if (isBuyer) {
@@ -38,7 +37,7 @@ function App() {
 
     useEffect(() => {
         onAppStarted();
-    }, [onAppStarted]);
+    }, []);
 
     return (
         <>

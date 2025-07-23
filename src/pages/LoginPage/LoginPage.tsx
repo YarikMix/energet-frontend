@@ -23,7 +23,7 @@ const LoginPage = () => {
         if (isAuthenticated) {
             navigate("/");
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated]);
 
     return (
         <Container maxWidth="xs" sx={{ pt: 8 }}>

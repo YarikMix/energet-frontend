@@ -68,13 +68,13 @@ export const OrdersTablePage = () => {
 
     useEffect(() => {
         refetchOrders();
-    }, [refetchOrders, status]);
+    }, [status]);
 
     useEffect(() => {
         if (!isModerator) {
             navigate("/");
         }
-    }, [isModerator, navigate]);
+    }, [isModerator]);
 
     const formatStatus = (status: number) => {
         if (status == 1) {

@@ -15,7 +15,7 @@ export const ConfiguratorDrafts = () => {
 
     useEffect(() => {
         dispatch(fetchConfiguratorDrafts());
-    }, [dispatch]);
+    }, []);
 
     if (!drafts || !drafts.length) {
         return (

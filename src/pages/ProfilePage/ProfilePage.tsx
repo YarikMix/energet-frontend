@@ -30,7 +30,7 @@ export const ProfilePage = () => {
         if (!isAuthenticated) {
             navigate("/");
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated]);
 
     const logoutBtnClicked = () => {
         dispatch(handleLogout());

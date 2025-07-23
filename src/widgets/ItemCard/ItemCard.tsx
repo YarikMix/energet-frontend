@@ -117,7 +117,7 @@ const ItemCard = ({
                 })
             );
         }
-    }, [debouncedCount, dispatch, error, isBinPage, item.id, order.items]);
+    }, [debouncedCount]);
 
     useEffect(() => {
         setCount(item?.count);
@@ -130,7 +130,7 @@ const ItemCard = ({
 
     useEffect(() => {
         setIsChecked(items.includes(item.id));
-    }, [item.id, items]);
+    }, [items]);
 
     useEffect(() => {
         if (count > item.warehouse_count) {

@@ -1,12 +1,12 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-import { Link } from "@mui/material";
-import { PasswordInput } from "shared/PasswordInput/PasswordInput.tsx";
-import { useForm } from "react-hook-form";
-import { T_UserRegisterCredentials } from "src/widgets/RegisterForm/types.ts";
-import UserRoleSelector from "shared/UserRoleSelector/UserRoleSelector.tsx";
+import { Box, Button, Link, Paper, TextField, Typography } from "@mui/material";
 import { E_UserRole } from "entities/User/model/types/User.ts";
+import { useForm } from "react-hook-form";
+import { Link as RouterLink } from "react-router-dom";
+import { PasswordInput } from "shared/PasswordInput/PasswordInput.tsx";
+import UserRoleSelector from "shared/UserRoleSelector/UserRoleSelector.tsx";
+import { T_UserRegisterCredentials } from "src/widgets/RegisterForm/types.ts";
 
 type Props = {
     onSubmit: (data: T_UserRegisterCredentials) => void;

@@ -20,7 +20,7 @@ import {
     selectAllItems,
     unselectAllItems,
 } from "entities/Order/lib/slices/DraftOrderSlice.ts";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
@@ -34,15 +34,15 @@ export const BinPage = () => {
 
     useEffect(() => {
         dispatch(handleFetchDraftOrder());
-    }, []);
+    }, [dispatch]);
+
+    const isSelectedAll = useCallback(() => {
+        return items.length == order?.items?.length;
+    }, [items, order]);
 
     useEffect(() => {
         setSelectedAll(isSelectedAll());
-    }, [items]);
-
-    const isSelectedAll = () => {
-        return items.length == order?.items?.length;
-    };
+    }, [isSelectedAll]);
 
     const isSelectedAny = () => {
         return items.length > 0;

@@ -64,7 +64,6 @@ function App() {
             >
                 Break the world
             </button>
-            ;
         </>
     );
 }

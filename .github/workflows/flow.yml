@@ -208,7 +208,7 @@ jobs:
         run: |
           touch .env
           echo VITE_SENTRY_SECRET=${{ secrets.SENTRY_SECRET }} >> .env
-          echo VITE_SENTRY_IP=${{ secrets.SENTRY_IP }} >> .env
+          echo VITE_SENTRY_URL=${{ secrets.SENTRY_URL }} >> .env
           echo VITE_SENTRY_PORT=${{ secrets.SENTRY_PORT }} >> .env
           echo VITE_SENTRY_PROJECT_ID=${{ secrets.SENTRY_PROJECT_ID }} >> .env
           cat .env

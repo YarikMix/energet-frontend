@@ -11,7 +11,7 @@ const root = createRoot(document.getElementById("root")!);
 const queryClient = new QueryClient();
 
 Sentry.init({
-    dsn: `http://${import.meta.env.VITE_SENTRY_SECRET}@${import.meta.env.VITE_SENTRY_IP}:${import.meta.env.VITE_SENTRY_PORT}/${import.meta.env.VITE_SENTRY_PROJECT_ID}`,
+    dsn: `http://${import.meta.env.VITE_SENTRY_SECRET}@${import.meta.env.VITE_SENTRY_URL}:${import.meta.env.VITE_SENTRY_PORT}/${import.meta.env.VITE_SENTRY_PROJECT_ID}`,
     sendDefaultPii: true,
 });
 

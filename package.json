@@ -20,6 +20,7 @@
     "@mui/x-data-grid": "^7.26.0",
     "@pbe/react-yandex-maps": "^1.2.5",
     "@reduxjs/toolkit": "^2.5.0",
+    "@sentry/react": "^10.3.0",
     "axios": "1.10.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",

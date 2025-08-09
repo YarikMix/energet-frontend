@@ -64,6 +64,13 @@ function App() {
             >
                 Break the world
             </button>
+            <button
+                onClick={() => {
+                    throw new TypeError("This is your first error!");
+                }}
+            >
+                TypeError
+            </button>
         </>
     );
 }

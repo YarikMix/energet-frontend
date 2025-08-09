@@ -11,7 +11,7 @@ const root = createRoot(document.getElementById("root")!);
 const queryClient = new QueryClient();
 
 Sentry.init({
-    dsn: `https://289701fbe36af4fb9fabff0877e0827e@energet-sentry.ru/2`,
+    dsn: `https://dee765831cd4c61b70fe4c23f563ecdb@energet-sentry.ru/2`,
     sendDefaultPii: true,
 });
 

@@ -59,14 +59,14 @@ function App() {
             )}
             <button
                 onClick={() => {
-                    throw new Error("This is your first error!");
+                    throw new Error("Error 123");
                 }}
             >
                 Break the world
             </button>
             <button
                 onClick={() => {
-                    throw new TypeError("This is your first error!");
+                    throw new TypeError("TypeError 123");
                 }}
             >
                 TypeError

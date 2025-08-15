@@ -57,20 +57,6 @@ function App() {
                     <AppRouter />
                 </div>
             )}
-            <button
-                onClick={() => {
-                    throw new Error("Error 123");
-                }}
-            >
-                Break the world
-            </button>
-            <button
-                onClick={() => {
-                    throw new TypeError("TypeError 123");
-                }}
-            >
-                TypeError
-            </button>
         </>
     );
 }

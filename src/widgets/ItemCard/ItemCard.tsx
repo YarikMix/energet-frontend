@@ -253,7 +253,7 @@ const ItemCard = ({
                     <CardMedia
                         component="img"
                         height="140"
-                        image={`https://c853dd2a-9187-471b-aca0-8ee187ab84ca.selstorage.ru/mock.png`}
+                        image={`/images/${item.image}`}
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">

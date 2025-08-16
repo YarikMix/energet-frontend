@@ -222,14 +222,7 @@ jobs:
           path: dist
           retention-days: 1
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@main
-        with:
-          name: build-output
-          path: static
-          retention-days: 1
-
-      - name: Upload build artifacts
+      - name: Upload static artifacts
         uses: actions/upload-artifact@main
         with:
           name: build-output

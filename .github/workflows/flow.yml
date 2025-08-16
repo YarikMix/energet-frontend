@@ -254,7 +254,7 @@ jobs:
       - name: Deploy static folder to S3 bucket
         uses: jakejarvis/s3-sync-action@master
         with:
-          args: --acl public-read --follow-symlinks --delete --no-verify-ssl
+          args: --acl public-read --follow-symlinks --no-verify-ssl
         env:
           AWS_S3_ENDPOINT: ${{secrets.AWS_S3_ENDPOINT}}
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}

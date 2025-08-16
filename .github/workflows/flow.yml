@@ -242,7 +242,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           job_name: ${{ github.job }}
 
-      - name: Send Telegram Message
+      - name: Send Telegram Error Message
         if: failure()
         uses: PacificPromise/macos-telegram-action@main
         with:
@@ -268,7 +268,6 @@ jobs:
         uses: actions/download-artifact@main
         with:
           name: build-output2
-          path: static
 
       - name: Deploy static folder to S3 bucket
         uses: jakejarvis/s3-sync-action@master
@@ -282,6 +281,32 @@ jobs:
           AWS_REGION: 'ru-7'
           SOURCE_DIR: 'static'
 
+      - name: Get Current Job Log URL
+        uses: Tiryoh/gha-jobid-action@main
+        if: failure()
+        id: jobs
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          job_name: ${{ github.job }}
+
+      - name: Send Telegram Error Message
+        if: failure()
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: |
+            ❗ Произошла ошибка во время деплоя в S3 ❗
+            
+            🔹 Repo: ${{ github.repository }}
+            🔹 Workflow: ${{ github.workflow }}
+            🔹 Job: ${{ github.job }}
+            
+            🔗 Ссылка на джобу 🔗
+            ${{ steps.jobs.outputs.html_url }}
+            
+            🔗 Ссылка на пайплайн 🔗
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -290,7 +315,6 @@ jobs:
         uses: actions/download-artifact@main
         with:
           name: build-output
-          path: dist
 
       - name: Очистка папки на сервере
         uses: appleboy/ssh-action@master
@@ -322,13 +346,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           job_name: ${{ github.job }}
 
-      - name: Send Telegram Message
+      - name: Send Telegram Error Message
         if: failure()
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
-          MESSAGE: |
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: |
             ❗ Произошла ошибка во время деплоя ❗
             
             🔹 Repo: ${{ github.repository }}
@@ -340,25 +363,18 @@ jobs:
             
             🔗 Ссылка на пайплайн 🔗
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: |
-          curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage' \
-          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=$MESSAGE" \
-          -d "reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}"
 
   notify-success:
     runs-on: ubuntu-latest
     needs: deploy
     steps:
-      - name: Send Telegram Message
-        env:
-          MESSAGE: |
+      - name: Send Telegram Error Message
+        if: failure()
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: |
             ✅ Изменения успешно задеплоены ✅
 
             🔗 Ссылка на прод 🔗
             ${{ secrets.PRODUCTION_URL || 'Отсутствует' }}
-        run: |
-          curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage' \
-          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=$MESSAGE" \
-          -d "reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}"

@@ -51,13 +51,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           job_name: ${{ github.job }}
 
-      - name: Send Telegram Message
+      - name: Send Telegram Error Message
         if: failure()
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
-          MESSAGE: |
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: |
             ❗ Произошла ошибка во время установки зависимостей ❗
             
             🔹 Repo: ${{ github.repository }}
@@ -69,12 +68,6 @@ jobs:
             
             🔗 Ссылка на пайплайн 🔗
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: |
-          curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage' \
-          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=$MESSAGE" \
-          -d "reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}" \
-          -d "parse_mode=MarkdownV2"
 
   lint:
     runs-on: ubuntu-latest
@@ -108,13 +101,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           job_name: ${{ github.job }}
 
-      - name: Send Telegram Message
+      - name: Send Telegram Error Message
         if: failure()
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
-          MESSAGE: |
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: |
             ❗ Произошла ошибка во время прогона линтера ❗
             
             🔹 Repo: ${{ github.repository }}
@@ -126,11 +118,6 @@ jobs:
             
             🔗 Ссылка на пайплайн 🔗
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: |
-          curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage' \
-          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=$MESSAGE" \
-          -d "reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}"
 
   unit-test:
     runs-on: ubuntu-latest
@@ -164,13 +151,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           job_name: ${{ github.job }}
 
-      - name: Send Telegram Message
+      - name: Send Telegram Error Message
         if: failure()
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
-          MESSAGE: |
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: |
             ❗ Произошла ошибка во время прогона юнит тестов ❗
             
             🔹 Repo: ${{ github.repository }}
@@ -182,11 +168,6 @@ jobs:
             
             🔗 Ссылка на пайплайн 🔗
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: |
-          curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage' \
-          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=$MESSAGE" \
-          -d "reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}"
 
   build:
     runs-on: ubuntu-latest
@@ -268,6 +249,7 @@ jobs:
         uses: actions/download-artifact@main
         with:
           name: build-output2
+          path: static
 
       - name: Deploy static folder to S3 bucket
         uses: jakejarvis/s3-sync-action@master
@@ -315,6 +297,7 @@ jobs:
         uses: actions/download-artifact@main
         with:
           name: build-output
+          path: dist
 
       - name: Очистка папки на сервере
         uses: appleboy/ssh-action@master

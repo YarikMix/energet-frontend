@@ -251,19 +251,6 @@ jobs:
           name: build-output2
           path: static
 
-      - name: Install Selectel SSL certificate
-        run: |
-          mkdir -p ~/.selectels3
-          wget https://secure.globalsign.net/cacert/root-r6.crt -O ~/.selectels3/root.crt
-          openssl x509 -inform der -in ~/.selectels3/root.crt -out ~/.selectels3/root.crt
-          chmod 600 ~/.selectels3/root.crt
-          
-          # Создаем конфиг AWS
-          mkdir -p ~/.aws
-          echo "[default]
-          region = ru-7
-          ca_bundle = ~/.selectels3/root.crt" > ~/.aws/config
-
       - name: Deploy static folder to S3 bucket
         uses: jakejarvis/s3-sync-action@master
         with:
@@ -275,7 +262,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'ru-7'
           SOURCE_DIR: 'static'
-          AWS_CA_BUNDLE: '~/.selectels3/root.crt'
 
       - name: Get Current Job Log URL
         uses: Tiryoh/gha-jobid-action@main

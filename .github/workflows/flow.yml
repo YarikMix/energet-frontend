@@ -226,7 +226,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: build-output
-          path: dist
+          path: static
           retention-days: 1
 
       - name: Upload build artifacts
@@ -276,7 +276,7 @@ jobs:
         uses: actions/download-artifact@main
         with:
           name: build-output
-          path: dist
+          path: static
 
       - name: Deploy static folder to S3 bucket
         uses: jakejarvis/s3-sync-action@master

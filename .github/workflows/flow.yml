@@ -2,6 +2,11 @@ name: Deploy Frontend
 
 on: [push]
 
+env:
+  TELEGRAM_GROUP_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+  TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
+  TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
 jobs:
   notify-commit:
     runs-on: ubuntu-latest
@@ -225,7 +230,7 @@ jobs:
       - name: Upload static artifacts
         uses: actions/upload-artifact@main
         with:
-          name: build-output
+          name: build-output2
           path: static
           retention-days: 1
 
@@ -239,11 +244,10 @@ jobs:
 
       - name: Send Telegram Message
         if: failure()
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
-          MESSAGE: |
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: |
             ❗ Произошла ошибка во время сборки ❗
             
             🔹 Repo: ${{ github.repository }}
@@ -255,11 +259,6 @@ jobs:
             
             🔗 Ссылка на пайплайн 🔗
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: |
-          curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage' \
-          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=$MESSAGE" \
-          -d "reply_to_message_id=${{ secrets.TELEGRAM_TOPIC_ID }}"
 
   deployS3:
     runs-on: ubuntu-latest
@@ -268,7 +267,7 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@main
         with:
-          name: build-output
+          name: build-output2
           path: static
 
       - name: Deploy static folder to S3 bucket

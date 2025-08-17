@@ -349,7 +349,8 @@ jobs:
 
   notify-success:
     runs-on: ubuntu-latest
-    needs: [deploy, deployS3]
+#    needs: [deploy, deployS3]
+    needs: [deploy]
     steps:
       - name: Send Telegram Success Message
         uses: PacificPromise/macos-telegram-action@main

@@ -42,13 +42,12 @@ export const handleCheckUser = createAsyncThunk<T_User, void, AsyncThunkConfig>(
     async function () {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get("code");
+        const deviceId = urlParams.get("device_id");
 
         try {
-            const data = JSON.parse(code);
-
             console.log(data);
             if (data) {
-                api.post("/auth/vk", { code: { ...data } });
+                api.post("/auth/vk", { code, deviceId });
             }
         } catch (e) {
             console.log("error");

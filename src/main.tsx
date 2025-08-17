@@ -7,12 +7,8 @@ import { BrowserRouter } from "react-router-dom";
 import { StoreProvider } from "src/app/providers/StoreProvider";
 import App from "./app/App.tsx";
 
-console.log("NODE_ENV", process.env.NODE_ENV);
-console.log("VITE_SENTRY_ENABLED", import.meta.env.VITE_SENTRY_ENABLED);
-console.log("VITE_VK_SDK_APP_ID", import.meta.env.VITE_VK_SDK_APP_ID);
-
 VKID.Config.init({
-    app: "import.meta.env.VITE_VK_SDK_APP_ID",
+    app: import.meta.env.VITE_VK_SDK_APP_ID,
     redirectUrl: "https://energet.shop",
     state: "state",
     codeVerifier: "codeVerifier",

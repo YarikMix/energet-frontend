@@ -1,19 +1,36 @@
 import { YMaps } from "@pbe/react-yandex-maps";
 import * as Sentry from "@sentry/react";
+import * as VKID from "@vkid/sdk";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import { StoreProvider } from "src/app/providers/StoreProvider";
 import App from "./app/App.tsx";
 
+VKID.Config.init({
+    app: import.meta.env.VITE_VK_SDK_APP_ID,
+    redirectUrl: "https://energet.shop",
+    state: "state",
+    codeVerifier: "codeVerifier",
+    scope: "phone email",
+});
+
 const root = createRoot(document.getElementById("root")!);
 
 const queryClient = new QueryClient();
 
-Sentry.init({
-    dsn: `https://35af3f18fe92e1c399d5067fedc94bd6@energet-sentry.ru/2`,
-    sendDefaultPii: true,
-});
+console.log("NODE_ENV", process.env.NODE_ENV);
+console.log("VITE_SENTRY_ENABLED", import.meta.env.VITE_SENTRY_ENABLED);
+
+if (
+    process.env.NODE_ENV == "production" &&
+    import.meta.env.VITE_SENTRY_ENABLED
+) {
+    Sentry.init({
+        dsn: import.meta.env.VITE_SENTRY_DSN,
+        sendDefaultPii: true,
+    });
+}
 
 root.render(
     <BrowserRouter basename="/">

@@ -5,6 +5,7 @@ import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { api } from "src/app/api.ts";
 import { useAppDispatch } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import LoginForm from "src/widgets/LoginForm/LoginForm.tsx";
 import { T_UserLoginCreadentials } from "src/widgets/LoginForm/types.ts";
@@ -23,6 +24,21 @@ const LoginPage = () => {
     useEffect(() => {
         if (isAuthenticated) {
             navigate("/");
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+
+        try {
+            const data = JSON.parse(code);
+
+            console.log(data);
+            if (data) {
+                api.post("/auth/vk", { code: { ...data } });
+            }
+        } catch (e) {
+            console.log("error");
+            console.log(e);
         }
 
         const oneTap = new VKID.OneTap();

@@ -25,7 +25,7 @@ const queryClient = new QueryClient();
 
 if (
     process.env.NODE_ENV == "production" &&
-    import.meta.env.VITE_SENTRY_ENABLED
+    Boolean(import.meta.env.VITE_SENTRY_ENABLED)
 ) {
     Sentry.init({
         dsn: import.meta.env.VITE_SENTRY_DSN,

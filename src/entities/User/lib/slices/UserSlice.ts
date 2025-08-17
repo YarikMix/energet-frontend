@@ -40,6 +40,21 @@ export const handleLogout = createAsyncThunk<void, void, AsyncThunkConfig>(
 export const handleCheckUser = createAsyncThunk<T_User, void, AsyncThunkConfig>(
     "check",
     async function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+
+        try {
+            const data = JSON.parse(code);
+
+            console.log(data);
+            if (data) {
+                api.post("/auth/vk", { code: { ...data } });
+            }
+        } catch (e) {
+            console.log("error");
+            console.log(e);
+        }
+
         const response = await api.post("/auth/check/");
         return response.data;
     }

@@ -94,7 +94,6 @@ export const saveDraftCalculation = createAsyncThunk<
     void,
     AsyncThunkConfig
 >("save_draft_configurator", async function (_, thunkAPI) {
-    console.log("saveDraftCalculation");
     const state = thunkAPI.getState();
 
     const configuration = state.configuratorReducer.configuration;

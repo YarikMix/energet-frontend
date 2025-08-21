@@ -40,18 +40,6 @@ export const handleLogout = createAsyncThunk<void, void, AsyncThunkConfig>(
 export const handleCheckUser = createAsyncThunk<T_User, void, AsyncThunkConfig>(
     "check",
     async function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get("code");
-        const deviceId = urlParams.get("device_id");
-
-        try {
-            if (code && deviceId) {
-                await api.post("/auth/vk", { code, deviceId });
-            }
-        } catch (e) {
-            console.log("error", e);
-        }
-
         const response = await api.post("/auth/check/");
         return response.data;
     }

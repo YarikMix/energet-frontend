@@ -13,6 +13,7 @@ VKID.Config.init({
     state: "state",
     codeVerifier: "codeVerifier",
     scope: "phone email",
+    responseMode: VKID.ConfigResponseMode.Callback,
 });
 
 const root = createRoot(document.getElementById("root")!);

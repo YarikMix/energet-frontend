@@ -30,7 +30,22 @@ const LoginPage = () => {
         if (container) {
             oneTap
                 .render({ container })
-                .on(VKID.WidgetEvents.ERROR, console.error);
+                .on(
+                    VKID.OneTapInternalEvents.LOGIN_SUCCESS,
+                    (payload: VKID.AuthResponse) => {
+                        const code = payload.code;
+                        const deviceId = payload.device_id;
+
+                        VKID.Auth.exchangeCode(code, deviceId)
+                            .then((data) => {
+                                console.log("exchangeCode success");
+                                console.log("data", data);
+                            })
+                            .catch(() => {
+                                console.log("exchangeCode error");
+                            });
+                    }
+                );
         }
     }, [isAuthenticated]);
 

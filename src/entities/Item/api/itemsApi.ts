@@ -53,7 +53,7 @@ export const useItemsList = ({ searchParams, page }: IProps) =>
                 .get(`/items`, { params } as AxiosRequestConfig)
                 .then((response) => response.data);
         },
-        { keepPreviousData: true }
+        { keepPreviousData: false }
     );
 
 export const useFavouriteList = ({ searchParams, page }: IProps) =>

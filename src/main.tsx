@@ -10,9 +10,7 @@ import App from "./app/App.tsx";
 VKID.Config.init({
     app: import.meta.env.VITE_VK_SDK_APP_ID,
     redirectUrl: import.meta.env.VITE_VK_ID_REDIRECT_URL,
-    state: "state",
-    codeVerifier: "codeVerifier",
-    scope: "phone email",
+    scope: "email",
     responseMode: VKID.ConfigResponseMode.Callback,
 });
 

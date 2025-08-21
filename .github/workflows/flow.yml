@@ -196,6 +196,7 @@ jobs:
           echo VITE_SENTRY_DSN=${{ secrets.VITE_SENTRY_DSN }} >> .env
           echo VITE_SENTRY_ENABLED=${{ secrets.VITE_SENTRY_ENABLED }} >> .env
           echo VITE_VK_SDK_APP_ID=${{ secrets.VITE_VK_SDK_APP_ID }} >> .env
+          echo VITE_VK_ID_REDIRECT_URL=${{ secrets.VITE_VK_ID_REDIRECT_URL }} >> .env
           cat .env
 
       - name: Сборка проекта

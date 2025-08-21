@@ -9,7 +9,7 @@ import App from "./app/App.tsx";
 
 VKID.Config.init({
     app: import.meta.env.VITE_VK_SDK_APP_ID,
-    redirectUrl: "https://energet.shop/login",
+    redirectUrl: "https://energet.shop",
     state: "state",
     codeVerifier: "codeVerifier",
     scope: "phone email",

@@ -3,6 +3,7 @@ import { handleFetchDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice
 import { handleCheckUser } from "entities/User/lib/slices/UserSlice.ts";
 import getIsBuyer from "entities/User/model/selectors/isBuyer.ts";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     useAppDispatch,
     useAppSelector,
@@ -15,6 +16,7 @@ import styles from "./App.module.scss";
 function App() {
     const isBuyer = useAppSelector(getIsBuyer);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     const dispatch = useAppDispatch();
 
@@ -22,6 +24,12 @@ function App() {
         setIsLoading(true);
         await dispatch(handleCheckUser());
         setIsLoading(false);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+        if (code) {
+            navigate("/");
+        }
     };
 
     const fetchDraftOrder = async () => {

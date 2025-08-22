@@ -3,7 +3,7 @@ import { handleFetchDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice
 import { handleCheckUser } from "entities/User/lib/slices/UserSlice.ts";
 import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
 import getIsBuyer from "entities/User/model/selectors/isBuyer.ts";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
     useAppDispatch,
@@ -26,9 +26,9 @@ function App() {
         setIsLoading(false);
     };
 
-    const fetchDraftOrder = async () => {
+    const fetchDraftOrder = useCallback(async () => {
         dispatch(handleFetchDraftOrder());
-    };
+    }, [dispatch]);
 
     const onAppStarted = async () => {
         await checkUser();

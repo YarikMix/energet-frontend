@@ -20,26 +20,26 @@ function App() {
 
     const dispatch = useAppDispatch();
 
-    const checkUser = async () => {
+    const checkUser = useCallback(async () => {
         setIsLoading(true);
         await dispatch(handleCheckUser());
         setIsLoading(false);
-    };
+    }, [dispatch]);
 
     const fetchDraftOrder = useCallback(async () => {
         dispatch(handleFetchDraftOrder());
     }, [dispatch]);
 
-    const onAppStarted = async () => {
+    const onAppStarted = useCallback(async () => {
         await checkUser();
         if (isBuyer) {
             await fetchDraftOrder();
         }
-    };
+    }, [checkUser, fetchDraftOrder, isBuyer]);
 
     useEffect(() => {
         onAppStarted();
-    }, []);
+    }, [onAppStarted]);
 
     const isAuthenticated = useSelector(getIsAuthenticated);
 

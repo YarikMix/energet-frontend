@@ -197,6 +197,7 @@ jobs:
           envkey_VITE_SENTRY_ENABLED: ${{ secrets.VITE_SENTRY_ENABLED }}
           envkey_VITE_VK_SDK_APP_ID: ${{ secrets.VITE_VK_SDK_APP_ID }}
           envkey_VITE_VK_ID_REDIRECT_URL: ${{ secrets.VITE_VK_ID_REDIRECT_URL }}
+          envkey_VITE_YMAPS_API_KEY: ${{ secrets.VITE_YMAPS_API_KEY }}
           directory: .
           file_name: .env.production
           fail_on_empty: false

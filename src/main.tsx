@@ -32,9 +32,7 @@ root.render(
     <BrowserRouter basename="/">
         <StoreProvider>
             <QueryClientProvider client={queryClient}>
-                <YMaps
-                    query={{ apikey: "7598f796-f2f2-46ef-98c6-0ea557ad8e28" }}
-                >
+                <YMaps query={{ apikey: import.meta.env.VITE_YMAPS_API_KEY }}>
                     <App />
                 </YMaps>
             </QueryClientProvider>

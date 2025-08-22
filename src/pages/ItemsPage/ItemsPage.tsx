@@ -45,7 +45,6 @@ const ItemsPage = () => {
     const { data: itemsList, refetch } = useItemsList({
         searchParams: [debouncedName, selectedItemTypes, selectedItemProducers],
         page,
-        isAuthenticated,
     });
 
     const { data: itemsTypes } = useItemsTypesList();

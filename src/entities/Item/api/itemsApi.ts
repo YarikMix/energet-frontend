@@ -12,7 +12,6 @@ import { ITEMS_PAGE_SIZE } from "src/app/consts.ts";
 interface IProps {
     searchParams: [string, number[], number[]];
     page?: number;
-    isAuthenticated: boolean;
 }
 
 interface ISeachItemsQueryParamsDict {
@@ -28,9 +27,9 @@ type I_ItemsListResponse = {
     total_pages: number;
 };
 
-export const useItemsList = ({ searchParams, page, isAuthenticated }: IProps) =>
+export const useItemsList = ({ searchParams, page }: IProps) =>
     useQuery(
-        ["ItemsList", ...searchParams, page, isAuthenticated],
+        ["ItemsList", ...searchParams, page],
         (): Promise<I_ItemsListResponse> => {
             const params: ISeachItemsQueryParamsDict = {};
 

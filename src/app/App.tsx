@@ -1,8 +1,10 @@
 import { Box, CircularProgress } from "@mui/material";
 import { handleFetchDraftOrder } from "entities/Order/lib/slices/DraftOrderSlice.ts";
 import { handleCheckUser } from "entities/User/lib/slices/UserSlice.ts";
+import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
 import getIsBuyer from "entities/User/model/selectors/isBuyer.ts";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
     useAppDispatch,
     useAppSelector,
@@ -38,6 +40,14 @@ function App() {
     useEffect(() => {
         onAppStarted();
     }, []);
+
+    const isAuthenticated = useSelector(getIsAuthenticated);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchDraftOrder();
+        }
+    }, [isAuthenticated, fetchDraftOrder]);
 
     return (
         <>

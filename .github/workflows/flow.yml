@@ -1,11 +1,15 @@
 name: Deploy Frontend
 
-on: [push]
+on: [push, pull_request]
 
 env:
   TELEGRAM_GROUP_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
   TELEGRAM_TOPIC_ID: ${{ secrets.TELEGRAM_TOPIC_ID }}
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   notify-commit:

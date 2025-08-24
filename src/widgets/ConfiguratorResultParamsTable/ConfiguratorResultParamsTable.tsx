@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { Paper } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { formatConfiguratorResultParamValue } from "shared/utils/formatConfiguratorResultParamValue/formatConfiguratorResultParamValue.ts";
+import { formatConfiguratorResultParamValue } from "shared/utils/formatConfiguratorResultParamValue.ts";
 import { getConfiguratorResultParamDescription } from "shared/utils/getConfiguratorResultParamDescription.ts";
 import { useAppSelector } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 

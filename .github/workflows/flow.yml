@@ -141,7 +141,13 @@ jobs:
             ${{ runner.os }}-npm-
 
       - name: Прогон тестов
-        run: npm test
+        run: npx vitest --coverage.enabled true
+
+      - name: 'Report Coverage'
+        # Set if: always() to also generate the report if tests are failing
+        # Only works if you set `reportOnFailure: true` in your vite config as specified above
+        if: always()
+        uses:  davelosert/vitest-coverage-report-action@v2
 
       - name: Get Current Job Log URL
         uses: Tiryoh/gha-jobid-action@main

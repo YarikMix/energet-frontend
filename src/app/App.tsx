@@ -11,6 +11,7 @@ import {
 } from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import { AppRouter } from "src/app/Router/AppRouter.tsx";
 import Header from "src/widgets/Header/Header.tsx";
+import OnboardingModal from "src/widgets/OnboardingModal/OnboardingModal.tsx";
 import { Reset } from "styled-reset";
 import styles from "./App.module.scss";
 
@@ -67,6 +68,7 @@ function App() {
                     <AppRouter />
                 </div>
             )}
+            <OnboardingModal />
         </>
     );
 }

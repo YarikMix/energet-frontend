@@ -234,7 +234,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: build-output2
-          path: static
+          path: public
           retention-days: 1
 
       - name: Get Current Job Log URL

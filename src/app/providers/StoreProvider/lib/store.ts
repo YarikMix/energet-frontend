@@ -1,7 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { configuratorReducer } from "entities/Configurator";
+import { modalsReducer } from "entities/Modals";
 import { orderReducer } from "entities/Order";
 import { userReducer } from "entities/User";
 import {
@@ -22,11 +23,12 @@ const persistConfig = {
 };
 
 export const store = configureStore({
-    reducer: {
+    reducer: combineReducers({
         userReducer: persistReducer(persistConfig, userReducer),
         orderReducer,
         configuratorReducer,
-    },
+        modalsReducer,
+    }),
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {

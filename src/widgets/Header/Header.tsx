@@ -3,12 +3,17 @@
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { Badge, Container, Tab } from "@mui/material";
 import Logo from "assets/logo.svg";
+import { setModal } from "entities/Modals/lib/slices/modalsSlice.ts";
 import getUserRole from "entities/User/model/selectors/getRole.ts";
 import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
 import { E_UserRole } from "entities/User/model/types/User.ts";
-import { Link } from "react-router-dom";
-import { useAppSelector } from "src/app/providers/StoreProvider/hooks/hooks.ts";
+import { Link, useLocation } from "react-router-dom";
+import {
+    useAppDispatch,
+    useAppSelector,
+} from "src/app/providers/StoreProvider/hooks/hooks.ts";
 import Nav, { T_Tab } from "src/widgets/Nav/Nav.tsx";
+import useLocalStorageState from "use-local-storage-state";
 import styles from "./Header.module.scss";
 
 const Header = () => {
@@ -71,11 +76,26 @@ const Header = () => {
         },
     ];
 
+    const { pathname } = useLocation();
+    const dispatch = useAppDispatch();
+    const [_, setShown] = useLocalStorageState("onb_shown");
+    const handleOpenOnboardingModal = (e) => {
+        if (pathname === "/") {
+            e.preventDefault();
+            dispatch(setModal("onboarding"));
+            setShown(false);
+        }
+    };
+
     return (
         <Container className={styles.container}>
             <Nav tabs={leftTabs} />
 
-            <Link to="/" className={styles.logo}>
+            <Link
+                to="/"
+                className={styles.logo}
+                onClick={handleOpenOnboardingModal}
+            >
                 <img src={Logo as string} alt="" />
             </Link>
 

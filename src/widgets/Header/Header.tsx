@@ -78,6 +78,7 @@ const Header = () => {
 
     const { pathname } = useLocation();
     const dispatch = useAppDispatch();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, setShown] = useLocalStorageState("onb_shown");
     const handleOpenOnboardingModal = (e) => {
         if (pathname === "/") {

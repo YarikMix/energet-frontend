@@ -41,14 +41,14 @@ export const CoordsPicker = () => {
             <Stack direction="row" gap={2} sx={{ mb: 4 }}>
                 <TextField
                     value={coords[0]}
-                    label="X"
+                    label="с. ш."
                     variant="outlined"
                     sx={{ width: 100 }}
                     onChange={handleCoordXChange}
                 />
                 <TextField
                     value={coords[1]}
-                    label="Y"
+                    label="в. д."
                     variant="outlined"
                     sx={{ width: 100 }}
                     onChange={handleCoordYChange}

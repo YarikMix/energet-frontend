@@ -10,7 +10,9 @@ type Props = {
     onSubmit: (data: T_UserLoginCreadentials) => void;
 };
 
-const LoginForm = ({ onSubmit }: Props) => {
+const LoginForm = (props: Props) => {
+    const { onSubmit } = props;
+
     const form = useForm<T_UserLoginCreadentials>({
         defaultValues: {
             email: "",

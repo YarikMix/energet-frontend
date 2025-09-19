@@ -25,6 +25,8 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
+    "typeRoots": ["./node_modules/@types", "./node_modules/@yandex/ymaps3-types"],
+
     /* Routing */
     "baseUrl": "src",
     "paths": {
@@ -32,7 +34,8 @@
       "pages/*": ["pages/*"],
       "entities/*": ["entities/*"],
       "shared/*": ["shared/*"],
-      "assets/*": ["shared/assets/*"]
+      "assets/*": ["shared/assets/*"],
+      "ymaps3": ["./node_modules/@yandex/ymaps3-types"]
     },
     "allowSyntheticDefaultImports": true
   },

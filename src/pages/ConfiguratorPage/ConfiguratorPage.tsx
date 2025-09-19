@@ -141,7 +141,7 @@ export const ConfiguratorPage = () => {
                     </Stepper>
                 </Box>
                 <Box display="flex" justifyContent="space-between">
-                    <Box>
+                    <Box flex={1} mr={2}>
                         <TabPanel currentTab={step} index={0}>
                             <CoordsPicker />
                         </TabPanel>

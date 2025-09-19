@@ -1,10 +1,10 @@
-import { YMaps } from "@pbe/react-yandex-maps";
 import * as Sentry from "@sentry/react";
 import * as VKID from "@vkid/sdk";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import { StoreProvider } from "src/app/providers/StoreProvider";
+import '@yandex/ymaps3-default-ui-theme/dist/esm/index.css';
 import App from "./app/App.tsx";
 
 VKID.Config.init({
@@ -32,9 +32,7 @@ root.render(
     <BrowserRouter basename="/">
         <StoreProvider>
             <QueryClientProvider client={queryClient}>
-                <YMaps query={{ apikey: import.meta.env.VITE_YMAPS_API_KEY }}>
-                    <App />
-                </YMaps>
+                <App />
             </QueryClientProvider>
         </StoreProvider>
     </BrowserRouter>

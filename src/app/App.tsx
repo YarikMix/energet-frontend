@@ -21,13 +21,6 @@ function App() {
 
     const dispatch = useAppDispatch();
 
-    window.addEventListener("error", (e) => {
-        if (e.message?.includes("vector: internal error")) {
-            e.stopImmediatePropagation();
-            console.warn("YMaps vector internal error ignored:", e);
-        }
-    });
-
     const checkUser = useCallback(async () => {
         setIsLoading(true);
         await dispatch(handleCheckUser());

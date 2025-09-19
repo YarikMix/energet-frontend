@@ -48,10 +48,13 @@ export const CoordsPicker = () => {
         return regex.test(value);
     };
 
+    const isCoordsValid = (newCoords) => {
+        return newCoords && newCoords[0] !== undefined && newCoords[1] !== undefined;
+    };
 
     const handleClick = (e) => {
         const newCoords = e?.entity?.geometry?.coordinates;
-        if (!newCoords) return;
+        if (!isCoordsValid(newCoords)) return;
 
         let [lon, lat] = newCoords;
         lon = clampLon(Number(lon.toFixed(5)));

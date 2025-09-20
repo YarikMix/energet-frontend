@@ -1,12 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import React from "react";
-import { Stack, TextField, Typography, Box } from "@mui/material";
+import { Stack, TextField, Typography, Box, Radio, RadioGroup, FormControlLabel} from "@mui/material";
 import {
     YMap,
     YMapDefaultSchemeLayer,
     YMapDefaultFeaturesLayer,
     YMapFeature,
+    YMapFeatureDataSource,
     YMapControls,
     YMapListener,
     reactify,
@@ -31,6 +32,7 @@ export const CoordsPicker = () => {
     );
 
     const [location, setLocation] = useState(LOCATION);
+    const [activeLayer, setActiveLayer] = useState<"polygons" | "lines">("polygons");
 
     // локальные стейты для строкового ввода
     const [lonInput, setLonInput] = useState(coords[0]?.toString() ?? "");
@@ -120,7 +122,7 @@ export const CoordsPicker = () => {
                 lon = clampLon(lon);
                 lat = clampLat(lat);
                 center = [lon, lat];
-                zoom = 12;
+                zoom = 16;
 
                 setLonInput(lon.toString());
                 setLatInput(lat.toString());
@@ -133,32 +135,55 @@ export const CoordsPicker = () => {
     }, []);
 
     return (
-        <Stack gap={3} sx={{ width: "100%" }}>
+        <Stack gap={3} sx={{ maxWidth: 600 }}>
             <Typography variant="span" fontSize={20}>
                 Введите координаты
             </Typography>
 
-            <Stack direction="row" gap={2} sx={{ mb: 4 }}>
-                <TextField
-                    value={latInput}
-                    label="с. ш."
-                    variant="outlined"
-                    sx={{ width: 100 }}
-                    onChange={handleCoordLatChange}
-                />
-                <TextField
-                    value={lonInput}
-                    label="в. д."
-                    variant="outlined"
-                    sx={{ width: 100 }}
-                    onChange={handleCoordLonChange}
-                />
+            <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
+                <Stack direction="row" gap={2}>
+                    <TextField
+                        value={latInput}
+                        label="с. ш."
+                        variant="outlined"
+                        sx={{ width: 100 }}
+                        onChange={handleCoordLatChange}
+                    />
+                    <TextField
+                        value={lonInput}
+                        label="в. д."
+                        variant="outlined"
+                        sx={{ width: 100 }}
+                        onChange={handleCoordLonChange}
+                    />
+                </Stack>
+
+                <Stack direction="row" gap={2}>
+                    <RadioGroup
+                        row
+                        value={activeLayer}
+                        onChange={(e) => setActiveLayer(e.target.value as "polygons" | "lines")}
+                    >
+                        <FormControlLabel
+                            value="polygons"
+                            control={<Radio />}
+                            label="Полигоны"
+                        />
+                        <FormControlLabel
+                            value="lines"
+                            control={<Radio />}
+                            label="Линии"
+                        />
+                    </RadioGroup>
+                </Stack>
             </Stack>
 
             <Box sx={{ maxWidth: 600, height: 400 }}>
                 <YMap location={location}>
+
                     <YMapDefaultSchemeLayer />
                     <YMapDefaultFeaturesLayer />
+
                     <YMapControls position="left top">
                         <YMapSearchControl searchResult={searchResultHandler} />
                     </YMapControls>
@@ -168,19 +193,35 @@ export const CoordsPicker = () => {
                         iconName={"fallback"}
                     />
 
-                    {LINES.map((line) => (
-                        <YMapFeature
-                            key={line.id}
-                            geometry={line.geometry}
-                            style={line.style}
-                        />
-                    ))}
+                    {/* Источники данных */}
+                    <YMapFeatureDataSource id="polygonsSource" />
+                    <YMapFeatureDataSource id="linesSource" />
+
+                    {/* Отдельные слои */}
+                    <YMapDefaultFeaturesLayer
+                        source="polygonsSource"
+                        visible={activeLayer === "polygons"}
+                    />
+                    <YMapDefaultFeaturesLayer
+                        source="linesSource"
+                        visible={activeLayer === "lines"}
+                    />
 
                     {POLYGONS.map((poly) => (
                         <YMapFeature
                             key={poly.id}
                             geometry={poly.geometry}
                             style={poly.style}
+                            source="polygonsSource"
+                        />
+                    ))}
+
+                    {LINES.map((line) => (
+                        <YMapFeature
+                            key={line.id}
+                            geometry={line.geometry}
+                            style={line.style}
+                            source="linesSource"
                         />
                     ))}
                 </YMap>

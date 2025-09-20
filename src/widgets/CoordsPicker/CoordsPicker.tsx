@@ -213,6 +213,7 @@ export const CoordsPicker = () => {
                             geometry={poly.geometry}
                             style={poly.style}
                             source="polygonsSource"
+                            dynamic={false}
                         />
                     ))}
 
@@ -222,6 +223,7 @@ export const CoordsPicker = () => {
                             geometry={line.geometry}
                             style={line.style}
                             source="linesSource"
+                            dynamic={false}
                         />
                     ))}
                 </YMap>

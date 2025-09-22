@@ -272,15 +272,16 @@ const ItemCard = ({
                                 Цена
                             </Typography>
                             <Typography
-                                sx={{
-                                    color: "#319CFF",
-                                    fontSize: 18,
-                                }}
+                            sx={{
+                                color: "#319CFF",
+                                fontSize: 18,
+                            }}
                             >
-                                {item.price}₽
+                            {item.price.toLocaleString('ru-RU') + ' ₽'}
                             </Typography>
                         </Box>
-                        <ItemProperty name="Тип" value={item.item_type.name} />
+                        <ItemProperty name="Категория" 
+                        value={<span style={{ display: 'block', textAlign: 'right', marginBottom: 10  }}>{item.item_type.name}</span>}/>
                         <ItemProperty
                             name="Производитель"
                             value={item.item_producer.name}
@@ -292,7 +293,10 @@ const ItemCard = ({
                                     ? "Ёмкость"
                                     : "Мощность"
                             }
-                            value={item.power + " вт"}
+                            value={item.item_type.name == "Аккумулятор"
+                                    ? (item.power < 1000 ? item.power + " кВт*ч" : (item.power / 1000) + " кВт*ч")
+                                    : (item.power < 1000 ? item.power + " Вт" : (item.power / 1000) + " кВт")
+                                }
                         />
                         {showAddToDraftOrderBtn && (
                             <Box>

@@ -252,7 +252,7 @@ const ItemCard = ({
                 <Box style={{ height: "100%" }}>
                     <CardMedia
                         component="img"
-                        height="140"
+                        style={{ width: "100%", height: "auto" }}
                         image={`/images/${item.image}`}
                     />
                     <CardContent>

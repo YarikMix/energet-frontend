@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import {
     Box,
     Container,
@@ -17,10 +15,10 @@ import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
 import getIsBuyer from "entities/User/model/selectors/isBuyer.ts";
 import getIsModerator from "entities/User/model/selectors/isModerator.ts";
 import getIsProducer from "entities/User/model/selectors/isProducer.ts";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import MultipleSelect from "shared/MultipleSelect/MultipleSelect.tsx";
 import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
+import MultipleSelect from "src/shared/MultipleSelect/MultipleSelect";
 import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
 import ItemsTable from "src/widgets/ItemsTable/ItemsTable.tsx";
 import { useDebounce } from "use-debounce";
@@ -51,17 +49,13 @@ const ItemsPage = () => {
 
     const { data: itemsProducers } = useItemsProducersList();
 
-    const handleChange = (e, pageIdx) => {
+    const handleChange = (_: React.ChangeEvent<unknown>, pageIdx: number) => {
         setPage(pageIdx);
     };
 
     useEffect(() => {
         setPage(1);
     }, [debouncedName, selectedItemTypes, selectedItemProducers]);
-
-    if (!itemsList) {
-        return null;
-    }
 
     if (isProducer || isModerator) {
         return (
@@ -121,7 +115,7 @@ const ItemsPage = () => {
                     />
                 </Box>
             </Box>
-            {itemsList.items?.length > 0 ? (
+            {itemsList?.items?.length > 0 ? (
                 <Box>
                     <Grid2
                         container

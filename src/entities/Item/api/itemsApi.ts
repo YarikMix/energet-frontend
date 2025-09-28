@@ -1,10 +1,12 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { createAsyncThunk } from "@reduxjs/toolkit";
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { AsyncThunkConfig } from "@reduxjs/toolkit/src/createAsyncThunk.ts";
+
+import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { T_Item, T_ItemOption } from "entities/Item/model/types/Item.ts";
-import { useQuery } from "react-query";
 import { getFormDataFromObject } from "shared/utils/getFormDataFromObject.ts";
 import { api } from "src/app/api.ts";
 import { ITEMS_PAGE_SIZE } from "src/app/consts.ts";
@@ -28,9 +30,9 @@ type I_ItemsListResponse = {
 };
 
 export const useItemsList = ({ searchParams, page }: IProps) =>
-    useQuery(
-        ["ItemsList", ...searchParams, page],
-        (): Promise<I_ItemsListResponse> => {
+    useQuery({
+        queryKey: ["ItemsList", ...searchParams, page],
+        queryFn: async (): Promise<I_ItemsListResponse> => {
             const params: ISeachItemsQueryParamsDict = {};
 
             if (searchParams[0]) {
@@ -38,28 +40,29 @@ export const useItemsList = ({ searchParams, page }: IProps) =>
             }
 
             if (searchParams[1].length > 0) {
-                params.types = searchParams[1].join(",");
+                params.types = searchParams[1].join("");
             }
 
             if (searchParams[2].length > 0) {
-                params.producers = searchParams[2].join(",");
+                params.producers = searchParams[2].join("");
             }
 
             if (page) {
                 params.offset = (page - 1) * ITEMS_PAGE_SIZE;
             }
 
-            return api
-                .get(`/items`, { params } as AxiosRequestConfig)
-                .then((response) => response.data);
+            const response = await api.get(`/items`, {
+                params,
+            } as AxiosRequestConfig);
+
+            return response.data;
         },
-        { keepPreviousData: false }
-    );
+    });
 
 export const useFavouriteList = ({ searchParams, page }: IProps) =>
-    useQuery(
-        ["FavouriteItemsList", ...searchParams, page],
-        (): Promise<T_Item[]> => {
+    useQuery({
+        queryKey: ["FavouriteItemsList", ...searchParams, page],
+        queryFn: async (): Promise<T_Item[]> => {
             const params: ISeachItemsQueryParamsDict = {};
 
             if (searchParams[0]) {
@@ -67,42 +70,40 @@ export const useFavouriteList = ({ searchParams, page }: IProps) =>
             }
 
             if (searchParams[1].length > 0) {
-                params.types = searchParams[1].join(",");
+                params.types = searchParams[1].join("");
             }
 
             if (searchParams[2].length > 0) {
-                params.producers = searchParams[2].join(",");
+                params.producers = searchParams[2].join("");
             }
 
-            return api
-                .get(`/favourites`, {
-                    params,
-                } as AxiosRequestConfig)
-                .then((response) => response.data);
+            const response = await api.get(`/favourites`, {
+                params,
+            } as AxiosRequestConfig);
+            return response.data;
         },
-        { keepPreviousData: true }
-    );
+    });
 
 export const useItemsTypesList = () =>
-    useQuery(
-        ["ItemsTypes"],
-        (): Promise<T_ItemOption[]> =>
-            api.get(`/items/types`).then((response) => response.data)
-    );
+    useQuery({
+        queryKey: ["ItemsTypes"],
+        queryFn: (): Promise<T_ItemOption[]> =>
+            api.get(`/items/types`).then((response) => response.data),
+    });
 
 export const useItemsProducersList = () =>
-    useQuery(
-        ["ItemsProducers"],
-        (): Promise<T_ItemOption[]> =>
-            api.get(`/items/producers`).then((response) => response.data)
-    );
+    useQuery({
+        queryKey: ["ItemsProducers"],
+        queryFn: (): Promise<T_ItemOption[]> =>
+            api.get(`/items/producers`).then((response) => response.data),
+    });
 
 export const useItem = (id: number) =>
-    useQuery(
-        ["Item"],
-        (): Promise<T_Item> =>
-            api.get(`/items/` + id).then((response) => response.data)
-    );
+    useQuery({
+        queryKey: ["Item"],
+        queryFn: (): Promise<T_Item> =>
+            api.get(`/items/` + id).then((response) => response.data),
+    });
 
 export const addToFavourites = createAsyncThunk<void, number, AsyncThunkConfig>(
     "add_item_to_favourites",
@@ -124,14 +125,15 @@ export const removeFromFavourites = createAsyncThunk<
     return response.data;
 });
 
-export const updateItem = createAsyncThunk<void, object, AsyncThunkConfig>(
-    "update_item",
-    async function ({ id, data }) {
-        const response = await api.put(`/items/${id}/`, data);
+export const updateItem = createAsyncThunk<
+    void,
+    { id: number; data: object },
+    AsyncThunkConfig
+>("update_item", async function ({ id, data }) {
+    const response = await api.put(`/items/${id}/`, data);
 
-        return response.data;
-    }
-);
+    return response.data;
+});
 
 export const deleteItem = createAsyncThunk<void, number, AsyncThunkConfig>(
     "delete_item",
@@ -142,20 +144,21 @@ export const deleteItem = createAsyncThunk<void, number, AsyncThunkConfig>(
     }
 );
 
-export const updateItemImage = createAsyncThunk<void, object, AsyncThunkConfig>(
-    "update_item_image",
-    async function ({ item_id, image }) {
-        const form_data = new FormData();
-        form_data.append("image", image, image.name);
+export const updateItemImage = createAsyncThunk<
+    void,
+    { item_id: number; image: File },
+    AsyncThunkConfig
+>("update_item_image", async function ({ item_id, image }) {
+    const form_data = new FormData();
+    form_data.append("image", image, image.name);
 
-        const response = await api.put(
-            `/items/${item_id}/update_image/`,
-            form_data
-        );
+    const response = await api.put(
+        `/items/${item_id}/update_image/`,
+        form_data
+    );
 
-        return response.data;
-    }
-);
+    return response.data;
+});
 
 export const createItem = createAsyncThunk<void, object, AsyncThunkConfig>(
     "create_item",

@@ -40,11 +40,11 @@ export const useItemsList = ({ searchParams, page }: IProps) =>
             }
 
             if (searchParams[1].length > 0) {
-                params.types = searchParams[1].join("");
+                params.types = searchParams[1].join(",");
             }
 
             if (searchParams[2].length > 0) {
-                params.producers = searchParams[2].join("");
+                params.producers = searchParams[2].join(",");
             }
 
             if (page) {
@@ -70,11 +70,11 @@ export const useFavouriteList = ({ searchParams, page }: IProps) =>
             }
 
             if (searchParams[1].length > 0) {
-                params.types = searchParams[1].join("");
+                params.types = searchParams[1].join(",");
             }
 
             if (searchParams[2].length > 0) {
-                params.producers = searchParams[2].join("");
+                params.producers = searchParams[2].join(",");
             }
 
             const response = await api.get(`/favourites`, {

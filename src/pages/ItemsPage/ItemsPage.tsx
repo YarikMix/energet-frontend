@@ -89,7 +89,6 @@ const ItemsPage = () => {
     }, [debouncedName, selectedItemTypeNames, selectedItemProducerNames]);
 
     const handleResetFilters = () => {
-        // Сброс только фильтров, не сбрасываем поиск
         setSelectedItemTypeNames([]);
         setSelectedItemProducerNames([]);
         setPage(1);
@@ -110,7 +109,6 @@ const ItemsPage = () => {
                         value={name}
                         onChange={setName}
                         onIconClick={refetch}
-                        // Можно добавить стили через prop или CSS
                     />
                     <Stack gap={2} direction="row" alignItems="center">
                         <MultipleSelect

@@ -1,8 +1,8 @@
 import { YMaps } from "@pbe/react-yandex-maps";
 import * as Sentry from "@sentry/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as VKID from "@vkid/sdk";
 import { createRoot } from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import { StoreProvider } from "src/app/providers/StoreProvider";
 import App from "./app/App.tsx";

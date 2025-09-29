@@ -58,6 +58,7 @@ const ItemsPage = () => {
     const selectedTypeIds = selectedItemTypeNames
         .map(name => itemsTypes?.find(item => item.name === name)?.id)
         .filter((id): id is number => typeof id === "number");
+
     const selectedProducerIds = selectedItemProducerNames
         .map(name => itemsProducers?.find(item => item.name === name)?.id)
         .filter((id): id is number => typeof id === "number");
@@ -68,37 +69,14 @@ const ItemsPage = () => {
     });
 
     useEffect(() => {
-    setSearchParams((prevParams) => {
-        const params = new URLSearchParams(prevParams);
+        const params: Record<string, string> = {};
+        if (name) params.name = name;
+        if (selectedItemTypeNames.length) params.types = selectedItemTypeNames.join(",");
+        if (selectedItemProducerNames.length) params.producers = selectedItemProducerNames.join(",");
+        if (page !== 1) params.page = page.toString();
 
-        if (name) {
-            params.set("name", name);
-        } else {
-            params.delete("name");
-        }
-
-        if (selectedItemTypeNames.length) {
-            params.set("types", selectedItemTypeNames.join(","));
-        } else {
-            params.delete("types");
-        }
-
-        if (selectedItemProducerNames.length) {
-            params.set("producers", selectedItemProducerNames.join(","));
-        } else {
-            params.delete("producers");
-        }
-
-        if (page !== 1) {
-            params.set("page", page.toString());
-        } else {
-            params.delete("page");
-        }
-
-        return params;
-      });
+        setSearchParams(params);
     }, [name, selectedItemTypeNames, selectedItemProducerNames, page, setSearchParams]);
-
 
     const handleChange = (_: React.ChangeEvent<unknown>, pageIdx: number) => {
         setPage(pageIdx);
@@ -119,127 +97,55 @@ const ItemsPage = () => {
             <Container>
                 <Box
                     mb={5}
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                    }}
+                    sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
                 >
-                    <SearchInput
-                        value={name}
-                        onChange={setName}
-                        onIconClick={refetch}
-                    />
+                    <SearchInput value={name} onChange={setName} onIconClick={refetch} />
                     <Stack gap={2} direction="row" alignItems="center">
-                        <MultipleSelect
-                            label="Категория"
-                            options={itemsTypes}
-                            value={selectedItemTypeNames}
-                            onChange={setSelectedItemTypeNames}
-                        />
-                        <MultipleSelect
-                            label="Производитель"
-                            options={itemsProducers}
-                            value={selectedItemProducerNames}
-                            onChange={setSelectedItemProducerNames}
-                        />
-                    <Button
-                    variant="outlined"
-                    color="secondary"
-                    sx={{ height: 40 }}
-                    onClick={handleResetFilters}
-                    >
-                        Сбросить фильтры
-                    </Button>
+                        <MultipleSelect label="Категория" options={itemsTypes || []} value={selectedItemTypeNames} onChange={setSelectedItemTypeNames} />
+                        <MultipleSelect label="Производитель" options={itemsProducers || []} value={selectedItemProducerNames} onChange={setSelectedItemProducerNames} />
+                        <Button variant="outlined" color="secondary" sx={{ height: 40 }} onClick={handleResetFilters}>
+                            Сбросить фильтры
+                        </Button>
                     </Stack>
                 </Box>
-                <ItemsTable items={itemsList.items} />
+                <ItemsTable items={itemsList?.items || []} />
             </Container>
         );
     }
 
-    if (!isBuyer && isAuthenticated) {
-        return null;
-    }
+    if (!isBuyer && isAuthenticated) return null;
 
     return (
         <Container>
             <Box
                 mb={5}
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                }}
+                sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
             >
-                <SearchInput
-                    value={name}
-                    onChange={setName}
-                    onIconClick={refetch}
-                />
+                <SearchInput value={name} onChange={setName} onIconClick={refetch} />
                 <Stack gap={2} direction="row" alignItems="center">
-                    <MultipleSelect
-                        label="Категория"
-                        options={itemsTypes}
-                        value={selectedItemTypeNames}
-                        onChange={setSelectedItemTypeNames}
-                    />
-                    <MultipleSelect
-                        label="Производитель"
-                        options={itemsProducers}
-                        value={selectedItemProducerNames}
-                        onChange={setSelectedItemProducerNames}
-                    />
-                    <Button
-                    variant="outlined"
-                    color="secondary"
-                    sx={{ height: 40 }}
-                    onClick={handleResetFilters}
-                    >
+                    <MultipleSelect label="Категория" options={itemsTypes || []} value={selectedItemTypeNames} onChange={setSelectedItemTypeNames} />
+                    <MultipleSelect label="Производитель" options={itemsProducers || []} value={selectedItemProducerNames} onChange={setSelectedItemProducerNames} />
+                    <Button variant="outlined" color="secondary" sx={{ height: 40 }} onClick={handleResetFilters}>
                         Сбросить фильтры
                     </Button>
                 </Stack>
             </Box>
-            {itemsList?.items?.length > 0 ? (
+            {itemsList?.items?.length ? (
                 <Box>
-                    <Grid2
-                        container
-                        spacing={{ xs: 2, md: 3 }}
-                        columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 3 }}
-                    >
+                    <Grid2 container spacing={{ xs: 2, md: 3 }} columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
                         {itemsList.items.map((item) => (
-                            <Grid2
-                                key={item.id}
-                                size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
-                                alignItems="stretch"
-                            >
-                                <ItemCard
-                                    key={item.id}
-                                    item={item}
-                                    showAddToDraftOrderBtn={isAuthenticated && isBuyer}
-                                />
+                            <Grid2 key={item.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }} alignItems="stretch">
+                                <ItemCard key={item.id} item={item} showAddToDraftOrderBtn={isAuthenticated && isBuyer} />
                             </Grid2>
                         ))}
                     </Grid2>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            mt: 5,
-                        }}
-                    >
-                        <Pagination
-                            count={itemsList?.total_pages}
-                            page={page}
-                            onChange={handleChange}
-                        />
+                    <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+                        <Pagination count={itemsList.total_pages} page={page} onChange={handleChange} />
                     </Box>
                 </Box>
             ) : (
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 15 }}>
-                    <Typography variant="h4" color="text.secondary">
-                        Оборудование не найдено
-                    </Typography>
+                    <Typography variant="h4" color="text.secondary">Оборудование не найдено</Typography>
                 </Box>
             )}
         </Container>

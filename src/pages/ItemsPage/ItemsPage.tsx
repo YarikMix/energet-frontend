@@ -68,14 +68,37 @@ const ItemsPage = () => {
     });
 
     useEffect(() => {
-        const params: any = {};
-        if (name) params.name = name;
-        if (selectedItemTypeNames.length) params.types = selectedItemTypeNames.join(",");
-        if (selectedItemProducerNames.length) params.producers = selectedItemProducerNames.join(",");
-        if (page !== 1) params.page = page.toString();
+    setSearchParams((prevParams) => {
+        const params = new URLSearchParams(prevParams);
 
-        setSearchParams(params);
-    }, [name, selectedItemTypeNames, selectedItemProducerNames, page]);
+        if (name) {
+            params.set("name", name);
+        } else {
+            params.delete("name");
+        }
+
+        if (selectedItemTypeNames.length) {
+            params.set("types", selectedItemTypeNames.join(","));
+        } else {
+            params.delete("types");
+        }
+
+        if (selectedItemProducerNames.length) {
+            params.set("producers", selectedItemProducerNames.join(","));
+        } else {
+            params.delete("producers");
+        }
+
+        if (page !== 1) {
+            params.set("page", page.toString());
+        } else {
+            params.delete("page");
+        }
+
+        return params;
+      });
+    }, [name, selectedItemTypeNames, selectedItemProducerNames, page, setSearchParams]);
+
 
     const handleChange = (_: React.ChangeEvent<unknown>, pageIdx: number) => {
         setPage(pageIdx);
@@ -120,29 +143,14 @@ const ItemsPage = () => {
                             value={selectedItemProducerNames}
                             onChange={setSelectedItemProducerNames}
                         />
-                        <Button
-                            variant="outlined"
-                            sx={{
-                                color: '#8A2BB8',
-                                borderColor: '#8A2BB8',
-                                fontWeight: 500,
-                                fontSize: '0.96rem',
-                                textTransform: 'uppercase',
-                                px: 1.5,
-                                py: 0.5,
-                                minWidth: 120,
-                                height: 36,
-                                whiteSpace: 'nowrap',
-                                lineHeight: 1.15,
-                                '&:hover': {
-                                    borderColor: '#721A99',
-                                    backgroundColor: '#F3EAF8',
-                                },
-                            }}
-                            onClick={handleResetFilters}
-                        >
-                            СБРОСИТЬ ФИЛЬТРЫ
-                        </Button>
+                    <Button
+                    variant="outlined"
+                    color="secondary"
+                    sx={{ height: 40 }}
+                    onClick={handleResetFilters}
+                    >
+                        Сбросить фильтры
+                    </Button>
                     </Stack>
                 </Box>
                 <ItemsTable items={itemsList.items} />

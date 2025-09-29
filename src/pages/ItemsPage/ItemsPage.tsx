@@ -17,6 +17,7 @@ import getIsModerator from "entities/User/model/selectors/isModerator.ts";
 import getIsProducer from "entities/User/model/selectors/isProducer.ts";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import { SearchInput } from "shared/SearchInput/SearchInput.tsx";
 import MultipleSelect from "src/shared/MultipleSelect/MultipleSelect";
 import ItemCard from "src/widgets/ItemCard/ItemCard.tsx";
@@ -29,25 +30,50 @@ const ItemsPage = () => {
     const isProducer = useSelector(getIsProducer);
     const isModerator = useSelector(getIsModerator);
 
+    const [searchParams, setSearchParams] = useSearchParams();
     const [name, setName] = useState("");
+    const [selectedItemTypeNames, setSelectedItemTypeNames] = useState<string[]>([]);
+    const [selectedItemProducerNames, setSelectedItemProducerNames] = useState<string[]>([]);
+    const [page, setPage] = useState(1);
 
-    const [selectedItemTypes, setSelectedItemTypes] = useState<number[]>([]);
-    const [selectedItemProducers, setSelectedItemProducers] = useState<
-        number[]
-    >([]);
+    const { data: itemsTypes } = useItemsTypesList();
+    const { data: itemsProducers } = useItemsProducersList();
+
+    useEffect(() => {
+        const nameParam = searchParams.get("name") || "";
+        const typesParam = searchParams.get("types") || "";
+        const producersParam = searchParams.get("producers") || "";
+        const pageParam = parseInt(searchParams.get("page") || "1", 10);
+
+        setName(nameParam);
+        setSelectedItemTypeNames(typesParam ? typesParam.split(",") : []);
+        setSelectedItemProducerNames(producersParam ? producersParam.split(",") : []);
+        setPage(pageParam);
+    }, [searchParams]);
 
     const [debouncedName] = useDebounce(name, 250);
 
-    const [page, setPage] = useState(1);
+    const selectedTypeIds = selectedItemTypeNames
+        .map(name => itemsTypes?.find(item => item.name === name)?.id)
+        .filter((id): id is number => typeof id === "number");
+    const selectedProducerIds = selectedItemProducerNames
+        .map(name => itemsProducers?.find(item => item.name === name)?.id)
+        .filter((id): id is number => typeof id === "number");
 
     const { data: itemsList, refetch } = useItemsList({
-        searchParams: [debouncedName, selectedItemTypes, selectedItemProducers],
+        searchParams: [debouncedName, selectedTypeIds, selectedProducerIds],
         page,
     });
 
-    const { data: itemsTypes } = useItemsTypesList();
+    useEffect(() => {
+        const params: any = {};
+        if (name) params.name = name;
+        if (selectedItemTypeNames.length) params.types = selectedItemTypeNames.join(",");
+        if (selectedItemProducerNames.length) params.producers = selectedItemProducerNames.join(",");
+        if (page !== 1) params.page = page.toString();
 
-    const { data: itemsProducers } = useItemsProducersList();
+        setSearchParams(params);
+    }, [name, selectedItemTypeNames, selectedItemProducerNames, page]);
 
     const handleChange = (_: React.ChangeEvent<unknown>, pageIdx: number) => {
         setPage(pageIdx);
@@ -55,7 +81,7 @@ const ItemsPage = () => {
 
     useEffect(() => {
         setPage(1);
-    }, [debouncedName, selectedItemTypes, selectedItemProducers]);
+    }, [debouncedName, selectedItemTypeNames, selectedItemProducerNames]);
 
     if (isProducer || isModerator) {
         return (
@@ -73,12 +99,14 @@ const ItemsPage = () => {
                         <MultipleSelect
                             label="Категория"
                             options={itemsTypes}
-                            onChange={setSelectedItemTypes}
+                            value={selectedItemTypeNames}
+                            onChange={(value) => setSelectedItemTypeNames(value)}
                         />
                         <MultipleSelect
                             label="Производитель"
                             options={itemsProducers}
-                            onChange={setSelectedItemProducers}
+                            value={selectedItemProducerNames}
+                            onChange={(value) => setSelectedItemProducerNames(value)}
                         />
                     </Stack>
                 </Box>
@@ -106,12 +134,14 @@ const ItemsPage = () => {
                     <MultipleSelect
                         label="Категория"
                         options={itemsTypes}
-                        onChange={setSelectedItemTypes}
+                        value={selectedItemTypeNames}
+                        onChange={(value) => setSelectedItemTypeNames(value)}
                     />
                     <MultipleSelect
                         label="Производитель"
                         options={itemsProducers}
-                        onChange={setSelectedItemProducers}
+                        value={selectedItemProducerNames}
+                        onChange={(value) => setSelectedItemProducerNames(value)}
                     />
                 </Box>
             </Box>
@@ -131,9 +161,7 @@ const ItemsPage = () => {
                                 <ItemCard
                                     key={item.id}
                                     item={item}
-                                    showAddToDraftOrderBtn={
-                                        isAuthenticated && isBuyer
-                                    }
+                                    showAddToDraftOrderBtn={isAuthenticated && isBuyer}
                                 />
                             </Grid2>
                         ))}

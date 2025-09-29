@@ -1,16 +1,19 @@
 import {
     Box,
+    Button,
     Container,
     Grid2,
     Pagination,
     Stack,
     Typography,
 } from "@mui/material";
+
 import {
     useItemsList,
     useItemsProducersList,
     useItemsTypesList,
 } from "entities/Item/api/itemsApi.ts";
+
 import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
 import getIsBuyer from "entities/User/model/selectors/isBuyer.ts";
 import getIsModerator from "entities/User/model/selectors/isModerator.ts";
@@ -25,12 +28,14 @@ import ItemsTable from "src/widgets/ItemsTable/ItemsTable.tsx";
 import { useDebounce } from "use-debounce";
 
 const ItemsPage = () => {
+
     const isBuyer = useSelector(getIsBuyer);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isProducer = useSelector(getIsProducer);
     const isModerator = useSelector(getIsModerator);
 
     const [searchParams, setSearchParams] = useSearchParams();
+
     const [name, setName] = useState("");
     const [selectedItemTypeNames, setSelectedItemTypeNames] = useState<string[]>([]);
     const [selectedItemProducerNames, setSelectedItemProducerNames] = useState<string[]>([]);
@@ -83,6 +88,13 @@ const ItemsPage = () => {
         setPage(1);
     }, [debouncedName, selectedItemTypeNames, selectedItemProducerNames]);
 
+    const handleResetFilters = () => {
+        // Сброс только фильтров, не сбрасываем поиск
+        setSelectedItemTypeNames([]);
+        setSelectedItemProducerNames([]);
+        setPage(1);
+    };
+
     if (isProducer || isModerator) {
         return (
             <Container>
@@ -94,20 +106,32 @@ const ItemsPage = () => {
                         justifyContent: "space-between",
                     }}
                 >
-                    <SearchInput onChange={setName} onIconClick={refetch} />
+                    <SearchInput
+                        value={name}
+                        onChange={setName}
+                        onIconClick={refetch}
+                        // Можно добавить стили через prop или CSS
+                    />
                     <Stack gap={2} direction="row" alignItems="center">
                         <MultipleSelect
                             label="Категория"
                             options={itemsTypes}
                             value={selectedItemTypeNames}
-                            onChange={(value) => setSelectedItemTypeNames(value)}
+                            onChange={setSelectedItemTypeNames}
                         />
                         <MultipleSelect
                             label="Производитель"
                             options={itemsProducers}
                             value={selectedItemProducerNames}
-                            onChange={(value) => setSelectedItemProducerNames(value)}
+                            onChange={setSelectedItemProducerNames}
                         />
+                        <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={handleResetFilters}
+                        >
+                            Сбросить фильтры
+                        </Button>
                     </Stack>
                 </Box>
                 <ItemsTable items={itemsList.items} />
@@ -129,21 +153,32 @@ const ItemsPage = () => {
                     justifyContent: "space-between",
                 }}
             >
-                <SearchInput onChange={setName} onIconClick={refetch} />
-                <Box>
+                <SearchInput
+                    value={name}
+                    onChange={setName}
+                    onIconClick={refetch}
+                />
+                <Stack gap={2} direction="row" alignItems="center">
                     <MultipleSelect
                         label="Категория"
                         options={itemsTypes}
                         value={selectedItemTypeNames}
-                        onChange={(value) => setSelectedItemTypeNames(value)}
+                        onChange={setSelectedItemTypeNames}
                     />
                     <MultipleSelect
                         label="Производитель"
                         options={itemsProducers}
                         value={selectedItemProducerNames}
-                        onChange={(value) => setSelectedItemProducerNames(value)}
+                        onChange={setSelectedItemProducerNames}
                     />
-                </Box>
+                    <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={handleResetFilters}
+                    >
+                        Сбросить фильтры
+                    </Button>
+                </Stack>
             </Box>
             {itemsList?.items?.length > 0 ? (
                 <Box>

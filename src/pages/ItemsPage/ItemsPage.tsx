@@ -7,13 +7,11 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
-
 import {
     useItemsList,
     useItemsProducersList,
     useItemsTypesList,
 } from "entities/Item/api/itemsApi.ts";
-
 import { getIsAuthenticated } from "entities/User/model/selectors/getUser.ts";
 import getIsBuyer from "entities/User/model/selectors/isBuyer.ts";
 import getIsModerator from "entities/User/model/selectors/isModerator.ts";
@@ -28,7 +26,6 @@ import ItemsTable from "src/widgets/ItemsTable/ItemsTable.tsx";
 import { useDebounce } from "use-debounce";
 
 const ItemsPage = () => {
-
     const isBuyer = useSelector(getIsBuyer);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isProducer = useSelector(getIsProducer);
@@ -125,10 +122,26 @@ const ItemsPage = () => {
                         />
                         <Button
                             variant="outlined"
-                            color="secondary"
+                            sx={{
+                                color: '#8A2BB8',
+                                borderColor: '#8A2BB8',
+                                fontWeight: 500,
+                                fontSize: '0.96rem',
+                                textTransform: 'uppercase',
+                                px: 1.5,
+                                py: 0.5,
+                                minWidth: 120,
+                                height: 36,
+                                whiteSpace: 'nowrap',
+                                lineHeight: 1.15,
+                                '&:hover': {
+                                    borderColor: '#721A99',
+                                    backgroundColor: '#F3EAF8',
+                                },
+                            }}
                             onClick={handleResetFilters}
                         >
-                            Сбросить фильтры
+                            СБРОСИТЬ ФИЛЬТРЫ
                         </Button>
                     </Stack>
                 </Box>
@@ -170,9 +183,10 @@ const ItemsPage = () => {
                         onChange={setSelectedItemProducerNames}
                     />
                     <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={handleResetFilters}
+                    variant="outlined"
+                    color="secondary"
+                    sx={{ height: 40 }}
+                    onClick={handleResetFilters}
                     >
                         Сбросить фильтры
                     </Button>

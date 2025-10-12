@@ -18,7 +18,7 @@ export const ConsumptionConstant = () => {
 
     return (
         <Box p={3}>
-            <ConsumptionPowerInput value={consumption} setValue={setPower} />
+            <ConsumptionPowerInput value={consumption} setPower={setPower} />
         </Box>
     );
 };

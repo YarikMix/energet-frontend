@@ -1,17 +1,41 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { Stack, TextField, Typography } from "@mui/material";
+import { debounce } from "lodash";
+import { useEffect, useRef } from "react";
+import { useForm, useWatch } from "react-hook-form";
 
 const COEFFICIENT = 0.024;
 
-export const ConsumptionPowerInput = ({ value, setValue, label }) => {
-    const onFirstInputChange = (e) => {
-        setValue(Math.round(parseFloat(e.target.value)));
+export const ConsumptionPowerInput = ({ value, setPower, label }) => {
+    const { control, setValue } = useForm({
+        defaultValues: {
+            watts: value,
+            kwh: Number((value * COEFFICIENT).toFixed(2)),
+        },
+    });
+
+    const wattsValue = useWatch({ control, name: "watts" });
+    const kwhValue = useWatch({ control, name: "kwh" });
+
+    const onWattsChange = (e) => {
+        const watts = parseFloat(e.target.value) || 0;
+        setValue("watts", Math.round(watts));
+        setValue("kwh", Number((watts * COEFFICIENT).toFixed(2)));
     };
 
-    const onSecondInputChange = (e) => {
-        setValue(Math.round(parseFloat(e.target.value) / COEFFICIENT));
+    const onKwhChange = (e) => {
+        const kwh = parseFloat(e.target.value) || 0;
+        setValue("kwh", kwh);
+        setValue("watts", Math.round(kwh / COEFFICIENT));
     };
+
+    const updateStoreValue = (value: number) => {
+        if (wattsValue !== value) {
+            setPower(wattsValue);
+        }
+    };
+
+    const throttled = useRef(debounce(updateStoreValue, 250));
+    useEffect(() => throttled.current(wattsValue), [wattsValue]);
 
     return (
         <Stack gap={3}>
@@ -22,17 +46,17 @@ export const ConsumptionPowerInput = ({ value, setValue, label }) => {
                     variant="outlined"
                     sx={{ width: 375 }}
                     type="number"
-                    value={value}
-                    onChange={onFirstInputChange}
+                    value={wattsValue}
+                    onChange={onWattsChange}
                 />
-                <Typography variant="span">ИЛИ</Typography>
+                <Typography variant="subtitle1">ИЛИ</Typography>
                 <TextField
-                    label="Значение (кВт*ч/с)"
+                    label="Значение (кВт*ч/сутки)"
                     variant="outlined"
                     sx={{ width: 375 }}
                     type="number"
-                    value={Math.round(value * COEFFICIENT)}
-                    onChange={onSecondInputChange}
+                    value={kwhValue}
+                    onChange={onKwhChange}
                 />
             </Stack>
         </Stack>

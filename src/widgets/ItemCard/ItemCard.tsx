@@ -2,6 +2,8 @@
 // @ts-nocheck
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { formatPower } from "shared/formatPower/formstPower";
+import { formatItemPrice } from "shared/formatItemPrice/formatItemPrice";
 import {
     Box,
     Button,
@@ -277,7 +279,7 @@ const ItemCard = ({
                                 fontSize: 18,
                             }}
                             >
-                            {item.price.toLocaleString('ru-RU') + ' ₽'}
+                            {formatItemPrice(item.price)}
                             </Typography>
                         </Box>
                         <ItemProperty name="Категория" 
@@ -293,10 +295,7 @@ const ItemCard = ({
                                     ? "Ёмкость"
                                     : "Мощность"
                             }
-                            value={item.item_type.name == "Аккумулятор"
-                                    ? (item.power < 1000 ? item.power + " кВт*ч" : (item.power / 1000) + " кВт*ч")
-                                    : (item.power < 1000 ? item.power + " Вт" : (item.power / 1000) + " кВт")
-                                }
+                            value={formatPower(item.power, item.item_type.name)}
                         />
                         {showAddToDraftOrderBtn && (
                             <Box>

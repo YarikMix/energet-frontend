@@ -41,15 +41,13 @@ export default function MultipleSelect({ label, options, value, onChange }: IPro
     }
 
     const handleChange = (event: SelectChangeEvent<string[]>) => {
-        const {
-            target: { value: v },
-        } = event;
-        if (Array.isArray(v)) {
-            onChange(v);
-        } else {
-            onChange([]);
-        }
-    };
+    const selectedValue = event.target.value;
+    if (Array.isArray(selectedValue)) {
+        onChange(selectedValue);
+    } else {
+        onChange([]);
+    }
+};
 
     return (
         <FormControl sx={{ m: 1, width: 300 }}>

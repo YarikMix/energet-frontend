@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { Box, Button, CardMedia, Container, Typography } from "@mui/material";
+import { formatItemPrice } from "shared/formatItemPrice/formatItemPrice";
+import { formatPower } from "shared/formatPower/formstPower";
 import {
     addToFavourites,
     removeFromFavourites,
@@ -121,7 +123,7 @@ export const ItemPage = () => {
                             variant="h5"
                             sx={{ color: "#319CFF", my: 3 }}
                         >
-                            {item.price.toLocaleString('ru-RU') + ' ₽'}
+                            {formatItemPrice(item.price)}
                         </Typography>
                         <ItemProperty name="Категория" value={item.item_type.name} />
                         <ItemProperty
@@ -135,9 +137,7 @@ export const ItemPage = () => {
                                     ? "Ёмкость"
                                     : "Мощность"
                             }
-                            value={item.item_type.name == "Аккумулятор"
-                                    ? (item.power < 1000 ? item.power + " кВт*ч" : (item.power / 1000) + " кВт*ч")
-                                    : (item.power < 1000 ? item.power + " Вт" : (item.power / 1000) + " кВт")}
+                            value={formatPower(item.power, item.item_type.name)}
                         />
                     </Box>
                     {isAuthenticated && isBuyer && (
@@ -209,9 +209,7 @@ export const ItemPage = () => {
                                         ? "Ёмкость"
                                         : "Мощность"
                                 }
-                                value={item.item_type.name == "Аккумулятор"
-                                    ? (item.power < 1000 ? item.power + " кВт*ч" : (item.power / 1000) + " кВт*ч")
-                                    : (item.power < 1000 ? item.power + " Вт" : (item.power / 1000) + " кВт")}
+                                value={formatPower(item.power, item.item_type.name)}
                             />
                         </Box>
                     </TabPanel>

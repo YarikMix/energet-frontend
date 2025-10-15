@@ -5,7 +5,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Theme, useTheme } from "@mui/material/styles";
 import { T_ItemOption } from "entities/Item/model/types/Item.ts";
-import * as React from "react";
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -29,31 +29,25 @@ function getStyles(name: string, personName: string[], theme: Theme) {
 interface IProps {
     label: string;
     options?: T_ItemOption[];
-    onChange: (value: number[]) => void;
+    value: string[];
+    onChange: (value: string[]) => void;
 }
 
-export default function MultipleSelect({ label, options, onChange }: IProps) {
+export default function MultipleSelect({ label, options, value, onChange }: IProps) {
     const theme = useTheme();
-    const [selectedOptions, setSelectedOptions] = React.useState<string[]>([]);
 
     if (!options) {
         return <div></div>;
     }
 
     const handleChange = (event: SelectChangeEvent<string[]>) => {
-        const {
-            target: { value },
-        } = event;
-        if (Array.isArray(value)) {
-            setSelectedOptions(value);
-            onChange(
-                value.map((option) => options.find((i) => i.name == option).id)
-            );
-        } else {
-            setSelectedOptions([]);
-            onChange([]);
-        }
-    };
+    const selectedValue = event.target.value;
+    if (Array.isArray(selectedValue)) {
+        onChange(selectedValue);
+    } else {
+        onChange([]);
+    }
+};
 
     return (
         <FormControl sx={{ m: 1, width: 300 }}>
@@ -62,7 +56,7 @@ export default function MultipleSelect({ label, options, onChange }: IProps) {
                 labelId="demo-multiple-name-label"
                 id="demo-multiple-name"
                 multiple
-                value={selectedOptions}
+                value={value}
                 onChange={handleChange}
                 input={<OutlinedInput label={label} />}
                 MenuProps={MenuProps}
@@ -71,7 +65,7 @@ export default function MultipleSelect({ label, options, onChange }: IProps) {
                     <MenuItem
                         key={item.id}
                         value={item.name}
-                        style={getStyles(item.name, selectedOptions, theme)}
+                        style={getStyles(item.name, value, theme)}
                     >
                         {item.name}
                     </MenuItem>
@@ -80,3 +74,4 @@ export default function MultipleSelect({ label, options, onChange }: IProps) {
         </FormControl>
     );
 }
+

@@ -20,7 +20,7 @@ const ItemsTable = ({ items }) => {
         },
         {
             field: "type",
-            headerName: "Тип",
+            headerName: "Категория",
             width: 200,
             valueFormatter: (value, row) => row.item_type.name,
         },

@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { Box, Button, CardMedia, Container, Typography } from "@mui/material";
+import { formatItemPrice } from "shared/formatItemPrice/formatItemPrice";
+import { formatPower } from "shared/formatPower/formstPower";
 import {
     addToFavourites,
     removeFromFavourites,
@@ -86,7 +88,7 @@ export const ItemPage = () => {
             case 2:
                 return "Высококачественный аккумулятор, предназначенный для долгосрочного хранения энергии и обеспечения надежного питания устройств и систем. Надежная конструкция, долговечность и высокая емкость позволяют использовать его в солнечных и ветровых электростанциях, транспортных средствах и системах резервного питания.";
             case 3:
-                return "Эффективная солнечная панель с высокой КПД, созданная для преобразования солнечного излучения в электрическую энергию. Идеально подходит для домашних, коммерческих и промышленных установок. Надежна, устойчива к воздействиям окружающей среды и обладает долгим сроком службы.";
+                return "Эффективная солнечная панель с высоким КПД, созданная для преобразования солнечного излучения в электрическую энергию. Идеально подходит для домашних, коммерческих и промышленных установок. Надежна, устойчива к воздействиям окружающей среды и обладает долгим сроком службы.";
             case 4:
                 return "Экологичный и экономичный ветряной генератор, предназначенный для преобразования ветровой энергии в электрическую. Отличный выбор для автономных систем, ферм и снабжения удаленных объектов. Компактный дизайн и высокая надежность обеспечивают долгий срок службы и стабильную работу.";
             case 5:
@@ -121,9 +123,9 @@ export const ItemPage = () => {
                             variant="h5"
                             sx={{ color: "#319CFF", my: 3 }}
                         >
-                            {item.price} ₽
+                            {formatItemPrice(item.price)}
                         </Typography>
-                        <ItemProperty name="Тип" value={item.item_type.name} />
+                        <ItemProperty name="Категория" value={item.item_type.name} />
                         <ItemProperty
                             name="Производитель"
                             value={item.item_producer.name}
@@ -135,7 +137,7 @@ export const ItemPage = () => {
                                     ? "Ёмкость"
                                     : "Мощность"
                             }
-                            value={item.power + " вт"}
+                            value={formatPower(item.power, item.item_type.name)}
                         />
                     </Box>
                     {isAuthenticated && isBuyer && (
@@ -190,7 +192,7 @@ export const ItemPage = () => {
                     <TabPanel currentTab={currentTab} index={1}>
                         <Box sx={{ width: "400px" }}>
                             <ItemProperty
-                                name="Тип"
+                                name="Категория"
                                 value={item.item_type.name}
                             />
                             <ItemProperty
@@ -207,7 +209,7 @@ export const ItemPage = () => {
                                         ? "Ёмкость"
                                         : "Мощность"
                                 }
-                                value={item.power + " вт"}
+                                value={formatPower(item.power, item.item_type.name)}
                             />
                         </Box>
                     </TabPanel>

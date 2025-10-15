@@ -2,6 +2,8 @@
 // @ts-nocheck
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { formatPower } from "shared/formatPower/formstPower";
+import { formatItemPrice } from "shared/formatItemPrice/formatItemPrice";
 import {
     Box,
     Button,
@@ -252,7 +254,7 @@ const ItemCard = ({
                 <Box style={{ height: "100%" }}>
                     <CardMedia
                         component="img"
-                        height="140"
+                        style={{ width: "100%", height: "auto" }}
                         image={`/images/${item.image}`}
                     />
                     <CardContent>
@@ -272,15 +274,16 @@ const ItemCard = ({
                                 Цена
                             </Typography>
                             <Typography
-                                sx={{
-                                    color: "#319CFF",
-                                    fontSize: 18,
-                                }}
+                            sx={{
+                                color: "#319CFF",
+                                fontSize: 18,
+                            }}
                             >
-                                {item.price}₽
+                            {formatItemPrice(item.price)}
                             </Typography>
                         </Box>
-                        <ItemProperty name="Тип" value={item.item_type.name} />
+                        <ItemProperty name="Категория" 
+                        value={<span style={{ display: 'block', textAlign: 'right', marginBottom: 10  }}>{item.item_type.name}</span>}/>
                         <ItemProperty
                             name="Производитель"
                             value={item.item_producer.name}
@@ -292,7 +295,7 @@ const ItemCard = ({
                                     ? "Ёмкость"
                                     : "Мощность"
                             }
-                            value={item.power + " вт"}
+                            value={formatPower(item.power, item.item_type.name)}
                         />
                         {showAddToDraftOrderBtn && (
                             <Box>

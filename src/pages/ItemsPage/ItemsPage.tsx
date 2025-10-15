@@ -33,25 +33,19 @@ const ItemsPage: React.FC = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [name, setName] = useState<string>("");
-  const [selectedItemTypeNames, setSelectedItemTypeNames] = useState<string[]>([]);
-  const [selectedItemProducerNames, setSelectedItemProducerNames] = useState<string[]>([]);
-  const [page, setPage] = useState<number>(1);
+  const [name, setName] = useState<string>(searchParams.get("name") || "");
+  const [selectedItemTypeNames, setSelectedItemTypeNames] = useState<string[]>(
+    searchParams.get("types") ? searchParams.get("types")!.split(",") : []
+  );
+  const [selectedItemProducerNames, setSelectedItemProducerNames] = useState<string[]>(
+    searchParams.get("producers") ? searchParams.get("producers")!.split(",") : []
+  );
+  const [page, setPage] = useState<number>(
+    parseInt(searchParams.get("page") || "1", 10)
+  );
 
   const { data: itemsTypes } = useItemsTypesList();
   const { data: itemsProducers } = useItemsProducersList();
-
-  useEffect(() => {
-    const nameParam = searchParams.get("name") || "";
-    const typesParam = searchParams.get("types") || "";
-    const producersParam = searchParams.get("producers") || "";
-    const pageParam = parseInt(searchParams.get("page") || "1", 10);
-
-    setName(nameParam);
-    setSelectedItemTypeNames(typesParam ? typesParam.split(",") : []);
-    setSelectedItemProducerNames(producersParam ? producersParam.split(",") : []);
-    setPage(pageParam);
-  }, [searchParams]);
 
   const [debouncedName] = useDebounce(name, 250);
 
@@ -87,6 +81,7 @@ const ItemsPage: React.FC = () => {
   }, [debouncedName]);
 
   const handleResetFilters = () => {
+    setName("");
     setSelectedItemTypeNames([]);
     setSelectedItemProducerNames([]);
     setPage(1);
@@ -100,7 +95,7 @@ const ItemsPage: React.FC = () => {
           <Stack gap={2} direction="row" alignItems="center">
             <MultipleSelect label="Категория" options={itemsTypes || []} value={selectedItemTypeNames} onChange={setSelectedItemTypeNames} />
             <MultipleSelect label="Производитель" options={itemsProducers || []} value={selectedItemProducerNames} onChange={setSelectedItemProducerNames} />
-            <Button variant="outlined" color="secondary" sx={{ height: 40 }} onClick={handleResetFilters}>
+            <Button variant="outlined" color="primary" sx={{ height: 40 }} onClick={handleResetFilters}>
               Сбросить фильтры
             </Button>
           </Stack>
@@ -119,7 +114,7 @@ const ItemsPage: React.FC = () => {
         <Stack gap={2} direction="row" alignItems="center">
           <MultipleSelect label="Категория" options={itemsTypes || []} value={selectedItemTypeNames} onChange={setSelectedItemTypeNames} />
           <MultipleSelect label="Производитель" options={itemsProducers || []} value={selectedItemProducerNames} onChange={setSelectedItemProducerNames} />
-          <Button variant="outlined" color="secondary" sx={{ height: 40 }} onClick={handleResetFilters}>
+          <Button variant="outlined" color="primary" sx={{ height: 40 }} onClick={handleResetFilters}>
             Сбросить фильтры
           </Button>
         </Stack>
